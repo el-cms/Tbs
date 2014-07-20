@@ -16,6 +16,9 @@ class Tbs {
 	// ---------------------------------------------------------------------------
 	/**
 	 * @var string Icon pack name (glyphicon, fa, icon,...)
+	 *
+	 * Link to glyphicons: http://glyphicons.com/examples-of-use/
+	 * Link to FontAwesome icons: http://fontawesome.io/
 	 */
 	public $iconPack = 'glyphicon';
 
@@ -29,6 +32,7 @@ class Tbs {
 	 * Creates a button
 	 *
 	 * @param string $content Button content
+	 * @param string $url target url
 	 * @param array $options List of options
 	 *
 	 * @return string Html code to be displayed
@@ -36,15 +40,88 @@ class Tbs {
 	 * @link http://getbootstrap.com/css/#buttons Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *  - class: string, *null
+	 *           Additionnal classes for the dropdown element
+	 *  - size:  string, big|*standard|small|xsmall
+	 *           Button size
+	 *  - type:  string, *standard|primary|success|info|warning|danger|link
+	 *           Button type
+	 *  - Other attributes that can apply to the "a" or "button elements
+	 *
+	 * If no $url is provided, a button element is created instead of a link.
+	 * Additionnal classes can be seen on the TBS CSS page: btn-block, active, disabled,...
+	 *
 	 */
-	public function button($content, $options = array()) {
+	public function button($content, $url = null, $options = array()) {
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Size
+		if ($this->_optionCheck($options, 'size')) {
+			switch (strtolower($options['size'])) {
+				case 'big':
+					$class.=' btn-lg';
+					break;
+				case 'small':
+					$class.=' btn-sm';
+					break;
+				case 'xsmall':
+					$class.=' btn-xs';
+					break;
+				default:
+					break;
+			}
+			unset($options['size']);
+		}
+
+		// Type:
+		if ($this->_optionCheck($options, 'type')) {
+			switch (strtolower($options['type'])) {
+				case 'primary':
+					$class.=' btn-primary';
+					break;
+				case 'success':
+					$class.=' btn-success';
+					break;
+				case 'info':
+					$class.=' btn-info';
+					break;
+				case 'warning':
+					$class.=' btn-warning';
+					break;
+				case 'danger':
+					$class.=' btn-danger';
+					break;
+			}
+			unset($options['type']);
+		}else{
+			// Default
+			$class.=' btn-default';
+		}
+
+		// Atrtibutes
+		$attributes = '';
+		foreach ($options as $k => $v) {
+			$attributes.=" $k=\"$v\"";
+		}
+
+		if (!is_null($url)) {
+			return "<a href=\"$url\" class=\"btn$class\"$attributes>$content</a>";
+		}
+		return "<button class=\"btn$class\"$attributes>$content</button>";
 	}
 
 	/**
 	 * Creates a dropdown menu to be used with dropdown buttons, or alone...
+	 * This method does not generate a button, just the dropdwon menu.
 	 *
-	 * @param array $content List of elements.
+	 * @param array $content List of elements. Should be links or %separator% or a
 	 * @param array $options List of options for this element
 	 *
 	 * @return Html code to be displayed
@@ -52,9 +129,51 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#dropdowns Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *  - align: string, *right|left
+	 *           Toggles the dropdown orientation
+	 *  - class: string, *null
+	 *           Additionnal classes for the dropdown element
+	 *  - Other attributes that can apply to the "ul" element
+	 *
+	 * Elements should be like "'title' => 'url'"
+	 * To add a divider, add a "'someItem' => '%divider%'" item
+	 * To add a menu header, add a "'headerTitle' => '%header%'" item
+	 *
 	 */
 	public function dropdown($content, $options = array()) {
+		// Additionnal classes
+		$class = null;
 
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
+
+		if ($this->_optionCheck($options, 'align')) {
+			$class .= " dropdown-menu-${$options['align']}";
+			unset($options['align']);
+		}
+
+		$attributes = $this->_getAttributes($options);
+
+		// Opening list
+		$list = "<ul class=\"dropdown-menu$class\"$attributes>\n\t";
+		// Links list
+		foreach ($content as $t => $l) {
+			if ($l == "%divider%") {
+				$list.="\t<li class=\"divider\"></li>\n";
+			} elseif ($l == "%header%") {
+				$list.="\t<li class=\"dropdown-header\">$t</li>\n";
+			} else {
+				$list.="\t<li><a tabindex=\"-1\" href=\"$l\">$t</a></li>\n";
+			}
+		}
+		// Closing list
+		$list.="</ul>\n";
+
+		return $list;
 	}
 
 	/**
@@ -67,6 +186,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#btn-groups Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function buttonGroup($buttons, $options = array()) {
@@ -84,6 +207,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#btn-dropdowns Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function buttonDropdown($button, $dropdown, $options = array()) {
@@ -107,6 +234,10 @@ class Tbs {
 	 * @link http://getbootstrap.com/css/#forms-example Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function input($name, $options = array()) {
 
@@ -122,6 +253,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#input-groups Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function inputGroup($input, $options = array()) {
@@ -145,6 +280,10 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#nav Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function nav($tabs, $options = array()) {
 
@@ -161,6 +300,10 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#navbar Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function navBar($elements, $options = array()) {
 
@@ -176,6 +319,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#breadcrumbs Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function breadcrumbs($elements, $options = array()) {
@@ -194,6 +341,10 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#pagination Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function paginator($links, $current, $options = array()) {
 
@@ -209,6 +360,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#pagination-pager Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function pager($links, $options = array()) {
@@ -232,11 +387,29 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#glyphicons Link to the TBS documentation about this element
 	 * ---
 	 *
-	 * @link 	 * ---
+	 * Options:
+	 * --------
+	 * - class string *null : additionnal list of styles. List depends on the icon pack you are using.
+	 *         Glyphicon examples: http://glyphicons.com/examples-of-use/
+	 *         FontAwesome examples: http://fontawesome.io/examples/
+	 * - other attributes, as id, title,...
 	 *
 	 */
 	public function icon($icon, $options = array()) {
+		// Icon pack
+		$iPack = $this->iconPack;
 
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class = ' ' . $options['class'];
+			unset($options['class']);
+		}
+
+		// Other attributes
+		$attributes = $this->_getAttributes($options);
+
+		return "<span class=\"$iPack $iPack-$icon$class\"$attributes></span>";
 	}
 
 	/**
@@ -249,6 +422,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#labels Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function label($title, $options = array()) {
@@ -265,6 +442,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#badges Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function badge($content, $options = array()) {
@@ -283,6 +464,10 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#jumbotron Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function jumbotron($title, $content, $options = array()) {
 
@@ -300,6 +485,10 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#page-header Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function header($content, $level, $options = array()) {
 
@@ -315,6 +504,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#thumbnails Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function thumbnail($path, $options = array()) {
@@ -332,6 +525,10 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#alerts Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function alert($content, $options = array()) {
 
@@ -347,6 +544,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#progress Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function progressBar($percent, $options = array()) {
@@ -365,6 +566,10 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#media Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function media($source, $content, $options = array()) {
 
@@ -380,6 +585,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#list-group Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function listGroup($items, $options) {
@@ -397,6 +606,10 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#panels Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function panel($content, $options) {
 
@@ -413,6 +626,10 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#responsive-embed Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Options:
+	 * --------
+	 *
+	 *
 	 */
 	public function embed($content, $options) {
 
@@ -428,6 +645,10 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#wells Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function well($content, $options) {
@@ -450,6 +671,10 @@ class Tbs {
 	 *
 	 * @link http://getbootstrap.com/javascript/#modals Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 *
 	 */
 	public function jModal($content, $options) {
@@ -475,6 +700,10 @@ class Tbs {
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#tabs Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 */
 	public function jTab($items, $options) {
 
@@ -490,6 +719,10 @@ class Tbs {
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#tooltips Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 */
 	public function jTooltip($content, $options) {
 
@@ -521,6 +754,10 @@ class Tbs {
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#alerts Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 */
 	public function jAlert($content, $options) {
 
@@ -536,6 +773,10 @@ class Tbs {
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#buttons Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 */
 	public function jButton($content, $options) {
 
@@ -551,6 +792,10 @@ class Tbs {
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#collapse Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 */
 	public function jCollapse($items, $options) {
 
@@ -566,6 +811,10 @@ class Tbs {
 	 *
 	 * @link http://getbootstrap.com/javascript/#carousel Link to the TBS documentation about this element
 	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *
 	 */
 	public function jCarousel($slides, $options) {
 
@@ -594,7 +843,15 @@ class Tbs {
 	 * @return bool
 	 */
 	private function _optionCheck($options, $option) {
+		return (isset($options[$option]) && !empty($options[$option]));
+	}
 
+	private function _getAttributes($options) {
+		$attributes = null;
+		foreach ($options as $k => $v) {
+			$attributes.=" $k=\"$v\"";
+		}
+		return $attributes;
 	}
 
 }
