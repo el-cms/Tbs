@@ -48,11 +48,13 @@ class Tbs {
 	 *           Button size
 	 *  - type:  string, *standard|primary|success|info|warning|danger|link
 	 *           Button type
+	 *  - tag:   string, *a|button|submit|input
+	 *           Button tag
 	 *  - Other attributes that can apply to the "a" or "button elements
 	 *
 	 * If no $url is provided, a button element is created instead of a link.
 	 * Additionnal classes can be seen on the TBS CSS page: btn-block, active, disabled,...
-	 *
+	 * If tag is different than "a" and $url is set, tag will be "a"
 	 */
 	public function button($content, $url = null, $options = array()) {
 		//Class
@@ -100,21 +102,43 @@ class Tbs {
 					break;
 			}
 			unset($options['type']);
-		}else{
+		} else {
 			// Default
 			$class.=' btn-default';
 		}
 
-		// Atrtibutes
-		$attributes = '';
-		foreach ($options as $k => $v) {
-			$attributes.=" $k=\"$v\"";
+		// Tag
+		$inputType = null;
+		if ($this->_optionCheck($options, 'tag')) {
+			$tag = $options['tag'];
+			unset($options['tag']);
+
+			// Check for type and value option with "submit" or "input" tag
+			if ($this->_optionCheck($options, 'type')) {
+				if (in_array($tag, array('submit', 'input'))) {
+					unset($options['type']);
+					$options['value'] = $content;
+				}
+			}
 		}
 
-		if (!is_null($url)) {
+		// Atrtibutes
+		$attributes = $this->_getAttributes($options);
+
+		// Choose between link or button
+		if (!is_null($url) || $tag === 'a') {
 			return "<a href=\"$url\" class=\"btn$class\"$attributes>$content</a>";
+		} else {
+			$tag = 'button';
 		}
-		return "<button class=\"btn$class\"$attributes>$content</button>";
+		switch (strtolower($tag)) {
+			case 'button':
+				return "<button class=\"btn{$class}\"$attributes>$content</button>";
+			case 'submit':
+				return "<input type=\"submit\" class=\"$class\"$attributes/>";
+			case 'input':
+				return "<input type=\"button\" class=\"$class\"$attributes/>";
+		}
 	}
 
 	/**
@@ -145,17 +169,18 @@ class Tbs {
 	public function dropdown($content, $options = array()) {
 		// Additionnal classes
 		$class = null;
-
 		if ($this->_optionCheck($options, 'class')) {
 			$class.=" ${options['class']}";
 			unset($options['class']);
 		}
 
+		// Align
 		if ($this->_optionCheck($options, 'align')) {
 			$class .= " dropdown-menu-${$options['align']}";
 			unset($options['align']);
 		}
 
+		// Attributes
 		$attributes = $this->_getAttributes($options);
 
 		// Opening list
@@ -199,9 +224,11 @@ class Tbs {
 	/**
 	 * Creates a button with a dropdown menu
 	 *
-	 * @param string $button Button element from button()
-	 * @param string $dropdown Dropdown element from dropdown()
-	 * @param array $options List of options for this element
+	 * @param string title Button title
+	 * @param array $content Dropdown content (same as the content passed to dropdown())
+	 * @param array $buttonOptions List of options for the button (same as button())
+	 * @param array $dropdownOptions List of options for the menu (same as dropdown())
+	 * @param array $options List of options for the button wrapper
 	 *
 	 * @return Html code to be displayed
 	 *
@@ -210,11 +237,64 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
+	 *  - split   true|*false    Makes a split button
+	 *  - dropup  true|*false    Makes the menu drop up.
 	 *
+	 * If you want to make a split button with an URL, pass the "url" option in the $buttonOptions array
 	 *
 	 */
-	public function buttonDropdown($button, $dropdown, $options = array()) {
+	public function buttonDropdown($title, $content, $buttonOptions = array(), $dropdownOptions = array(), $options = array()) {
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Split
+		$url = null;
+		$split = false;
+		if ($this->_optionCheck($options, 'split') && $options['split'] === true) {
+//			if ($options['split'] === true) {
+			if ($this->_optionCheck($buttonOptions, 'url')) {
+				$url = $buttonOptions['url'];
+				unset($buttonOptions['url']);
+			}
+			$split = true;
+			unset($options['split']);
+//			}
+		}
+
+		// Dropup
+		if ($this->_optionCheck($options, 'dropup') && $options['dropup'] === true) {
+			$class.=' dropup';
+			unset($options['dropup']);
+		}
+
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		// Creating button
+		if ($split) {
+			$button = $this->button($title, $url, $buttonOptions);
+			$caretOptions = $buttonOptions;
+			$caretOptions['class'].=' dropdown-toggle';
+			$caretOptions['data-toggle'] = 'dropdown';
+			$button.= $this->button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', null, $caretOptions);
+		} else {
+			// Updating button class and attributes:
+			$buttonOptions['class'].=' dropdown-toggle';
+			$buttonOptions['data-toggle'] = 'dropdown';
+			$button = $this->button($title . ' <span class="caret"></span>', $url, $buttonOptions);
+		}
+
+		// Creating dropdown
+		$dropdown = $this->dropdown($content, $dropdownOptions);
+
+		return "<div class=\"btn-group{$class}\"$attributes>\n"
+						. "$button\n"
+						. "$dropdown\n"
+						. "</div>";
 	}
 
 	// ---------------------------------------------------------------------------

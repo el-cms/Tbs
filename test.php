@@ -34,6 +34,10 @@ $Tbs = new Tbs;
 			#main-menu li:hover{
 				border-left:3px solid #0C0;
 			}
+
+			pre{
+				font-size: 0.8em;
+			}
 		</style>
 		<link rel="stylesheet" href="boilerplate/css/bootstrap-theme.min.css">
 		<link rel="stylesheet" href="boilerplate/css/main.css">
@@ -67,12 +71,16 @@ $Tbs = new Tbs;
 							<li><a href="#icon">Icons</a></li>
 							<li><a href="#button">Buttons</a></li>
 							<li><a href="#dropdown">Dropdowns</a></li>
-							<li><a href="#button-group">Button group</a></li>
+							<!--<li><a href="#button-group">Button group</a></li>-->
 							<li><a href="#button-dropdown">Button dropdown</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-md-10">
+<!--					<div class='alert alert-warning'>
+						This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
+						<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
+					</div>-->
 
 					<!-- -----------------------------------------------------------------
 
@@ -120,11 +128,12 @@ $Tbs = new Tbs;
 						<div class="panel-body">
 							<pre>echo $Tbs->button('I\'m a button');
 echo $Tbs->button('Me too', '#button');
-echo $Tbs->button('I\'m a button with a JS alert', null, array('onClick'=>'javascript:alert(\'i\\\'m the alert\')'));
-echo $Tbs->button('Big disabled button', '#', array('size'=>'big', 'type'=>'primary', 'class'=>'disabled'));
-echo $Tbs->button('Active danger button', '#button', array('type'=>'danger', 'class'=>'active'));
-echo $Tbs->button('Small info button', '#button', array('size'=>'small', 'type'=>'info'));
-echo $Tbs->button($Tbs->icon('star').' I have an icon !!', '#button', array('size'=>'xsmall', 'type'=>'warning'));</pre>
+echo $Tbs->button('I\'m a button with a JS alert', null, array('onClick' => 'javascript:alert(\'i\\\'m the alert\')'));
+echo $Tbs->button('Big disabled button', '#', array('size' => 'big', 'type' => 'primary', 'class' => 'disabled'));
+echo $Tbs->button('Input button', null, array('type' => 'primary', 'class' => 'success', 'tag'=>'input'));
+echo $Tbs->button('Active danger button', '#button', array('type' => 'danger', 'class' => 'active'));
+echo $Tbs->button('Small info button', '#button', array('size' => 'small', 'type' => 'info'));
+echo $Tbs->button($Tbs->icon('star') . ' I have an icon !!', '#button', array('size' => 'xsmall', 'type' => 'warning'));</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -132,6 +141,7 @@ echo $Tbs->button($Tbs->icon('star').' I have an icon !!', '#button', array('siz
 							echo $Tbs->button('Me too', '#button');
 							echo $Tbs->button('I\'m a button with a JS alert', null, array('onClick' => 'javascript:alert(\'i\\\'m the alert\')'));
 							echo $Tbs->button('Big disabled button', '#', array('size' => 'big', 'type' => 'primary', 'class' => 'disabled'));
+							echo $Tbs->button('Input button', null, array('type' => 'primary', 'class' => 'success', 'tag' => 'input'));
 							echo $Tbs->button('Active danger button', '#button', array('type' => 'danger', 'class' => 'active'));
 							echo $Tbs->button('Small info button', '#button', array('size' => 'small', 'type' => 'info'));
 							echo $Tbs->button($Tbs->icon('star') . ' I have an icon !!', '#button', array('size' => 'xsmall', 'type' => 'warning'));
@@ -152,7 +162,17 @@ echo $Tbs->button($Tbs->icon('star').' I have an icon !!', '#button', array('siz
 							<h3 class="panel-title">Basic usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>echo $Tbs->icon('star');</pre>
+							<pre>$content = array(
+		'Title' => '%header%',
+		'SomeLink' => '#',
+		'SomeLink2' => '#',
+		'SomeLink3' => '#',
+		'item' => '%divider%',
+		'SomeLink4' => '#',
+		'SomeLink5' => '#',
+		'SomeLink6' => '#',
+);
+echo $Tbs->dropdown($content, array('class' => 'clearfix'));</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -167,7 +187,7 @@ echo $Tbs->button($Tbs->icon('star').' I have an icon !!', '#button', array('siz
 									'SomeLink6' => '#',
 							);
 							echo $Tbs->dropdown($content, array('class' => 'clearfix'));
-							?>
+							?><em>We don't see anything as i'm unable to display a dropdown menu only...</em>
 						</div>
 					</div>
 
@@ -176,7 +196,7 @@ echo $Tbs->button($Tbs->icon('star').' I have an icon !!', '#button', array('siz
 						Button group
 
 					------------------------------------------------------------------ -->
-					<a id="button-group"></a>
+<!--					<a id="button-group"></a>
 					<h2>Button group <small>buttonGroup($buttons, $options)</small></h2>
 
 					<div class="panel panel-default">
@@ -189,7 +209,7 @@ echo $Tbs->button($Tbs->icon('star').' I have an icon !!', '#button', array('siz
 						<div class="panel-footer">
 							<?php echo $Tbs->icon('star'); ?>
 						</div>
-					</div>
+					</div>-->
 
 					<!-- -----------------------------------------------------------------
 
@@ -197,21 +217,49 @@ echo $Tbs->button($Tbs->icon('star').' I have an icon !!', '#button', array('siz
 
 					------------------------------------------------------------------ -->
 					<a id="button-dropdown"></a>
-					<h2>Button dropdown <small>buttonDropdown($button, $dropdown, $options)</small></h2>
+					<h2>Button dropdown <small>buttonDropdown($button, $dropdown, $buttonOptions, $dropDownOptions, $options)</small></h2>
 
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h3 class="panel-title">Basic usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>echo $Tbs->icon('star');</pre>
+							<pre>$content = array(
+		'Title' => '%header%',
+		'SomeLink' => '#',
+		'SomeLink2' => '#',
+		'SomeLink3' => '#',
+		'item' => '%divider%',
+		'SomeLink4' => '#',
+		'SomeLink5' => '#',
+		'SomeLink6' => '#',
+);
+echo $Tbs->buttonDropdown('button', $content);
+echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'success'), array(), array('split' => true));
+echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'info', 'size' => 'big'), array(), array('split' => true, 'dropup' => true));
+echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'info', 'class' => 'disabled', 'size'=>'xsmall'), array(), array('dropup' => true));
+echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'warning', 'size'=>'xsmall'), array(), array('dropup' => true));</pre>
 						</div>
 						<div class="panel-footer">
-							<?php echo $Tbs->icon('star'); ?>
+							<?php
+							$content = array(
+									'Title' => '%header%',
+									'SomeLink' => '#',
+									'SomeLink2' => '#',
+									'SomeLink3' => '#',
+									'item' => '%divider%',
+									'SomeLink4' => '#',
+									'SomeLink5' => '#',
+									'SomeLink6' => '#',
+							);
+							echo $Tbs->buttonDropdown('button', $content);
+							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'success'), array(), array('split' => true));
+							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'info', 'size' => 'big'), array(), array('split' => true, 'dropup' => true));
+							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'info', 'class' => 'disabled', 'size'=>'xsmall'), array(), array('dropup' => true));
+							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'warning', 'size'=>'xsmall'), array(), array('dropup' => true));
+							?>
 						</div>
 					</div>
-
-
 				</div>
 			</div>
 
