@@ -39,8 +39,7 @@ $Tbs = new Tbs;
 				font-size: 0.8em;
 			}
 		</style>
-		<link rel="stylesheet" href="boilerplate/css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="boilerplate/css/main.css">
+		<!--<link rel="stylesheet" href="boilerplate/css/bootstrap-theme.min.css">-->
 
         <!--<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>-->
 	</head>
@@ -71,16 +70,17 @@ $Tbs = new Tbs;
 							<li><a href="#icon">Icons</a></li>
 							<li><a href="#button">Buttons</a></li>
 							<li><a href="#dropdown">Dropdowns</a></li>
-							<!--<li><a href="#button-group">Button group</a></li>-->
+							<li><a href="#button-group">Button group</a></li>
+							<!--<li><a href="#toolbar">Toolbar</a></li>-->
 							<li><a href="#button-dropdown">Button dropdown</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-md-10">
-<!--					<div class='alert alert-warning'>
-						This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
-						<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
-					</div>-->
+					<!--					<div class='alert alert-warning'>
+											This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
+											<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
+										</div>-->
 
 					<!-- -----------------------------------------------------------------
 
@@ -89,27 +89,20 @@ $Tbs = new Tbs;
 					------------------------------------------------------------------ -->
 					<a id="icon"></a>
 					<h2>Icon <small>icon($icon, $options)</small></h2>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">Basic usage</h3>
-						</div>
-						<div class="panel-body">
-							<pre>echo $Tbs->icon('star');</pre>
-						</div>
-						<div class="panel-footer">
-							<?php echo $Tbs->icon('star'); ?>
-						</div>
-					</div>
 
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">Adding some options</h3>
+							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>echo $Tbs->icon('star', array('class'=>'text-danger', 'title'=>'Yay ! Red star !'));</pre>
+							<pre>echo $Tbs->icon('star');
+echo $Tbs->icon('star', array('class'=>'text-danger', 'title'=>'Yay ! Red star !'));</pre>
 						</div>
 						<div class="panel-footer">
-							<?php echo $Tbs->icon('star', array('class' => 'text-danger', 'title' => 'Yay ! Red star !')); ?>
+							<?php
+							echo $Tbs->icon('star');
+							echo $Tbs->icon('star', array('class' => 'text-danger', 'title' => 'Yay ! Red star !'));
+							?>
 						</div>
 					</div>
 
@@ -123,17 +116,17 @@ $Tbs = new Tbs;
 
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">Basic usage</h3>
+							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>echo $Tbs->button('I\'m a button');
-echo $Tbs->button('Me too', '#button');
-echo $Tbs->button('I\'m a button with a JS alert', null, array('onClick' => 'javascript:alert(\'i\\\'m the alert\')'));
-echo $Tbs->button('Big disabled button', '#', array('size' => 'big', 'type' => 'primary', 'class' => 'disabled'));
-echo $Tbs->button('Input button', null, array('type' => 'primary', 'class' => 'success', 'tag'=>'input'));
-echo $Tbs->button('Active danger button', '#button', array('type' => 'danger', 'class' => 'active'));
-echo $Tbs->button('Small info button', '#button', array('size' => 'small', 'type' => 'info'));
-echo $Tbs->button($Tbs->icon('star') . ' I have an icon !!', '#button', array('size' => 'xsmall', 'type' => 'warning'));</pre>
+							<pre>echo $Tbs-&gt;button('I\'m a button');
+echo $Tbs-&gt;button('Me too', '#button');
+echo $Tbs-&gt;button('I\'m a button with a JS alert', null, array('onClick' =&gt; 'javascript:alert(\'i\\\'m the alert\')'));
+echo $Tbs-&gt;button('Big disabled button', '#', array('size' =&gt; 'big', 'type' =&gt; 'primary', 'class' =&gt; 'disabled'));
+echo $Tbs-&gt;button('Input button', null, array('type' =&gt; 'primary', 'class' =&gt; 'success', 'tag'=&gt;'input'));
+echo $Tbs-&gt;button('Active danger button', '#button', array('type' =&gt; 'danger', 'class' =&gt; 'active'));
+echo $Tbs-&gt;button('Small info button', '#button', array('size' =&gt; 'small', 'type' =&gt; 'info'));
+echo $Tbs-&gt;button($Tbs-&gt;icon('star') . ' I have an icon !!', '#button', array('size' =&gt; 'xsmall', 'type' =&gt; 'warning'));</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -159,20 +152,20 @@ echo $Tbs->button($Tbs->icon('star') . ' I have an icon !!', '#button', array('s
 
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">Basic usage</h3>
+							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
 							<pre>$content = array(
-		'Title' => '%header%',
-		'SomeLink' => '#',
-		'SomeLink2' => '#',
-		'SomeLink3' => '#',
-		'item' => '%divider%',
-		'SomeLink4' => '#',
-		'SomeLink5' => '#',
-		'SomeLink6' => '#',
+		'Title' =&gt; '%header%',
+		'SomeLink' =&gt; '#',
+		'SomeLink2' =&gt; '#',
+		'SomeLink3' =&gt; '#',
+		'item' =&gt; '%divider%',
+		'SomeLink4' =&gt; '#',
+		'SomeLink5' =&gt; '#',
+		'SomeLink6' =&gt; '#',
 );
-echo $Tbs->dropdown($content, array('class' => 'clearfix'));</pre>
+echo $Tbs-&gt;dropdown($content, array('class' =&gt; 'clearfix'));</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -196,18 +189,114 @@ echo $Tbs->dropdown($content, array('class' => 'clearfix'));</pre>
 						Button group
 
 					------------------------------------------------------------------ -->
-<!--					<a id="button-group"></a>
+					<a id="button-group"></a>
 					<h2>Button group <small>buttonGroup($buttons, $options)</small></h2>
 
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">Basic usage</h3>
+							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>echo $Tbs->icon('star');</pre>
+							<pre>// Basic usage
+$buttons = array(
+		$Tbs-&gt;button('Item1'),
+		$Tbs-&gt;button('Item2'),
+		$Tbs-&gt;button('Item3'),
+		$Tbs-&gt;button('Item4'),
+);
+echo '&lt;strong&gt;Basic usage:&lt;/strong&gt;&lt;br&gt;';
+echo $Tbs-&gt;buttonGroup($buttons);
+
+// Mixed usage
+$buttonsMixed = array(
+		$Tbs->button('Item1'),
+		//Note that you must define buttonDropdown size if your button group has a custom one. (<a href="https://github.com/el-cms/Tbs/issues/1">#issue1</a>)
+		$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall')),
+		$Tbs->button('Item3', null, array('type' => 'danger')),
+		$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall'), array(), array('split' => true)),
+		$Tbs->button('Item5'),
+);
+echo '&lt;br&gt;&lt;strong&gt;Mixed usage&lt;/strong&gt;&lt;br&gt;';
+echo $Tbs-&gt;buttonGroup($buttonsMixed, array('size'=&gt;'xsmall'));</pre>
 						</div>
 						<div class="panel-footer">
-							<?php echo $Tbs->icon('star'); ?>
+							<?php
+							// Default usage
+							$buttons = array(
+									$Tbs->button('Item1'),
+									$Tbs->button('Item2'),
+									$Tbs->button('Item3'),
+									$Tbs->button('Item4'),
+							);
+							echo '<strong>Basic usage:</strong><br>';
+							echo $Tbs->buttonGroup($buttons);
+
+							// Mixed usage
+							$buttonsMixed = array(
+									$Tbs->button('Item1'),
+									//Note that you must define buttonDropdown size if your button group has a custom one.
+									$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall')),
+									$Tbs->button('Item3', null, array('type' => 'danger')),
+									$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall'), array(), array('split' => true)),
+									$Tbs->button('Item5'),
+							);
+							echo '<br><strong>Mixed usage</strong><br>';
+							echo $Tbs->buttonGroup($buttonsMixed, array('size' => 'xsmall'));
+							?>
+							<em>Note that split buttons dropdowns are not really nice to see...</em>
+						</div>
+					</div>
+
+					<!-- -----------------------------------------------------------------
+
+						Toolbar (work in progress)
+
+					------------------------------------------------------------------ -->
+<!--					<a id="toolbar"></a>
+					<h2>Toolbar <small>toolbar($buttonsGroups, $options)</small></h2>
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Usage</h3>
+						</div>
+						<div class="panel-body">
+							<pre>$buttonGroups = array(array(
+				$Tbs->button('Item1'),
+				$Tbs->button('Item2'),
+				$Tbs->button('Item3'),
+				$Tbs->button('Item4'),
+		),
+		array(
+				$Tbs->button('Item1'),
+				//Note that you must define buttonDropdown size if your button group has a custom one.
+				$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall')),
+				$Tbs->button('Item3', null, array('type' => 'danger')),
+				$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall'), array(), array('split' => true)),
+				$Tbs->button('Item5'),
+		)
+);
+echo $Tbs->toolbar($buttonsMixed, array('size' => 'xsmall'));</pre>
+						</div>
+						<div class="panel-footer">
+							<?php
+							// Default usage
+							$buttonGroups = array(array(
+											$Tbs->button('Item1'),
+											$Tbs->button('Item2'),
+											$Tbs->button('Item3'),
+											$Tbs->button('Item4'),
+									),
+									array(
+											$Tbs->button('Item1'),
+											//Note that you must define buttonDropdown size if your button group has a custom one.
+											$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall')),
+											$Tbs->button('Item3', null, array('type' => 'danger')),
+											$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall'), array(), array('split' => true)),
+											$Tbs->button('Item5'),
+									)
+							);
+							echo $Tbs->toolbar($buttonsMixed, array('size' => 'xsmall'));
+							?>
 						</div>
 					</div>-->
 
@@ -221,7 +310,7 @@ echo $Tbs->dropdown($content, array('class' => 'clearfix'));</pre>
 
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">Basic usage</h3>
+							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
 							<pre>$content = array(
@@ -255,8 +344,8 @@ echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' 
 							echo $Tbs->buttonDropdown('button', $content);
 							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'success'), array(), array('split' => true));
 							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'info', 'size' => 'big'), array(), array('split' => true, 'dropup' => true));
-							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'info', 'class' => 'disabled', 'size'=>'xsmall'), array(), array('dropup' => true));
-							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'warning', 'size'=>'xsmall'), array(), array('dropup' => true));
+							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'info', 'class' => 'disabled', 'size' => 'xsmall'), array(), array('dropup' => true));
+							echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'warning', 'size' => 'xsmall'), array(), array('dropup' => true));
 							?>
 						</div>
 					</div>
@@ -269,8 +358,6 @@ echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' 
 		<script>window.jQuery || document.write('<script src="boilerplate/js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
 
 		<script src="boilerplate/js/vendor/bootstrap.min.js"></script>
-
-		<script src="boilerplate/js/main.js"></script>
 
 		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 <!--        <script>

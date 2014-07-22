@@ -24,4 +24,5 @@ The `test.php` file contains tests, you can open it in your browser... (it uses 
  - [x] icon($icon, $options) **Displays an icon**
  - [x] button($content, $url, $options) **Displays a button**
  - [x] dropdown($content, $options) **Creates a dropdown menu**
+ - [x] buttonGroup($buttons, $options) **Creates a group of buttons**
  - [x] dropdownButton($title, $content, $buttonOptions, $dropdownOptions, $options) **Creates a dropdown button**

@@ -204,7 +204,7 @@ class Tbs {
 	/**
 	 * Creates a group of buttons
 	 *
-	 * @param array $buttons List of buttons elements from button()
+	 * @param array $buttons List of buttons elements from button() or buttonDropdown()
 	 * @param array $options List of options for this element
 	 *
 	 * @return Html code to be displayed
@@ -214,11 +214,71 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
-	 *
+	 *  - class:         string    *null
+	 *                   Additionnal classes for the button group
+	 *  - size:          string    *null|big|standard|small|xsmall
+	 *                   Button sizes. Don't define custom styles for the buttons, but define one for dropdowns.
 	 */
 	public function buttonGroup($buttons, $options = array()) {
+//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Size
+		if ($this->_optionCheck($options, 'size')) {
+			switch (strtolower($options['size'])) {
+				case 'big':
+					$class.=' btn-group-lg';
+					break;
+				case 'small':
+					$class.=' btn-group-sm';
+					break;
+				case 'xsmall':
+					$class.=' btn-group-xs';
+					break;
+				default:
+					break;
+			}
+			unset($options['size']);
+		}
+
+		// Atrtibutes
+		$attributes = $this->_getAttributes($options);
+
+		$out="<div class=\"btn-group{$class}\"$attributes>";
+		foreach($buttons as $b){
+			$out.="\n$b";
+		}
+		$out.="\n</div>";
+
+		return $out;
+	}
+
+	/**
+	 * Creates a toolbar
+	 *
+	 * @param array $buttonGroups List of buttonGroup() items
+	 * @param array $options List of options for this element
+	 *
+	 * @return Html code to be displayed
+	 *
+	 * @link http://getbootstrap.com/components/#btn-groups-toolbar Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 * - class:         string    *null
+	 *                   Additionnal classes for the button group
+	 *  - size:          string    *null|big|standard|small|xsmall
+	 *                   Button sizes. Don't define custom styles for the buttons.
+	 *  - type:    string    *null|standard|primary|success|info|warning|danger|link
+	 *                   Type for the buttons. Don't define custom types for buttons if you use this.
+	 */
+	public function toolbar($buttonGroups, $options = array()) {
+		// Work in progress :)
 	}
 
 	/**
