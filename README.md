@@ -26,3 +26,6 @@ The `test.php` file contains tests, you can open it in your browser... (it uses 
  - [x] dropdown($content, $options) **Creates a dropdown menu**
  - [x] buttonGroup($buttons, $options) **Creates a group of buttons**
  - [x] dropdownButton($title, $content, $buttonOptions, $dropdownOptions, $options) **Creates a dropdown button**
+ - [x] label($content, $options) **Creates a label**
+ - [x] badge($content, $options) **Creates a badge**
+ - [x] alert($content, $options, $dismisible) **Creates an alert block**
