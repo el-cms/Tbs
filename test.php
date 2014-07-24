@@ -21,6 +21,7 @@ $Tbs = new Tbs;
 			body {
 				padding-top: 60px;
 				padding-bottom: 20px;
+				font-size:12px;
 			}
 			#main-menu{
 				font-size: 0.8em;
@@ -38,6 +39,7 @@ $Tbs = new Tbs;
 			pre{
 				font-size: 0.8em;
 			}
+
 		</style>
 		<!--<link rel="stylesheet" href="boilerplate/css/bootstrap-theme.min.css">-->
 
@@ -73,10 +75,14 @@ $Tbs = new Tbs;
 							<li><a href="#button-group">Button group</a></li>
 							<!--<li><a href="#toolbar">Toolbar</a></li>-->
 							<li><a href="#button-dropdown">Button dropdown</a></li>
+							<li><a href="#label">Label</a></li>
+							<li><a href="#alert">Alert</a></li>
+							<li><a href="#badge">Badge</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-md-10">
+
 					<!--					<div class='alert alert-warning'>
 											This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
 											<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
@@ -95,8 +101,10 @@ $Tbs = new Tbs;
 							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>echo $Tbs->icon('star');
-echo $Tbs->icon('star', array('class'=>'text-danger', 'title'=>'Yay ! Red star !'));</pre>
+							<pre class="syntax brush-html">&lt;?php
+echo $Tbs->icon('star');
+echo $Tbs->icon('star', array('class'=>'text-danger', 'title'=>'Yay ! Red star !'));
+?&gt;</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -119,14 +127,16 @@ echo $Tbs->icon('star', array('class'=>'text-danger', 'title'=>'Yay ! Red star !
 							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>echo $Tbs-&gt;button('I\'m a button');
+							<pre class="syntax html">&lt;?php
+echo $Tbs-&gt;button('I\'m a button');
 echo $Tbs-&gt;button('Me too', '#button');
 echo $Tbs-&gt;button('I\'m a button with a JS alert', null, array('onClick' =&gt; 'javascript:alert(\'i\\\'m the alert\')'));
 echo $Tbs-&gt;button('Big disabled button', '#', array('size' =&gt; 'big', 'type' =&gt; 'primary', 'class' =&gt; 'disabled'));
 echo $Tbs-&gt;button('Input button', null, array('type' =&gt; 'primary', 'class' =&gt; 'success', 'tag'=&gt;'input'));
 echo $Tbs-&gt;button('Active danger button', '#button', array('type' =&gt; 'danger', 'class' =&gt; 'active'));
 echo $Tbs-&gt;button('Small info button', '#button', array('size' =&gt; 'small', 'type' =&gt; 'info'));
-echo $Tbs-&gt;button($Tbs-&gt;icon('star') . ' I have an icon !!', '#button', array('size' =&gt; 'xsmall', 'type' =&gt; 'warning'));</pre>
+echo $Tbs-&gt;button($Tbs-&gt;icon('star') . ' I have an icon !!', '#button', array('size' =&gt; 'xsmall', 'type' =&gt; 'warning'));
+?&gt;</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -155,7 +165,8 @@ echo $Tbs-&gt;button($Tbs-&gt;icon('star') . ' I have an icon !!', '#button', ar
 							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>$content = array(
+							<pre class="syntax html">&lt;?php
+$content = array(
 		'Title' =&gt; '%header%',
 		'SomeLink' =&gt; '#',
 		'SomeLink2' =&gt; '#',
@@ -165,7 +176,8 @@ echo $Tbs-&gt;button($Tbs-&gt;icon('star') . ' I have an icon !!', '#button', ar
 		'SomeLink5' =&gt; '#',
 		'SomeLink6' =&gt; '#',
 );
-echo $Tbs-&gt;dropdown($content, array('class' =&gt; 'clearfix'));</pre>
+echo $Tbs-&gt;dropdown($content, array('class' =&gt; 'clearfix'));
+?&gt;</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -197,7 +209,8 @@ echo $Tbs-&gt;dropdown($content, array('class' =&gt; 'clearfix'));</pre>
 							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>// Basic usage
+							<pre class="syntax html">&lt;?php
+// Basic usage
 $buttons = array(
 		$Tbs-&gt;button('Item1'),
 		$Tbs-&gt;button('Item2'),
@@ -217,7 +230,8 @@ $buttonsMixed = array(
 		$Tbs->button('Item5'),
 );
 echo '&lt;br&gt;&lt;strong&gt;Mixed usage&lt;/strong&gt;&lt;br&gt;';
-echo $Tbs-&gt;buttonGroup($buttonsMixed, array('size'=&gt;'xsmall'));</pre>
+echo $Tbs-&gt;buttonGroup($buttonsMixed, array('size'=&gt;'xsmall'));
+?&gt;</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -252,53 +266,55 @@ echo $Tbs-&gt;buttonGroup($buttonsMixed, array('size'=&gt;'xsmall'));</pre>
 						Toolbar (work in progress)
 
 					------------------------------------------------------------------ -->
-<!--					<a id="toolbar"></a>
-					<h2>Toolbar <small>toolbar($buttonsGroups, $options)</small></h2>
+					<!--					<a id="toolbar"></a>
+										<h2>Toolbar <small>toolbar($buttonsGroups, $options)</small></h2>
 
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">Usage</h3>
-						</div>
-						<div class="panel-body">
-							<pre>$buttonGroups = array(array(
-				$Tbs->button('Item1'),
-				$Tbs->button('Item2'),
-				$Tbs->button('Item3'),
-				$Tbs->button('Item4'),
-		),
-		array(
-				$Tbs->button('Item1'),
-				//Note that you must define buttonDropdown size if your button group has a custom one.
-				$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall')),
-				$Tbs->button('Item3', null, array('type' => 'danger')),
-				$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall'), array(), array('split' => true)),
-				$Tbs->button('Item5'),
-		)
-);
-echo $Tbs->toolbar($buttonsMixed, array('size' => 'xsmall'));</pre>
-						</div>
-						<div class="panel-footer">
-							<?php
-							// Default usage
-							$buttonGroups = array(array(
-											$Tbs->button('Item1'),
-											$Tbs->button('Item2'),
-											$Tbs->button('Item3'),
-											$Tbs->button('Item4'),
-									),
-									array(
-											$Tbs->button('Item1'),
-											//Note that you must define buttonDropdown size if your button group has a custom one.
-											$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall')),
-											$Tbs->button('Item3', null, array('type' => 'danger')),
-											$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall'), array(), array('split' => true)),
-											$Tbs->button('Item5'),
-									)
-							);
-							echo $Tbs->toolbar($buttonsMixed, array('size' => 'xsmall'));
-							?>
-						</div>
-					</div>-->
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h3 class="panel-title">Usage</h3>
+											</div>
+											<div class="panel-body">
+												<pre class="syntax html">&lt;?php
+$buttonGroups = array(array(
+									$Tbs->button('Item1'),
+									$Tbs->button('Item2'),
+									$Tbs->button('Item3'),
+									$Tbs->button('Item4'),
+							),
+							array(
+									$Tbs->button('Item1'),
+									//Note that you must define buttonDropdown size if your button group has a custom one.
+									$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall')),
+									$Tbs->button('Item3', null, array('type' => 'danger')),
+									$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall'), array(), array('split' => true)),
+									$Tbs->button('Item5'),
+							)
+					);
+					echo $Tbs->toolbar($buttonsMixed, array('size' => 'xsmall'));
+?&gt;</pre>
+											</div>
+											<div class="panel-footer">
+					<?php
+					// Default usage
+					$buttonGroups = array(array(
+									$Tbs->button('Item1'),
+									$Tbs->button('Item2'),
+									$Tbs->button('Item3'),
+									$Tbs->button('Item4'),
+							),
+							array(
+									$Tbs->button('Item1'),
+									//Note that you must define buttonDropdown size if your button group has a custom one.
+									$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall')),
+									$Tbs->button('Item3', null, array('type' => 'danger')),
+									$Tbs->buttonDropdown('Item2', $content, array('size' => 'xsmall'), array(), array('split' => true)),
+									$Tbs->button('Item5'),
+							)
+					);
+					echo $Tbs->toolbar($buttonsMixed, array('size' => 'xsmall'));
+					?>
+											</div>
+										</div>-->
 
 					<!-- -----------------------------------------------------------------
 
@@ -313,7 +329,8 @@ echo $Tbs->toolbar($buttonsMixed, array('size' => 'xsmall'));</pre>
 							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>$content = array(
+							<pre class="syntax html">&lt;?php
+$content = array(
 		'Title' => '%header%',
 		'SomeLink' => '#',
 		'SomeLink2' => '#',
@@ -327,7 +344,8 @@ echo $Tbs->buttonDropdown('button', $content);
 echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'success'), array(), array('split' => true));
 echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'info', 'size' => 'big'), array(), array('split' => true, 'dropup' => true));
 echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'info', 'class' => 'disabled', 'size'=>'xsmall'), array(), array('dropup' => true));
-echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'warning', 'size'=>'xsmall'), array(), array('dropup' => true));</pre>
+echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' => 'https://github.com/el-cms/Tbs', 'target' => '_blank', 'type' => 'warning', 'size'=>'xsmall'), array(), array('dropup' => true));
+?&gt;</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -363,12 +381,14 @@ echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' 
 							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>echo $Tbs-&gt;label('label') . "\n";
+							<pre class="syntax html">&lt;?php
+echo $Tbs-&gt;label('label') . "\n";
 echo $Tbs-&gt;label('label', array('type' =&gt; 'primary')) . "\n";
 echo $Tbs-&gt;label('label', array('type' =&gt; 'success')) . "\n";
 echo $Tbs-&gt;label('label', array('type' =&gt; 'info')) . "\n";
 echo $Tbs-&gt;label('label', array('type' =&gt; 'warning')) . "\n";
-echo $Tbs-&gt;label('label', array('type' =&gt; 'danger')) . "\n";</pre>
+echo $Tbs-&gt;label('label', array('type' =&gt; 'danger')) . "\n";
+?&gt;</pre>
 						</div>
 						<div class="panel-footer">
 							<?php
@@ -395,7 +415,7 @@ echo $Tbs-&gt;label('label', array('type' =&gt; 'danger')) . "\n";</pre>
 							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>&lt;p&gt;lorem ipsum &lt;?php echo $Tbs->badge('150');?&gt;&lt;/p&gt;
+							<pre class="syntax html">&lt;p&gt;lorem ipsum &lt;?php echo $Tbs->badge('150');?&gt;&lt;/p&gt;
 &lt;ul class="nav nav-pills nav-stacked" style="max-width:250px;"&gt;
   &lt;li class="active"&gt;
     &lt;a href="#"&gt;&lt;?php echo $Tbs->badge('150', array('class' => 'pull-right')); ?&gt;Home&lt;/a&gt;
@@ -425,7 +445,7 @@ echo $Tbs-&gt;label('label', array('type' =&gt; 'danger')) . "\n";</pre>
 							<h3 class="panel-title">Usage</h3>
 						</div>
 						<div class="panel-body">
-							<pre>&lt;?php
+							<pre class="syntax html">&lt;?php
 $content = "&lt;strong&gt;Well done!&lt;/strong&gt; You successfully read this important alert message.";
 echo $Tbs-&gt;alert($content, array('type' =&gt; 'success'));
 echo $Tbs-&gt;alert($content, array('type' =&gt; 'success'), 'Close');
@@ -448,6 +468,13 @@ echo $Tbs-&gt;alert($content, array('type' =&gt; 'success'), 'Close');
 		<script>window.jQuery || document.write('<script src="boilerplate/js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
 
 		<script src="boilerplate/js/vendor/bootstrap.min.js"></script>
+		<script src="jquery-syntax/jquery.syntax.min.js"></script>
+		<script>
+			// Syntax highlighting
+			jQuery(function($) {
+				$.syntax();
+			});
+		</script>
 
 		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 <!--        <script>
