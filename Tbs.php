@@ -565,11 +565,44 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class: string, *null
+	 *           Additionnal classes for the label element
+	 *  - type:  string, *primary|success|info|warning|danger
+	 *           label type
 	 *
 	 */
-	public function label($title, $options = array()) {
+	public function label($content, $options = array()) {
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		if ($this->_optionCheck($options, 'type')) {
+			switch (strtolower($options['type'])) {
+				case 'primary':
+					$class.=' label-primary';
+					break;
+				case 'success':
+					$class.=' label-success';
+					break;
+				case 'info':
+					$class.=' label-info';
+					break;
+				case 'warning':
+					$class.=' label-warning';
+					break;
+				case 'danger':
+					$class.=' label-danger';
+					break;
+			}
+			unset($options['type']);
+		} else {
+			// Default
+			$class.=' label-default';
+		}
+
+		return "<span class=\"label{$class}\">$content</span>";
 	}
 
 	/**
@@ -585,11 +618,17 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
+	 * - class : string *null : additionnal list of styles.
 	 *
 	 */
 	public function badge($content, $options = array()) {
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		return "<span class=\"badge{$class}\">$content</span>";
 	}
 
 	/**
@@ -659,6 +698,8 @@ class Tbs {
 	 *
 	 * @param string $content Alert content
 	 * @param array $options List of options for this element
+	 * @param string $dismisible Add a dismiss button to the element
+	 *			the text of $dismisible will be added to the button tag.
 	 *
 	 * @return Html code to be displayed
 	 *
@@ -667,11 +708,46 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class: string, *null
+	 *           Additionnal classes for the alert element
+	 *  - type:  string, *success|info|warning|danger
+	 *           alert type
 	 *
 	 */
-	public function alert($content, $options = array()) {
+	public function alert($content, $options = array(), $dismisible = '') {
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class .= " ${options['class']}";
+			unset($options['class']);
+		}
 
+		if ($this->_optionCheck($options, 'type')) {
+			switch (strtolower($options['type'])) {
+				case 'success':
+					$class .= ' alert-success';
+					break;
+				case 'info':
+					$class .= ' alert-info';
+					break;
+				case 'warning':
+					$class .= ' alert-warning';
+					break;
+				case 'danger':
+					$class .= ' alert-danger';
+					break;
+			}
+			unset($options['type']);
+		}
+
+		$dismiss = null;
+		if ($dismisible != '') {
+			$class .= ' alert-dismissible';
+			$dismiss = '<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">' . $dismisible . '</span></button>';
+		}
+
+		return "<div class=\"alert{$class}\" role=\"alert\">
+			$dismiss
+			$content</div>";
 	}
 
 	/**

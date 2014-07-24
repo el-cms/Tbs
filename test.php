@@ -349,6 +349,96 @@ echo $Tbs->buttonDropdown($Tbs->icon('link') . ' gitHub', $content, array('url' 
 							?>
 						</div>
 					</div>
+
+					<!-- -----------------------------------------------------------------
+
+						Label
+
+					------------------------------------------------------------------ -->
+					<a id="label"></a>
+					<h2>Label <small>button($content, $options)</small></h2>
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Usage</h3>
+						</div>
+						<div class="panel-body">
+							<pre>echo $Tbs-&gt;label('label') . "\n";
+echo $Tbs-&gt;label('label', array('type' =&gt; 'primary')) . "\n";
+echo $Tbs-&gt;label('label', array('type' =&gt; 'success')) . "\n";
+echo $Tbs-&gt;label('label', array('type' =&gt; 'info')) . "\n";
+echo $Tbs-&gt;label('label', array('type' =&gt; 'warning')) . "\n";
+echo $Tbs-&gt;label('label', array('type' =&gt; 'danger')) . "\n";</pre>
+						</div>
+						<div class="panel-footer">
+							<?php
+							echo $Tbs->label('label') . "\n";
+							echo $Tbs->label('label', array('type' => 'primary')) . "\n";
+							echo $Tbs->label('label', array('type' => 'success')) . "\n";
+							echo $Tbs->label('label', array('type' => 'info')) . "\n";
+							echo $Tbs->label('label', array('type' => 'warning')) . "\n";
+							echo $Tbs->label('label', array('type' => 'danger')) . "\n";
+							?>
+						</div>
+					</div>
+
+					<!-- -----------------------------------------------------------------
+
+						Badge
+
+					------------------------------------------------------------------ -->
+					<a id="badge"></a>
+					<h2>Badge <small>badge($content, $options)</small></h2>
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Usage</h3>
+						</div>
+						<div class="panel-body">
+							<pre>&lt;p&gt;lorem ipsum &lt;?php echo $Tbs->badge('150');?&gt;&lt;/p&gt;
+&lt;ul class="nav nav-pills nav-stacked" style="max-width:250px;"&gt;
+  &lt;li class="active"&gt;
+    &lt;a href="#"&gt;&lt;?php echo $Tbs->badge('150', array('class' => 'pull-right')); ?&gt;Home&lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</pre>
+						</div>
+						<div class="panel-footer">
+							<p>Lorem ipsum <?php echo $Tbs->badge('150'); ?></p>
+							<ul class="nav nav-pills nav-stacked" style="max-width:250px;">
+								<li class="active">
+									<a href="#"><?php echo $Tbs->badge('150', array('class' => 'pull-right')); ?>Home</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- -----------------------------------------------------------------
+
+						Alert
+
+					------------------------------------------------------------------ -->
+					<a id="alert"></a>
+					<h2>Alert <small>alert($content, $options, $dismisible = false)</small></h2>
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Usage</h3>
+						</div>
+						<div class="panel-body">
+							<pre>&lt;?php
+$content = "&lt;strong&gt;Well done!&lt;/strong&gt; You successfully read this important alert message.";
+echo $Tbs-&gt;alert($content, array('type' =&gt; 'success'));
+echo $Tbs-&gt;alert($content, array('type' =&gt; 'success'), 'Close');
+?&gt;</pre>
+						</div>
+						<div class="panel-footer">
+							<?php
+							$content = "<strong>Well done!</strong> You successfully read this important alert message.";
+							echo $Tbs->alert($content, array('type' => 'success'));
+							echo $Tbs->alert($content, array('type' => 'warning'), 'Close');
+							?>
+						</div>
+					</div>
 				</div>
 			</div>
 
