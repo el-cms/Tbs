@@ -17,9 +17,9 @@ $Tbs = new Tbs;
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/bootstrap.theme.min.css">
 		<style>
 			body {
-				padding-top: 60px;
 				padding-bottom: 20px;
 				/*font-size:0.8px;*/
 			}
@@ -36,16 +36,20 @@ $Tbs = new Tbs;
 			/*			TOC styles*/
 			#main-menu{
 				font-size: 0.8em;
-				list-style-type: none;
 			}
-			#main-menu a{
+			a.toc-depth-2{
 				margin-bottom: 3px;
 				border-left:3px solid #CCC;
 				padding-left:5px;
 				display:block;
 			}
-			#main-menu a:hover{
+			a.toc-depth-2:hover{
 				border-left:3px solid #0C0;
+			}
+			a.toc-depth-1{
+				font-size:1em;
+				border:0px;
+				font-weight:bold;
 			}
 		</style>
 	</head>
@@ -53,7 +57,7 @@ $Tbs = new Tbs;
 		<!--[if lt IE 7]>
 				<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar navbar-inverse" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -71,26 +75,29 @@ $Tbs = new Tbs;
       <!-- Example row of columns -->
 			<div class="row affix-top">
 				<div class="col-md-2">
-					<div id="main-menu" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+					<div id="main-menu" data-spy="affix" data-offset-bottom="200">
 					</div>
 				</div>
 				<div class="col-md-10">
 
-<!--					<div class='alert alert-warning'>
-						This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
-						<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
-					</div>-->
-
+					<!--					<div class='alert alert-warning'>
+											This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
+											<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
+										</div>-->
+					<h1>CSS</h1>
+					<?php
+					include 'sections/button.php';
+					?>
+					<h1>Elements</h1>
 					<?php
 					include 'sections/icon.php';
-					include 'sections/button.php';
 					include 'sections/dropdown.php';
 					include 'sections/btngroup.php';
 					include 'sections/toolbar.php';
 					include 'sections/btndropdown.php';
 					include 'sections/label.php';
-					include 'sections/alert.php';
 					include 'sections/badge.php';
+					include 'sections/alert.php';
 					?>
 				</div>
 			</div>
@@ -114,7 +121,7 @@ $Tbs = new Tbs;
 				});
 			});
 
-			$('#main-menu').tableOfContents(null, {depth:2});
+			$('#main-menu').tableOfContents(null, {depth: 2});
 		</script>
 
 		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
