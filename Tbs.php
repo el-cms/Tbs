@@ -50,7 +50,9 @@ class Tbs {
 	 *           Button type
 	 *  - tag:   string, *a|button|submit|input
 	 *           Button tag
-	 *  - Other attributes that can apply to the "a" or "button elements
+	 *  - url:   string, *null
+	 *           Button's URL
+	 *  - Other attributes that can apply to the "a" or "button" elements
 	 *
 	 * If no $url is provided, a button element is created instead of a link.
 	 * Additionnal classes can be seen on the TBS CSS page: btn-block, active, disabled,...
@@ -109,6 +111,7 @@ class Tbs {
 
 		// Tag
 		$inputType = null;
+		$tag = null;
 		if ($this->_optionCheck($options, 'tag')) {
 			$tag = $options['tag'];
 			unset($options['tag']);
@@ -220,7 +223,7 @@ class Tbs {
 	 *                   Button sizes. Don't define custom styles for the buttons, but define one for dropdowns.
 	 */
 	public function buttonGroup($buttons, $options = array()) {
-//Class
+		//Class
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
 			$class.=" ${options['class']}";
@@ -245,11 +248,11 @@ class Tbs {
 			unset($options['size']);
 		}
 
-		// Atrtibutes
+		// Attributes
 		$attributes = $this->_getAttributes($options);
 
-		$out="<div class=\"btn-group{$class}\"$attributes>";
-		foreach($buttons as $b){
+		$out = "<div class=\"btn-group{$class}\"$attributes>";
+		foreach ($buttons as $b) {
 			$out.="\n$b";
 		}
 		$out.="\n</div>";
@@ -272,22 +275,35 @@ class Tbs {
 	 * --------
 	 * - class:         string    *null
 	 *                   Additionnal classes for the button group
-	 *  - size:          string    *null|big|standard|small|xsmall
-	 *                   Button sizes. Don't define custom styles for the buttons.
-	 *  - type:    string    *null|standard|primary|success|info|warning|danger|link
-	 *                   Type for the buttons. Don't define custom types for buttons if you use this.
+	 * - Other attributes that can apply to a "div" element.
+	 *
 	 */
 	public function toolbar($buttonGroups, $options = array()) {
-		// Work in progress :)
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
+
+		// Atrtibutes
+		$attributes = $this->_getAttributes($options);
+
+		$out = "<div class=\"btn-toolbar{$class}\"$attributes>";
+		foreach ($buttonGroups as $v) {
+			$out.="\n$v";
+		}
+		$out.="\n</div>";
+
+		return $out;
 	}
 
 	/**
 	 * Creates a button with a dropdown menu
 	 *
 	 * @param string title Button title
-	 * @param array $content Dropdown content (same as the content passed to dropdown())
+	 * @param array $dropdown Dropdown content from dropdown()
 	 * @param array $buttonOptions List of options for the button (same as button())
-	 * @param array $dropdownOptions List of options for the menu (same as dropdown())
 	 * @param array $options List of options for the button wrapper
 	 *
 	 * @return Html code to be displayed
@@ -297,64 +313,93 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *  - split   true|*false    Makes a split button
-	 *  - dropup  true|*false    Makes the menu drop up.
-	 *
+	 *  - class: string, *null
+	 *           Additionnal classes for the button
+	 *  - size:  string, big|*standard|small|xsmall
+	 *           Button size
+	 *  - type:  string, *standard|primary|success|info|warning|danger|link
+	 *           Button type
+	 *  - tag:   string, *a|button|submit|input
+	 *           Button tag
+	 *  - url:   string, *null
+	 *           Button's URL
+	 *  - split  bool, *false
+	 *           Creates a split button dropdown
+	 *  - dropup bool, *false
+	 *           Creates a dropup variation.
 	 * If you want to make a split button with an URL, pass the "url" option in the $buttonOptions array
 	 *
 	 */
-	public function buttonDropdown($title, $content, $buttonOptions = array(), $dropdownOptions = array(), $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
+	public function buttonDropdown($title, $dropdown, $options = array()) {
+		// wrapper class
+		// button class
+		$btnClass = null;
+		$btnOptions = array('class'=>null, 'url'=>null, 'tag'=>null, 'type'=>null);
+		$url=null;
+
+		// Type will be passed to button();
+		if ($this->_optionCheck($options, 'type')) {
+			$btnOptions['type'] = $options['type'];
+			unset($options['type']);
 		}
 
+		// Tag will be passed to button();
+		if ($this->_optionCheck($options, 'tag')) {
+			$btnOptions['tag'] = $options['tag'];
+			unset($options['tag']);
+		}
+
+		// Url will be passed to button()
+		if ($this->_optionCheck($options, 'url')) {
+			$url = $options['url'];
+			unset($options['url']);
+		}
+		// Disabled will be passed to button()
+		if ($this->_optionCheck($options, 'disabled')) {
+			$btnOptions['disabled'] = $options['disabled'];
+			unset($options['disabled']);
+		}
 		// Split
-		$url = null;
 		$split = false;
 		if ($this->_optionCheck($options, 'split') && $options['split'] === true) {
-//			if ($options['split'] === true) {
-			if ($this->_optionCheck($buttonOptions, 'url')) {
-				$url = $buttonOptions['url'];
-				unset($buttonOptions['url']);
-			}
 			$split = true;
 			unset($options['split']);
-//			}
 		}
 
 		// Dropup
 		if ($this->_optionCheck($options, 'dropup') && $options['dropup'] === true) {
-			$class.=' dropup';
+			if(!empty($options['class'])){
+				$options['class'].='dropup';
+			}else{
+				$options['class']='dropup';
+			}
+			$options['class'].=' dropup';
 			unset($options['dropup']);
 		}
 
 		// Attributes
 		$attributes = $this->_getAttributes($options);
 
+		$buttons = array();
+
 		// Creating button
 		if ($split) {
-			$button = $this->button($title, $url, $buttonOptions);
-			$caretOptions = $buttonOptions;
+			$buttons[] = $this->button($title, $url, $btnOptions);
+			$caretOptions = $btnOptions;
 			$caretOptions['class'].=' dropdown-toggle';
 			$caretOptions['data-toggle'] = 'dropdown';
-			$button.= $this->button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', null, $caretOptions);
+			$buttons[] = $this->button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', null, $caretOptions);
 		} else {
 			// Updating button class and attributes:
-			$buttonOptions['class'].=' dropdown-toggle';
-			$buttonOptions['data-toggle'] = 'dropdown';
-			$button = $this->button($title . ' <span class="caret"></span>', $url, $buttonOptions);
+			$btnOptions['class'].=' dropdown-toggle';
+			$btnOptions['data-toggle'] = 'dropdown';
+			$buttons[] = $this->button($title . ' <span class="caret"></span>', $url, $btnOptions);
 		}
 
 		// Creating dropdown
-		$dropdown = $this->dropdown($content, $dropdownOptions);
+		$buttons[] = $dropdown;
 
-		return "<div class=\"btn-group{$class}\"$attributes>\n"
-						. "$button\n"
-						. "$dropdown\n"
-						. "</div>";
+		return $this->buttonGroup($buttons, $options);
 	}
 
 	// ---------------------------------------------------------------------------
@@ -699,7 +744,7 @@ class Tbs {
 	 * @param string $content Alert content
 	 * @param array $options List of options for this element
 	 * @param string $dismisible Add a dismiss button to the element
-	 *			the text of $dismisible will be added to the button tag.
+	 * 			the text of $dismisible will be added to the button tag.
 	 *
 	 * @return Html code to be displayed
 	 *
