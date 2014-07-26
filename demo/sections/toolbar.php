@@ -1,9 +1,9 @@
 <a id="toolbar"></a>
-<h2>Toolbar</h2>
+<h3>Toolbar</h3>
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Usage: <code>toolbar($buttonsGroups, $options)</code></h3>
+		Usage: <code>toolbar($buttonsGroups, $options)</code>
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php

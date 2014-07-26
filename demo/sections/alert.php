@@ -3,7 +3,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Usage: <code>alert($content, $options, $dismisible = false)</code></h3>
+		Usage: <code>alert($content, $options, $dismisible = false)</code>
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php

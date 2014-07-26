@@ -3,7 +3,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Usage: <code>dropdown($content, $options)</code></h3>
+		Usage: <code>dropdown($content, $options)</code>
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php

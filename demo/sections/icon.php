@@ -3,7 +3,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Usage: <code>icon($icon, $options)</code></h3>
+		Usage: <code>icon($icon, $options)</code>
 	</div>
 	<div class="panel-body">
 		<pre class="syntax brush-html">&lt;?php

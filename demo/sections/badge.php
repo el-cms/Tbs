@@ -3,7 +3,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Usage: <code>badge($content, $options)</code></h3>
+		Usage: <code>badge($content, $options)</code>
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;p&gt;lorem ipsum &lt;?php echo $Tbs->badge('150');?&gt;&lt;/p&gt;

@@ -279,7 +279,7 @@ class Tbs {
 	 *
 	 */
 	public function toolbar($buttonGroups, $options = array()) {
-		//Class
+		// Class
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
 			$class.=" ${options['class']}";
@@ -425,6 +425,11 @@ class Tbs {
 	 *
 	 */
 	public function input($name, $options = array()) {
+
+	}
+
+
+	public function form($inputs, $options){
 
 	}
 

@@ -2,7 +2,7 @@
 <h2>Button dropdown</h2>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">Usage: <code>buttonDropdown($button, $dropdown, $options)</code></h3>
+		Usage: <code>buttonDropdown($button, $dropdown, $options)</code>
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php
