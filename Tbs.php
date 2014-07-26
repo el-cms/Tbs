@@ -748,8 +748,6 @@ class Tbs {
 	 *
 	 * @param string $content Alert content
 	 * @param array $options List of options for this element
-	 * @param string $dismisible Add a dismiss button to the element
-	 * 			the text of $dismisible will be added to the button tag.
 	 *
 	 * @return Html code to be displayed
 	 *
@@ -762,9 +760,12 @@ class Tbs {
 	 *           Additionnal classes for the alert element
 	 *  - type:  string, *success|info|warning|danger
 	 *           alert type
+	 * - dismiss: string, *null
+	 *            If not null, a dismiss button will be create.
+	 *            The string value will be added to the button tag.
 	 *
 	 */
-	public function alert($content, $options = array(), $dismisible = '') {
+	public function alert($content, $options = array()) {
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
 			$class .= " ${options['class']}";
@@ -790,9 +791,14 @@ class Tbs {
 		}
 
 		$dismiss = null;
-		if ($dismisible != '') {
+		if ($this->_optionCheck($options, 'dismiss')) {
+			$dismiss .= " ${options['dismiss']}";
+			unset($options['dismiss']);
+		}
+
+		if ($dismiss != '') {
 			$class .= ' alert-dismissible';
-			$dismiss = '<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">' . $dismisible . '</span></button>';
+			$dismiss = '<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">' . $dismiss . '</span></button>';
 		}
 
 		return "<div class=\"alert{$class}\" role=\"alert\">
