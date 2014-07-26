@@ -51,6 +51,16 @@ $Tbs = new Tbs;
 				border:0px;
 				font-weight:bold;
 			}
+			a.toc-depth-3{
+				margin-left:5px;
+				margin-bottom: 3px;
+				border-left:3px solid #CFF;
+				padding-left:5px;
+				display:block;
+			}
+			a.toc-depth-3:hover{
+				border-left:3px solid #0CC;
+			}
 		</style>
 	</head>
 	<body>
@@ -93,7 +103,8 @@ $Tbs = new Tbs;
 					include 'sections/icon.php';
 					include 'sections/dropdown.php';
 					include 'sections/btngroup.php';
-					include 'sections/toolbar.php';
+					// Toolbar is a button-group subsection
+						include 'sections/toolbar.php';
 					include 'sections/btndropdown.php';
 					include 'sections/label.php';
 					include 'sections/badge.php';
@@ -121,7 +132,7 @@ $Tbs = new Tbs;
 				});
 			});
 
-			$('#main-menu').tableOfContents(null, {depth: 2});
+			$('#main-menu').tableOfContents(null, {depth: 3});
 		</script>
 
 		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
