@@ -1,10 +1,9 @@
 <a id="image"></a>
-<!-- if the section corresponds to an element variation, use h3 !-->
-<h2>Images</h2>
+<div class="inToc"><h2>Images</h2></div>
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		Usage: <code><!--Method definition--></code>
+		Usage: <code>image($path, $options = array())</code>
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php

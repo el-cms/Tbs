@@ -17,16 +17,46 @@ $Tbs = new Tbs;
 ```
 
 ## Tests
-The `test.php` file contains tests, you can open it in your browser... (it uses a boilerplate template from [Initializr](http://www.initializr.com/))
+The `demo/index.php` file contains tests, you can open it in your browser... (it uses a boilerplate template from [Initializr](http://www.initializr.com/))
 
 ## Methods that are ready:
 
- - [x] icon($icon, $options) **Displays an icon**
- - [x] button($content, $url, $options) **Displays a button**
- - [x] dropdown($content, $options) **Creates a dropdown menu**
- - [x] buttonGroup($buttons, $options) **Creates a group of buttons**
-  - [x] toolbar($buttonGroups, $options) ** Creates a toolbar**
- - [x] dropdownButton($title, $content, $buttonOptions, $dropdownOptions, $options) **Creates a dropdown button**
- - [x] label($content, $options) **Creates a label**
- - [x] badge($content, $options) **Creates a badge**
- - [x] alert($content, $options) **Creates an alert block**
+ - [x] icon($icon, $options) *Displays an icon*
+ - **Buttons:**
+  - [x] button($content, $url, $options) *Displays a button*
+  - [x] buttonGroup($buttons, $options) *Creates a group of buttons*
+  - [x] buttonDropdown($title, $content, $buttonOptions, $dropdownOptions, $options) *Creates a dropdown button*
+  - [x] toolbar($buttonGroups, $options) * Creates a toolbar*
+ - [x] dropdown($content, $options) *Creates a dropdown menu*
+ - [x] label($content, $options) *Creates a label*
+ - [x] badge($content, $options) *Creates a badge*
+ - [x] alert($content, $options) *Creates an alert block*
+ - **Forms:**
+  - [ ] form() *Not done yet*
+  - [x] input($name, $type, $value, $options) *Creates an input element*
+   - [x] inputSelect($name, $list, $options) *Creates a select element*
+ - [x] image($path, $options) *Creates an image*
+ - [ ] breadcrumbs()
+ - [ ] embed()
+ - [x] header()
+ - [ ] inputGroup()
+ - [ ] jAffix()
+ - [ ] jAlert()
+ - [ ] jButton()
+ - [ ] jCarousel()
+ - [ ] jCollapse()
+ - [ ] jModal()
+ - [ ] jPopover()
+ - [ ] jScrollspy()
+ - [ ] jTooltip()
+ - [ ] jumbotron()
+ - [ ] listGroup()
+ - [ ] media()
+ - [ ] nav()
+ - [ ] navBar()
+ - [ ] pager()
+ - [ ] paginator()
+ - [ ] panel()
+ - [ ] progressBar()
+ - [ ] toolbar()
+ - [ ] well()

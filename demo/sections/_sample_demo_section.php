@@ -1,6 +1,6 @@
 <a id="<!--Element-->"></a>
 <!-- if the section corresponds to an element variation, use h3 !-->
-<h2>Alert</h2>
+<div class="inToc"><h2>Alert</h2></div>
 
 <div class="panel panel-default">
 	<div class="panel-heading">
@@ -13,7 +13,7 @@
 	</div>
 	<div class="panel-footer">
 		<?php
-		// PHP code 
+		// PHP code
 		?>
 	</div>
 </div>

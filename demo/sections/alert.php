@@ -1,5 +1,5 @@
 <a id="alert"></a>
-<h2>Alert</h2>
+<div class="inToc"><h2>Alert</h2></div>
 
 <div class="panel panel-default">
 	<div class="panel-heading">

@@ -1,5 +1,5 @@
 <a id="input"></a>
-<h3>Input</h3>
+<div class="inToc"><h3>Input</h3></div>
 
 <div class="panel panel-default">
 	<div class="panel-heading">

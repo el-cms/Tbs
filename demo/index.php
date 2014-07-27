@@ -17,7 +17,6 @@ $Tbs = new Tbs;
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap.theme.min.css">
 		<style>
 			body {
 				padding-bottom: 20px;
@@ -95,23 +94,24 @@ $Tbs = new Tbs;
 											This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
 											<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
 										</div>-->
-					<h1>CSS</h1>
+					<div class="inToc"><h1>CSS</h1></div>
 					<?php
 					include 'sections/form.php';
 					include 'sections/input.php';
 					include 'sections/button.php';
 					include 'sections/image.php';
 					?>
-					<h1>Elements</h1>
+					<div class="inToc"><h1>Elements</h1></div>
 					<?php
 					include 'sections/icon.php';
 					include 'sections/dropdown.php';
 					include 'sections/btngroup.php';
 					// Toolbar is a button-group subsection
-						include 'sections/toolbar.php';
+					include 'sections/toolbar.php';
 					include 'sections/btndropdown.php';
 					include 'sections/label.php';
 					include 'sections/badge.php';
+					include 'sections/header.php';
 					include 'sections/alert.php';
 					?>
 				</div>
@@ -136,7 +136,7 @@ $Tbs = new Tbs;
 				});
 			});
 
-			$('#main-menu').tableOfContents(null, {depth: 3});
+			$('#main-menu').tableOfContents($('.inToc'), {depth: 3});
 		</script>
 
 		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

@@ -1,5 +1,5 @@
 <a id="icon"></a>
-<h2>Icon</h2>
+<div class="inToc"><h2>Icon</h2></div>
 
 <div class="panel panel-default">
 	<div class="panel-heading">

@@ -909,7 +909,7 @@ class Tbs {
 	 * Creates a header (H element)
 	 *
 	 * @param string $content Header content
-	 * @param int $level Header level (1,2,3,4,5 or 6)
+	 * @param string $subtext Sub-text
 	 * @param array $options List of options for this element
 	 *
 	 * @return Html code to be displayed
@@ -919,11 +919,25 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class      string, *null
+	 *               Additionnal classes
 	 *
 	 */
-	public function header($content, $level, $options = array()) {
+	public function header($content, $subtext, $options = array()) {
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		if(!is_null($subtext)){
+			$subtext=" <small>$subtext</small>";
+		}
+		return "\n<div class=\"page-header{$class}\">\n\t<h1>$content{$subtext}</h1></div>";
 	}
 
 	/**
@@ -955,7 +969,7 @@ class Tbs {
 		}
 		// Type
 		if ($this->_optionCheck($options, 'type')) {
-			switch($options['type']){
+			switch ($options['type']) {
 				case 'round':
 					$class.=' img-rounded';
 					break;
@@ -972,17 +986,17 @@ class Tbs {
 		// Responsive
 		$responsive = false;
 		if ($this->_optionCheck($options, 'responsive')) {
-			$responsive=$options['responsive'];
+			$responsive = $options['responsive'];
 			unset($options['responsive']);
 		}
-		if($responsive){
+		if ($responsive) {
 			$class.=' img-responsive';
 		}
 
 		// Attributes
 		$attributes = $this->_getAttributes($options);
 
-		return "<img class=\"".trim($class)."\"$attributes src=\"$path\"/>";
+		return "<img class=\"" . trim($class) . "\"$attributes src=\"$path\"/>";
 	}
 
 	/**
