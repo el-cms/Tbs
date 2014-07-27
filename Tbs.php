@@ -927,7 +927,7 @@ class Tbs {
 	}
 
 	/**
-	 * Creates a thumbnail element
+	 * Creates a img element
 	 *
 	 * @param string $path Path to the image
 	 * @param array $options List of options for this element
@@ -939,11 +939,50 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
-	 *
+	 *  - class      string, *null
+	 *               Additionnal classes
+	 *  - type       string, *null|round|circle|thumb
+	 *               Image type
+	 *  - responsive bool *false
+	 *               Defines if the image is responsive or not. Use it for big pics
 	 */
-	public function thumbnail($path, $options = array()) {
+	public function image($path, $options = array()) {
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
+		// Type
+		if ($this->_optionCheck($options, 'type')) {
+			switch($options['type']){
+				case 'round':
+					$class.=' img-rounded';
+					break;
+				case 'circle':
+					$class.='img-circle';
+					break;
+				case 'thumb':
+					$class.='img-thumbnail';
+					break;
+			}
+			unset($options['type']);
+		}
 
+		// Responsive
+		$responsive = false;
+		if ($this->_optionCheck($options, 'responsive')) {
+			$responsive=$options['responsive'];
+			unset($options['responsive']);
+		}
+		if($responsive){
+			$class.=' img-responsive';
+		}
+
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		return "<img class=\"".trim($class)."\"$attributes src=\"$path\"/>";
 	}
 
 	/**

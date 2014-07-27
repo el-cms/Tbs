@@ -97,9 +97,10 @@ $Tbs = new Tbs;
 										</div>-->
 					<h1>CSS</h1>
 					<?php
-					include 'sections/button.php';
 					include 'sections/form.php';
 					include 'sections/input.php';
+					include 'sections/button.php';
+					include 'sections/image.php';
 					?>
 					<h1>Elements</h1>
 					<?php
