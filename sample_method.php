@@ -1,5 +1,3 @@
-<?php
-
 // This is a sample method to speed up the class development.
 
 /**
@@ -21,7 +19,7 @@
  * If you want to make a split button with an URL, pass the "url" option in the $buttonOptions array
  *
  */
-public function method($var, $options) {
+public function <method>($var, $options) {
 
 	//Class
 	$class = null;
@@ -30,7 +28,6 @@ public function method($var, $options) {
 		unset($options['class']);
 	}
 
-	// Attributes
 	// Attributes
 	$attributes = $this->_getAttributes($options);
 

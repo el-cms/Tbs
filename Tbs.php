@@ -84,6 +84,26 @@ class Tbs {
 			unset($options['size']);
 		}
 
+		// Tag
+		$inputType = null;
+		$tag = null;
+		if ($this->_optionCheck($options, 'tag')) {
+			$tag = $options['tag'];
+			unset($options['tag']);
+
+			// Force type for submits and reset
+			if (in_array($tag, array('submit', 'input', 'reset'))) {
+				switch ($tag) {
+					case 'submit':
+						$options['type'] = 'primary';
+						break;
+					case 'reset':
+						$options['type'] = 'danger';
+						break;
+				}
+			}
+		}
+
 		// Type:
 		if ($this->_optionCheck($options, 'type')) {
 			switch (strtolower($options['type'])) {
@@ -109,22 +129,6 @@ class Tbs {
 			$class.=' btn-default';
 		}
 
-		// Tag
-		$inputType = null;
-		$tag = null;
-		if ($this->_optionCheck($options, 'tag')) {
-			$tag = $options['tag'];
-			unset($options['tag']);
-
-			// Check for type and value option with "submit" or "input" tag
-			if ($this->_optionCheck($options, 'type')) {
-				if (in_array($tag, array('submit', 'input'))) {
-					unset($options['type']);
-					$options['value'] = $content;
-				}
-			}
-		}
-
 		// Atrtibutes
 		$attributes = $this->_getAttributes($options);
 
@@ -132,15 +136,16 @@ class Tbs {
 		if (!is_null($url) || $tag === 'a') {
 			return "<a href=\"$url\" class=\"btn$class\"$attributes>$content</a>";
 		} else {
-			$tag = 'button';
-		}
-		switch (strtolower($tag)) {
-			case 'button':
-				return "<button class=\"btn{$class}\"$attributes>$content</button>";
-			case 'submit':
-				return "<input type=\"submit\" class=\"$class\"$attributes/>";
-			case 'input':
-				return "<input type=\"button\" class=\"$class\"$attributes/>";
+			switch ($tag) {
+				case 'submit':
+					return "\n<input type=\"submit\" class=\"btn$class\"$attributes/>";
+				case 'input':
+					return "\n<input type=\"button\" class=\"btn$class\"$attributes/>";
+				case 'reset':
+					return "\n<input type=\"reset\" class=\"btn$class\"$attributes/>";
+				default:
+					return "\n<button class=\"btn{$class}\"$attributes>$content</button>";
+			}
 		}
 	}
 
@@ -327,6 +332,7 @@ class Tbs {
 	 *           Creates a split button dropdown
 	 *  - dropup bool, *false
 	 *           Creates a dropup variation.
+	 * - Other attributes that can apply to a "div" element.
 	 * If you want to make a split button with an URL, pass the "url" option in the $buttonOptions array
 	 *
 	 */
@@ -334,8 +340,8 @@ class Tbs {
 		// wrapper class
 		// button class
 		$btnClass = null;
-		$btnOptions = array('class'=>null, 'url'=>null, 'tag'=>null, 'type'=>null);
-		$url=null;
+		$btnOptions = array('class' => null, 'url' => null, 'tag' => null, 'type' => null);
+		$url = null;
 
 		// Type will be passed to button();
 		if ($this->_optionCheck($options, 'type')) {
@@ -368,10 +374,10 @@ class Tbs {
 
 		// Dropup
 		if ($this->_optionCheck($options, 'dropup') && $options['dropup'] === true) {
-			if(!empty($options['class'])){
+			if (!empty($options['class'])) {
 				$options['class'].='dropup';
-			}else{
-				$options['class']='dropup';
+			} else {
+				$options['class'] = 'dropup';
 			}
 			$options['class'].=' dropup';
 			unset($options['dropup']);
@@ -412,25 +418,222 @@ class Tbs {
 	 * Creates an input element to be used in forms
 	 *
 	 * @param string $name Input name
+	 * @param string $type Input type in text|password|datetime|datetime-local|date|month|time|week|number|email|url|search|tel|color|button|submit|checkbox|radio|select|static
+	 * @param string $value Value
 	 * @param array $options List of options for this element
 	 *
 	 * @return Html code to be displayed
 	 *
-	 * @link http://getbootstrap.com/css/#forms-example Link to the TBS documentation about this element
+	 * @link http://getbootstrap.com/css/#forms-controls Link to the TBS documentation about this element
 	 * ---
 	 *
 	 * Options:
 	 * --------
+	 *  - class:      string, *null
+	 *                Additionnal class for the element
+	 *  - default     bool, *false
+	 *                Default state for a radio or checkbox element
+	 *  - description string, *null
+	 *                Input description (useful for radios/checkboxes)
+	 *  - disabled    bool, *false
+	 *                Defines if the element is disabled.
 	 *
+	 * To create a select, use "inputSelect()" instead
 	 *
 	 */
-	public function input($name, $options = array()) {
+	public function input($name, $type, $value = null, $options = array()) {
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Default state for checkboxes and radios
+		$default = false;
+		if ($this->_optionCheck($options, 'default')) {
+			$default = true;
+			unset($options['default']);
+		}
+
+		// Description
+		$description = null;
+		if ($this->_optionCheck($options, 'description')) {
+			$description = $options['description'];
+			unset($options['description']);
+		}
+
+		// Disabled state
+		$disabled = null;
+		if ($this->_optionCheck($options, 'disabled')) {
+			$disabled = ' disabled';
+			unset($options['disabled']);
+		}
+
+		// Required state
+		$required = null;
+		if ($this->_optionCheck($options, 'required')) {
+			$required = ' required';
+			unset($options['required']);
+		}
+
+		$attributes = $this->_getAttributes($options);
+
+		$checked = null;
+		// Element
+		if (in_array($type, array('text', 'password', 'datetime', 'datetime-local', 'date', 'month', 'time', 'week', 'number', 'email', 'url', 'search', 'tel', 'color'))) {
+			return "\n<input type=\"$type\" class=\"form-control{$class}\"$disabled value=\"$value\" name=\"$name\"$attributes/>";
+		} elseif ($type === 'static') {
+			return "\n<p class=\"form-control-static{$class}{$disabled}\" value=\"$value\" name=\"name\"$attributes>$value</p>";
+		} else {
+			switch (strtolower($type)) {
+				case 'submit':
+					// Updating options
+					$options['tag'] = 'submit';
+					$options['name'] = $name;
+					$options['value'] = $value;
+					return $this->button($value, null, $options);
+				case 'reset':
+					$options['tag'] = 'reset';
+					$options['name'] = $name;
+					$options['value'] = $value;
+					return $this->button($value, null, $options);
+				case 'button':
+					$options['tag'] = 'input';
+					$options['name'] = $name;
+					$options['value'] = $value;
+					return $this->button($value, null, $options);
+				case 'checkbox':
+					if ($default) {
+						$checked = ' checked="checked"';
+					}
+					return "\n<div class=\"checkbox{$disabled}\">\n\t<label>\n\t\t<input type=\"checkbox\" class=\"" . trim($class) . "\"$checked value=\"$value\"{$disabled} name=\"$name\"$attributes />$description\n\t</label>\n</div>";
+				case 'radio':
+					if ($default) {
+						$checked = ' checked="checked"';
+					}
+					return "\n<div class=\"radio{$disabled}\">\n\t<label>\n\t\t<input type=\"radio\"{$disabled} class=\"" . trim($class) . "\"$checked value=\"$value\" name=\"$name\"$attributes />$description\n\t</label>\n</div>";
+				case 'textarea':
+					return "\n<textarea class=\"form-control{$class}\"{$disabled} name=\"$name\"$attributes />$value</textarea>";
+				default:
+					return "\n<input type=\"text\" class=\"form-control{$class}\"{$disabled} value=\"$value\" name=\"$name\"$attributes />";
+			}
+		}
 	}
 
+	/**
+	 * Creates a select input
+	 *
+	 * @param string $name Input name
+	 * @param array $list List of elements. Should be like array('caption'=>'value', 'caption'=>'value')
+	 * @param array $options List of options for the select element
+	 *
+	 * @return Html code to be displayed
+	 *
+	 * @link http://getbootstrap.com/css/#forms-controls Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class:    string, *null
+	 *              Additionnal classes for the button
+	 *  - default:  string, *null
+	 *              Default element's value.
+	 *  - multiple: boolean, *false
+	 *              Defines if the list is multiple or not
+	 * If you want to make a split button with an URL, pass the "url" option in the $buttonOptions array
+	 *
+	 */
+	public function inputSelect($name, $list, $options = array()) {
 
-	public function form($inputs, $options){
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Default
+		$default = null;
+		if ($this->_optionCheck($options, 'default')) {
+			$default = $options['default'];
+			unset($options['default']);
+		}
+		// Multiple
+		$multiple = null;
+		if ($this->_optionCheck($options, 'multiple')) {
+			$multiple = ' multiple';
+			unset($options['multiple']);
+		}
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		$out = "\n<select name=\"$name\" class=\"form-control{$class}\"{$multiple}{$attributes}>";
+		$out.= $this->_makeSelectList($list, $default);
+		$out.="\n</select>";
+		return $out;
+	}
+
+	/**
+	 * Creates a list of options for a select element. Can be really recursive, but to be valid,
+	 * you can't have sub-option groups...
+	 *
+	 * @param array $list List of elements (array(group=>array(element1=>val1), element2=>val2,...)
+	 * @param string $default Default value to be selected
+	 *
+	 * @return string Html code for the options list
+	 */
+	private function _makeSelectList($list, $default = null) {
+		$out = null;
+		foreach ($list as $c => $v) {
+			if (is_array($v)) {
+				$out.="\n<optgroup label=\"$c\">";
+				$out.=$this->_makeSelectList($v, $default);
+				$out.="\n</optgroup>";
+			} else {
+				$selected = null;
+				if ($v === $default) {
+					$selected = ' selected="selected"';
+				}
+				$out.="\n\t<option value=\"$v\"$selected>$c</option>";
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * Creates a form with the given inputs
+	 *
+	 * @param array $inputs List of inputs from input()
+	 * @param array $options List of options for the button wrapper
+	 *
+	 * @return Html code to be displayed
+	 *
+	 * @link  http://getbootstrap.com/css/#forms Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class: string, *null
+	 *           Additionnal classes for the button
+	 *  - style: string, *null|inline|horizontal
+	 *
+	 * If you want to make a split button with an URL, pass the "url" option in the $buttonOptions array
+	 *
+	 */
+	public function form($inputs, $options) {
+
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
+
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		return '';
 	}
 
 	/**
@@ -748,6 +951,8 @@ class Tbs {
 	 *
 	 * @param string $content Alert content
 	 * @param array $options List of options for this element
+	 * @param string $dismisible Add a dismiss button to the element
+	 * 			the text of $dismisible will be added to the button tag.
 	 *
 	 * @return Html code to be displayed
 	 *
@@ -760,12 +965,9 @@ class Tbs {
 	 *           Additionnal classes for the alert element
 	 *  - type:  string, *success|info|warning|danger
 	 *           alert type
-	 * - dismiss: string, *null
-	 *            If not null, a dismiss button will be create.
-	 *            The string value will be added to the button tag.
 	 *
 	 */
-	public function alert($content, $options = array()) {
+	public function alert($content, $options = array(), $dismisible = '') {
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
 			$class .= " ${options['class']}";
@@ -791,14 +993,9 @@ class Tbs {
 		}
 
 		$dismiss = null;
-		if ($this->_optionCheck($options, 'dismiss')) {
-			$dismiss .= " ${options['dismiss']}";
-			unset($options['dismiss']);
-		}
-
-		if ($dismiss != '') {
+		if ($dismisible != '') {
 			$class .= ' alert-dismissible';
-			$dismiss = '<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">' . $dismiss . '</span></button>';
+			$dismiss = '<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">' . $dismisible . '</span></button>';
 		}
 
 		return "<div class=\"alert{$class}\" role=\"alert\">

@@ -88,6 +88,7 @@ $Tbs = new Tbs;
 					<div id="main-menu" data-spy="affix" data-offset-bottom="200">
 					</div>
 				</div>
+
 				<div class="col-md-10">
 
 					<!--					<div class='alert alert-warning'>
@@ -97,6 +98,8 @@ $Tbs = new Tbs;
 					<h1>CSS</h1>
 					<?php
 					include 'sections/button.php';
+					include 'sections/form.php';
+					include 'sections/input.php';
 					?>
 					<h1>Elements</h1>
 					<?php
