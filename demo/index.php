@@ -90,10 +90,11 @@ $Tbs = new Tbs;
 
 				<div class="col-md-10">
 
-					<!--					<div class='alert alert-warning'>
-											This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
-											<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
-										</div>-->
+					<div class='alert alert-warning'>
+						This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
+						<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
+					</div>
+
 					<div class="inToc"><h1>CSS</h1></div>
 					<?php
 					include 'sections/form.php';

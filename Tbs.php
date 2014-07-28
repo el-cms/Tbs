@@ -22,6 +22,24 @@ class Tbs {
 	 */
 	public $iconPack = 'glyphicon';
 
+	/**
+	 * Will be true if a form is opened
+	 * @var integer
+	 */
+	public $formOpen = false;
+
+	/**
+	 * Defines the current form style.
+	 * @var string
+	 */
+	public $formStyle = null;
+
+	/**
+	 * Default label width in a horizontal form. Can be overriden by formOpen()
+	 * @var string
+	 */
+	public $formWidth = 3;
+
 	// ---------------------------------------------------------------------------
 	//
 	// Buttons-related components
@@ -441,7 +459,7 @@ class Tbs {
 	 * To create a select, use "inputSelect()" instead
 	 *
 	 */
-	public function input($name, $type, $value = null, $options = array()) {
+	public function input($name, $type, $options = array()) {
 		//Class
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
@@ -477,14 +495,25 @@ class Tbs {
 			unset($options['required']);
 		}
 
+		// Value
+		$value = null;
+		if ($this->_optionCheck($options, 'value')) {
+			$value = trim($options['value']);
+			unset($options['value']);
+		}
+		$attrValue = $this->_cleanAttribute('value', $value);
+
+		// Attributes
 		$attributes = $this->_getAttributes($options);
 
+		// Checked state (radio/checkbox)
 		$checked = null;
+
 		// Element
 		if (in_array($type, array('text', 'password', 'datetime', 'datetime-local', 'date', 'month', 'time', 'week', 'number', 'email', 'url', 'search', 'tel', 'color'))) {
-			return "\n<input type=\"$type\" class=\"form-control{$class}\"$disabled value=\"$value\" name=\"$name\"$attributes/>";
+			return "\n<input type=\"$type\" class=\"form-control{$class}\"$disabled{$attrValue} name=\"$name\"$attributes/>";
 		} elseif ($type === 'static') {
-			return "\n<p class=\"form-control-static{$class}{$disabled}\" value=\"$value\" name=\"name\"$attributes>$value</p>";
+			return "\n<p class=\"form-control-static{$class}{$disabled}\"{$attrValue} name=\"name\"$attributes>$value</p>";
 		} else {
 			switch (strtolower($type)) {
 				case 'submit':
@@ -507,16 +536,16 @@ class Tbs {
 					if ($default) {
 						$checked = ' checked="checked"';
 					}
-					return "\n<div class=\"checkbox{$disabled}\">\n\t<label>\n\t\t<input type=\"checkbox\" class=\"" . trim($class) . "\"$checked value=\"$value\"{$disabled} name=\"$name\"$attributes />$description\n\t</label>\n</div>";
+					return "\n<div class=\"checkbox{$disabled}\">\n\t<label>\n\t\t<input type=\"checkbox\" class=\"" . trim($class) . "\"$checked{$attrValue}{$disabled} name=\"$name\"$attributes />$description\n\t</label>\n</div>";
 				case 'radio':
 					if ($default) {
 						$checked = ' checked="checked"';
 					}
-					return "\n<div class=\"radio{$disabled}\">\n\t<label>\n\t\t<input type=\"radio\"{$disabled} class=\"" . trim($class) . "\"$checked value=\"$value\" name=\"$name\"$attributes />$description\n\t</label>\n</div>";
+					return "\n<div class=\"radio{$disabled}\">\n\t<label>\n\t\t<input type=\"radio\"{$disabled} class=\"" . trim($class) . "\"$checked{$attrValue} name=\"$name\"$attributes />$description\n\t</label>\n</div>";
 				case 'textarea':
 					return "\n<textarea class=\"form-control{$class}\"{$disabled} name=\"$name\"$attributes />$value</textarea>";
 				default:
-					return "\n<input type=\"text\" class=\"form-control{$class}\"{$disabled} value=\"$value\" name=\"$name\"$attributes />";
+					return "\n<input type=\"text\" class=\"form-control{$class}\"{$disabled}{$attrValue} name=\"$name\"$attributes />";
 			}
 		}
 	}
@@ -602,9 +631,9 @@ class Tbs {
 	}
 
 	/**
-	 * Creates a form with the given inputs
+	 * Opens a form
 	 *
-	 * @param array $inputs List of inputs from input()
+	 * @param array $name Form name
 	 * @param array $options List of options for the button wrapper
 	 *
 	 * @return Html code to be displayed
@@ -614,26 +643,110 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *  - class: string, *null
-	 *           Additionnal classes for the button
-	 *  - style: string, *null|inline|horizontal
-	 *
-	 * If you want to make a split button with an URL, pass the "url" option in the $buttonOptions array
+	 *  - class:       string, *null
+	 *                 Additionnal classes for the button
+	 *  - style:       string, *null|inline|horizontal
+	 *                 Form display style
+	 *  - width        int, *3|[1-11]
+	 *                 Label width for horizontal forms
+	 *  - file:        bool, *false
+	 *                 Defines if the form contains a upload field.
+	 *  - method:      string, *POST
+	 *                 Default send method
 	 *
 	 */
-	public function form($inputs, $options) {
+	public function formOpen($name, $options = array()) {
+		$this->formOpen = true;
 
-		//Class
+		// Class
 		$class = null;
+
 		if ($this->_optionCheck($options, 'class')) {
 			$class.=" ${options['class']}";
 			unset($options['class']);
 		}
 
+		// Style
+		if ($this->_optionCheck($options, 'style')) {
+			switch ($options['style']) {
+				case 'horizontal':
+					$class.=' form-horizontal';
+					break;
+				case 'inline':
+					$class.=' form-inline';
+					break;
+				default:
+					break;
+			}
+			unset($options['style']);
+			$this->formStyle = $options['style'];
+		}
+
+		// File
+		if ($this->_optionCheck($options, 'file')) {
+			if ($options['file'] === true) {
+				$options['enctype'] = 'multipart/form-data';
+			}
+			unset($options['file']);
+		}
+
+		// Default method
+		if (!$this->_optionCheck($options, 'method')) {
+			$options['method'] = 'POST';
+		}
+
+		// Horizontal forms: label width
+		if ($this->_optionCheck($options, 'width')) {
+			$this->formWidth = $options['width'];
+			unset($options['width']);
+		}
+
 		// Attributes
 		$attributes = $this->_getAttributes($options);
 
-		return '';
+		// Cleaning class
+		$class = $this->_cleanAttribute('class', $class);
+
+		// Output
+		return "<form{$class}{$attributes} role=\"form\">\n";
+	}
+
+	public function formClose($options = array()) {
+		$out = null;
+		// Submit
+		if ($this->_optionCheck($options, 'submit')) {
+			$out.=$this->input(null, 'submit', $options['submit']);
+		}
+		// Reset
+		if ($this->_optionCheck($options, 'reset')) {
+			$out.=$this->input(null, 'reset', $options['reset']);
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Creates a form group : a label + an element. No need to use it for checkboxes.
+	 * @param string $label Input label
+	 * @param string $input Output from input() or inputSelect()
+	 * @param array $options List of options
+	 *
+	 * @return string Html code to display
+	 *
+	 * @link  http://getbootstrap.com/css/#forms Link to the TBS documentation about this element
+	 * ---
+	 * Options:
+	 * --------
+	 *  - class:       string, *null
+	 *                 Additionnal classes for the button
+	 *  - style:       string, *null|inline|horizontal
+	 *                 Form display style
+	 *  - labelWidth : int, *2|[1-12]
+	 *                 For horizontal display, the label width. Should be between 1 and 11
+	 *                 in standard grid system.
+	 */
+	public function formGroup($label, $input, $options = array()) {
+
 	}
 
 	/**
@@ -934,8 +1047,8 @@ class Tbs {
 		// Attributes
 		$attributes = $this->_getAttributes($options);
 
-		if(!is_null($subtext)){
-			$subtext=" <small>$subtext</small>";
+		if (!is_null($subtext)) {
+			$subtext = " <small>$subtext</small>";
 		}
 		return "\n<div class=\"page-header{$class}\">\n\t<h1>$content{$subtext}</h1></div>";
 	}
@@ -1374,6 +1487,24 @@ class Tbs {
 			$attributes.=" $k=\"$v\"";
 		}
 		return $attributes;
+	}
+
+	/**
+	 * Cleans attributes values. If not empty, returns the attributes and its values,
+	 * to be added in a tag.
+	 *
+	 * @param string $name Attribute name
+	 * @param string $value Value
+	 * @return null|string
+	 */
+	private function _cleanAttribute($name, $value) {
+		$value = trim($value);
+		if (empty($value)) {
+			return null;
+		} else {
+			$value = $value;
+			return " $name=\"$value\"";
+		}
 	}
 
 }

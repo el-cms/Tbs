@@ -32,13 +32,16 @@ The `demo/index.php` file contains tests, you can open it in your browser... (it
  - [x] badge($content, $options) *Creates a badge*
  - [x] alert($content, $options) *Creates an alert block*
  - **Forms:**
-  - [ ] form() *Not done yet*
+  - [x] formOpen($name, $options) *Opens a form*
   - [x] input($name, $type, $value, $options) *Creates an input element*
    - [x] inputSelect($name, $list, $options) *Creates a select element*
+   - *Help is wanted to find a way to do input groups and form-controls elements...*
+   - *input() is not totally completed as it lacks of some bootstrap functionnalities.*
+  - [x] formClose($options) *Closes a form*
  - [x] image($path, $options) *Creates an image*
  - [ ] breadcrumbs()
  - [ ] embed()
- - [x] header()
+ - [x] header($content, $subtext, $options)
  - [ ] inputGroup()
  - [ ] jAffix()
  - [ ] jAlert()
