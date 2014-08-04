@@ -7,6 +7,19 @@
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php
+//
+// Simple list
+//
+$items = array(
+		array('Item 1'),
+		array('Item 2', array('badge'=&gt;$Tbs-&gt;badge('12'))),
+		array('Item 3'),
+);
+echo $Tbs-&gt;listGroup($items);
+
+//
+// Linked list
+//
 $items = array(
 		array('Item1'),
 		array($Tbs-&gt;icon('home') . ' Icon'),
@@ -22,6 +35,18 @@ echo $Tbs-&gt;listGroup($items, array('linked' =&gt; true));
 	<div class="panel-footer">
 		<div class="row">
 			<div class="col-sm-4">
+				<h3>Simple list</h3>
+				<?php
+				$items = array(
+						array('Item 1'),
+						array('Item 2', array('badge'=>$Tbs->badge('12'))),
+						array('Item 3'),
+				);
+				echo $Tbs->listGroup($items);
+				?>
+			</div>
+			<div class="col-sm-4">
+				<h3>Linked list</h3>
 				<?php
 				$items = array(
 						array('Item1'),

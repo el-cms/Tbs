@@ -1268,7 +1268,19 @@ class Tbs {
 	 *
 	 */
 	public function media($source, $content, $options = array()) {
+		// Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class .= " ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		$out= "<div class=\"media{$class}\"{$attributes}>\n";
+		$out.="</div>\n";
+		return $out;
 	}
 
 	/**
@@ -1290,7 +1302,7 @@ class Tbs {
 	 *             Creates a linked items list
 	 *
 	 */
-	public function listGroup($items, $options) {
+	public function listGroup($items, $options=array()) {
 		//Class
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
@@ -1302,6 +1314,7 @@ class Tbs {
 		$linked = false;
 		if ($this->_optionCheck($options, 'linked') && $options['linked'] === true) {
 			$linked = true;
+			unset($options['linked']);
 		}
 
 		// Tag choice
@@ -1351,7 +1364,7 @@ class Tbs {
 	 *  - content   srting, *null
 	 *              Custom content
 	 */
-	private function _listItem($title, $options) {
+	private function _listItem($title, $options=array()) {
 		//Class
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
@@ -1439,7 +1452,7 @@ class Tbs {
 	 *
 	 *
 	 */
-	public function panel($content, $options) {
+	public function panel($content, $options=array()) {
 
 	}
 
@@ -1509,7 +1522,7 @@ class Tbs {
 	 *
 	 *
 	 */
-	public function well($content, $options) {
+	public function well($content, $options=array()) {
 
 	}
 
@@ -1535,7 +1548,7 @@ class Tbs {
 	 *
 	 *
 	 */
-	public function jModal($content, $options) {
+	public function jModal($content, $options=array()) {
 
 	}
 
@@ -1563,7 +1576,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jTab($items, $options) {
+	public function jTab($items, $options=array()) {
 
 	}
 
@@ -1582,7 +1595,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jTooltip($content, $options) {
+	public function jTooltip($content, $options=array()) {
 
 	}
 
@@ -1598,7 +1611,7 @@ class Tbs {
 	 * @link 	http://getbootstrap.com/javascript/#popovers Link to the TBS documentation about this element
 	 *  ---
 	 */
-	public function jPopover($title, $content, $options) {
+	public function jPopover($title, $content, $options=array()) {
 
 	}
 
@@ -1617,7 +1630,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jAlert($content, $options) {
+	public function jAlert($content, $options=array()) {
 
 	}
 
@@ -1636,7 +1649,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jButton($content, $options) {
+	public function jButton($content, $options=array()) {
 
 	}
 
@@ -1655,7 +1668,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jCollapse($items, $options) {
+	public function jCollapse($items, $options=array()) {
 
 	}
 
@@ -1674,7 +1687,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jCarousel($slides, $options) {
+	public function jCarousel($slides, $options=array()) {
 
 	}
 
