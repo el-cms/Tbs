@@ -174,7 +174,7 @@ class Tbs {
 	 * @param array $content List of elements. Should be links or %separator% or a
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#dropdowns Link to the TBS documentation about this element
 	 * ---
@@ -233,7 +233,7 @@ class Tbs {
 	 * @param array $buttons List of buttons elements from button() or buttonDropdown()
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#btn-groups Link to the TBS documentation about this element
 	 * ---
@@ -289,7 +289,7 @@ class Tbs {
 	 * @param array $buttonGroups List of buttonGroup() items
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link http://getbootstrap.com/components/#btn-groups-toolbar Link to the TBS documentation about this element
 	 * ---
@@ -329,7 +329,7 @@ class Tbs {
 	 * @param array $buttonOptions List of options for the button (same as button())
 	 * @param array $options List of options for the button wrapper
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#btn-dropdowns Link to the TBS documentation about this element
 	 * ---
@@ -440,7 +440,7 @@ class Tbs {
 	 * @param string $value Value
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link http://getbootstrap.com/css/#forms-controls Link to the TBS documentation about this element
 	 * ---
@@ -557,7 +557,7 @@ class Tbs {
 	 * @param array $list List of elements. Should be like array('caption'=>'value', 'caption'=>'value')
 	 * @param array $options List of options for the select element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link http://getbootstrap.com/css/#forms-controls Link to the TBS documentation about this element
 	 * ---
@@ -636,7 +636,7 @@ class Tbs {
 	 * @param array $name Form name
 	 * @param array $options List of options for the button wrapper
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/css/#forms Link to the TBS documentation about this element
 	 * ---
@@ -711,6 +711,22 @@ class Tbs {
 		return "<form{$class}{$attributes} role=\"form\">\n";
 	}
 
+	/**
+	 * Closes an opened form. You can add a submit and a reset button in the $option array
+	 *
+	 * @param array $options A list of options
+	 *
+	 * @return string HTML code to display
+	 *
+	 * ---
+	 * Options:
+	 * --------
+	 *  - submit    bool, *false
+	 *              If true, a submit button will be created
+	 *  - reset     bool, *false
+	 *              If true, a reset button will be created
+	 *
+	 */
 	public function formClose($options = array()) {
 		$out = null;
 		// Submit
@@ -755,7 +771,7 @@ class Tbs {
 	 * @param string $input Input Html element from input()
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#input-groups Link to the TBS documentation about this element
 	 * ---
@@ -781,7 +797,7 @@ class Tbs {
 	 * @param array $tabs List of elements
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#nav Link to the TBS documentation about this element
 	 * ---
@@ -801,7 +817,7 @@ class Tbs {
 	 * @param type $elements
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#navbar Link to the TBS documentation about this element
 	 * ---
@@ -816,23 +832,50 @@ class Tbs {
 	}
 
 	/**
-	 * Creates breadcrumb
+	 * Creates breadcrumb list. The last element will be the current active element
 	 *
 	 * @param array $elements List of elements
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#breadcrumbs Link to the TBS documentation about this element
 	 * ---
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class:       string, *null
+	 *                 Additionnal classes for the ol element
 	 *
 	 */
 	public function breadcrumbs($elements, $options = array()) {
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class = ' ' . $options['class'];
+			unset($options['class']);
+		}
 
+		// Other attributes
+		$attributes = $this->_getAttributes($options);
+
+		$lastOne = count($elements);
+		$i = 1;
+		$out = "<ol class=\"breadcrumb{$class}\"$attributes>";
+		$itemClass = null;
+		foreach ($elements as $e => $l) {
+			$itemLink = $e;
+			if ($i === $lastOne) {
+				$itemClass = ' class="active"';
+			}
+			if (!empty($l)) {
+				$itemLink = "<a href=\"$l\">$e</a>";
+			}
+			$out.="\t<li{$itemClass}>{$itemLink}</li>";
+			$i++;
+		}
+		$out.="</ol>\n";
+		return $out;
 	}
 
 	/**
@@ -842,7 +885,7 @@ class Tbs {
 	 * @param integer $current Key of the current link
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#pagination Link to the TBS documentation about this element
 	 * ---
@@ -862,7 +905,7 @@ class Tbs {
 	 * @param array $links List of the two links
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#pagination-pager Link to the TBS documentation about this element
 	 * ---
@@ -888,7 +931,7 @@ class Tbs {
 	 * @param string $icon Icon code
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#glyphicons Link to the TBS documentation about this element
 	 * ---
@@ -924,7 +967,7 @@ class Tbs {
 	 * @param string $title Label title
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#labels Link to the TBS documentation about this element
 	 * ---
@@ -977,7 +1020,7 @@ class Tbs {
 	 * @param string $content Badge content
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#badges Link to the TBS documentation about this element
 	 * ---
@@ -1004,18 +1047,33 @@ class Tbs {
 	 * @param string $content Content
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#jumbotron Link to the TBS documentation about this element
 	 * ---
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class      string, *null
+	 *               Additionnal classes for the main div
 	 *
 	 */
 	public function jumbotron($title, $content, $options = array()) {
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		$out = "<div class=\"jumbotron{$class}\"$attributes>\n";
+		$out.="\t<div class=\"container\">\n";
+		$out.="\t\t<h1>$title</h1>\n$content";
+		$out.="\t</div>\n</div>\n";
+		return $out;
 	}
 
 	/**
@@ -1025,7 +1083,7 @@ class Tbs {
 	 * @param string $subtext Sub-text
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#page-header Link to the TBS documentation about this element
 	 * ---
@@ -1059,7 +1117,7 @@ class Tbs {
 	 * @param string $path Path to the image
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#thumbnails Link to the TBS documentation about this element
 	 * ---
@@ -1087,10 +1145,10 @@ class Tbs {
 					$class.=' img-rounded';
 					break;
 				case 'circle':
-					$class.='img-circle';
+					$class.=' img-circle';
 					break;
 				case 'thumb':
-					$class.='img-thumbnail';
+					$class.=' img-thumbnail';
 					break;
 			}
 			unset($options['type']);
@@ -1120,7 +1178,7 @@ class Tbs {
 	 * @param string $dismisible Add a dismiss button to the element
 	 * 			the text of $dismisible will be added to the button tag.
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#alerts Link to the TBS documentation about this element
 	 * ---
@@ -1164,7 +1222,10 @@ class Tbs {
 			$dismiss = '<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">' . $dismisible . '</span></button>';
 		}
 
-		return "<div class=\"alert{$class}\" role=\"alert\">
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		return "<div class=\"alert{$class}\"{$attributes} role=\"alert\">
 			$dismiss
 			$content</div>";
 	}
@@ -1175,7 +1236,7 @@ class Tbs {
 	 * @param float $percent Percentage
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#progress Link to the TBS documentation about this element
 	 * ---
@@ -1196,7 +1257,7 @@ class Tbs {
 	 * @param string $content Media text
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#media Link to the TBS documentation about this element
 	 * ---
@@ -1213,21 +1274,153 @@ class Tbs {
 	/**
 	 * Creates a list group
 	 *
-	 * @param array $items List of items
+	 * @param array $items List of items with their options
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#list-group Link to the TBS documentation about this element
 	 * ---
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class:   string, *null
+	 *             Additionnal classes for the list main element
+	 *  - linked:  bool, *false
+	 *             Creates a linked items list
 	 *
 	 */
 	public function listGroup($items, $options) {
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Linked
+		$linked = false;
+		if ($this->_optionCheck($options, 'linked') && $options['linked'] === true) {
+			$linked = true;
+		}
+
+		// Tag choice
+		if ($linked) {
+			$tag = 'div';
+		} else {
+			$tag = 'ol';
+		}
+
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		// Output
+		$out = "<$tag class=\"list-group$class\"$attributes>\n";
+		foreach ($items as $i) {
+			$i[1]['linked'] = $linked;
+			$out.="\t" . $this->_listItem($i[0], $i[1]);
+		}
+		$out.="</$tag>";
+		return $out;
+	}
+
+	/**
+	 *
+	 * @param type $title
+	 * @param type $options
+	 *
+	 * @return string Html code to be displayed
+	 *
+	 * @link  http://getbootstrap.com/components/#list-group Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class:    string, *null
+	 *              Additionnal classes for the list element
+	 *  - badge:    string, *null
+	 *              HTML string for a badge (you should use badge() output)
+	 *  - linked:   bool, *false
+	 *              creates 'a' elements instead of 'li'
+	 *  - url:      string, *null
+	 *              Url for the link, if any
+	 *  - disabled  bool, *false
+	 *              Toggle the disabled state
+	 *  - type      string, *null|success|info|warning|danger
+	 *              Contextual class
+	 *  - content   srting, *null
+	 *              Custom content
+	 */
+	private function _listItem($title, $options) {
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
+
+		// Badge
+		$badge = null;
+		if ($this->_optionCheck($options, 'badge')) {
+			$badge = $options['badge'];
+			unset($options['badge']);
+		}
+
+		// Linked
+		if ($this->_optionCheck($options, 'linked') && $options['linked'] === true) {
+			$tag = 'a';
+		} else {
+			$tag = 'li';
+		}
+
+		// Disabled
+		if ($this->_optionCheck($options, 'disabled') && $options['disabled'] === true) {
+			$class.=' disabled';
+			unset($options['disabled']);
+		}
+
+		// Type
+		if ($this->_optionCheck($options, 'type')) {
+			switch (strtolower($options['type'])) {
+				case 'success':
+					$class .= ' list-group-item-success';
+					break;
+				case 'info':
+					$class .= ' list-group-item-info';
+					break;
+				case 'warning':
+					$class .= ' list-group-item-warning';
+					break;
+				case 'danger':
+					$class .= ' list-group-item-danger';
+					break;
+			}
+			unset($options['type']);
+		}
+
+		// Content
+		if ($this->_optionCheck($options, 'content')) {
+			$content = "\t\t{$badge}<h4 class=\"list-group-item-heading\">$title</h4>\n";
+			$content .= "\t\t<p class=\"list-group-item-text\">{$options['content']}</p>\n";
+			unset($options['content']);
+		} else {
+			$content = $badge . $title;
+		}
+
+		// Url
+		if ($this->_optionCheck($options, 'url')) {
+			if ($tag === 'a') {
+				$options['href'] = $options['url'];
+			} else {
+				$title = "<a href=\"{$options['url']}\">$content</a>";
+			}
+			unset($options['url']);
+		}
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		// Output
+		return "<$tag class=\"list-group-item{$class}\"$attributes>$content</$tag>";
 	}
 
 	/**
@@ -1236,7 +1429,7 @@ class Tbs {
 	 * @param string $content Panel content
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#panels Link to the TBS documentation about this element
 	 * ---
@@ -1253,21 +1446,51 @@ class Tbs {
 	/**
 	 * Creates a responsive embedded element
 	 *
-	 * @param string $content Content of the embedded element
+	 * @param string $content Content of the embedded element (URL)
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#responsive-embed Link to the TBS documentation about this element
 	 * ---
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class: string, *null
+	 *           Additionnal classes for the alert element
+	 *  - size:  string, *4:3|16:9
+	 *           Element ratio
 	 *
 	 */
-	public function embed($content, $options) {
+	public function embed($content, $options = array()) {
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
 
+		// Size
+		if (!$this->_optionCheck($options, 'size')) {
+			$options['size'] = '4:3';
+		}
+		switch ($options['size']) {
+			case '16:9':
+				$class.=' embed-responsive-16by9';
+				break;
+			case '4:3':
+				$class.=' embed-responsive-4by3';
+				break;
+		}
+		unset($options['size']);
+
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+		$out = "<div class=\"embed-responsive{$class}\">\n";
+		$out.="\t<iframe class=\"embed-responsive-item\" src=\"$content\"></iframe>\n";
+		$out.='</div>';
+
+		return $out;
 	}
 
 	/**
@@ -1276,7 +1499,7 @@ class Tbs {
 	 * @param string $content Well content
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#wells Link to the TBS documentation about this element
 	 * ---
@@ -1302,7 +1525,7 @@ class Tbs {
 	 * @param string $content Modal content
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link http://getbootstrap.com/javascript/#modals Link to the TBS documentation about this element
 	 * ---
@@ -1331,7 +1554,7 @@ class Tbs {
 	 * @param array $items List of items with their content.
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#tabs Link to the TBS documentation about this element
 	 * ---
@@ -1350,7 +1573,7 @@ class Tbs {
 	 * @param string $content Content of the tooltip
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#tooltips Link to the TBS documentation about this element
 	 * ---
@@ -1370,7 +1593,7 @@ class Tbs {
 	 * @param string $content popover content
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#popovers Link to the TBS documentation about this element
 	 *  ---
@@ -1385,7 +1608,7 @@ class Tbs {
 	 * @param string $content
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#alerts Link to the TBS documentation about this element
 	 * ---
@@ -1404,7 +1627,7 @@ class Tbs {
 	 * @param string $content Button content
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#buttons Link to the TBS documentation about this element
 	 * ---
@@ -1423,7 +1646,7 @@ class Tbs {
 	 * @param array $items List of items with their content
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link 	http://getbootstrap.com/javascript/#collapse Link to the TBS documentation about this element
 	 * ---
@@ -1442,7 +1665,7 @@ class Tbs {
 	 * @param array $slides list of slides
 	 * @param array $options List of options for this element
 	 *
-	 * @return Html code to be displayed
+	 * @return string Html code to be displayed
 	 *
 	 * @link http://getbootstrap.com/javascript/#carousel Link to the TBS documentation about this element
 	 * ---
@@ -1481,6 +1704,13 @@ class Tbs {
 		return (isset($options[$option]) && !empty($options[$option]));
 	}
 
+	/**
+	 * Returns a list of HTML attributes to add in components
+	 *
+	 * @param array $options Remaining options from the method
+	 *
+	 * @return string Attributes
+	 */
 	private function _getAttributes($options) {
 		$attributes = null;
 		foreach ($options as $k => $v) {
@@ -1495,6 +1725,7 @@ class Tbs {
 	 *
 	 * @param string $name Attribute name
 	 * @param string $value Value
+	 *
 	 * @return null|string
 	 */
 	private function _cleanAttribute($name, $value) {

@@ -60,6 +60,38 @@ $Tbs = new Tbs;
 			a.toc-depth-3:hover{
 				border-left:3px solid #0CC;
 			}
+
+			.panel-body{
+				background-color:#FBFBFB;
+			}
+			.panel-body:before{
+				content: 'Code:';
+				display:block;
+				color: #CCC;
+				border-bottom: 1px dotted #CCC;
+				margin-bottom:5px;
+				font-variant: small-caps;
+
+			}
+			.panel-footer{
+				background-color:#FFF;
+			}
+			.panel-footer:before{
+				content: 'Results:';
+				display:block;
+				color: #CCC;
+				border-bottom: 1px dotted #CCC;
+				margin-bottom:5px;
+				font-variant: small-caps;
+			}
+			.panel-heading:before{
+				content: 'Infos :';
+				display:block;
+				color: #CCC;
+				border-bottom: 1px dotted #CCC;
+				margin-bottom:5px;
+				font-variant: small-caps;
+			}
 		</style>
 	</head>
 	<body>
@@ -110,10 +142,14 @@ $Tbs = new Tbs;
 					// Toolbar is a button-group subsection
 					include 'sections/toolbar.php';
 					include 'sections/btndropdown.php';
+					include 'sections/breadcrumb.php';
 					include 'sections/label.php';
 					include 'sections/badge.php';
+					include 'sections/jumbotron.php';
 					include 'sections/header.php';
 					include 'sections/alert.php';
+					include 'sections/listgroup.php';
+					include 'sections/embed.php';
 					?>
 				</div>
 			</div>

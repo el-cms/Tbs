@@ -39,8 +39,8 @@ The `demo/index.php` file contains tests, you can open it in your browser... (it
    - *input() is not totally completed as it lacks of some bootstrap functionnalities.*
   - [x] formClose($options) *Closes a form*
  - [x] image($path, $options) *Creates an image*
- - [ ] breadcrumbs()
- - [ ] embed()
+ - [x] breadcrumbs()
+ - [x] embed()
  - [x] header($content, $subtext, $options)
  - [ ] inputGroup()
  - [ ] jAffix()
@@ -52,8 +52,8 @@ The `demo/index.php` file contains tests, you can open it in your browser... (it
  - [ ] jPopover()
  - [ ] jScrollspy()
  - [ ] jTooltip()
- - [ ] jumbotron()
- - [ ] listGroup()
+ - [x] jumbotron()
+ - [x] listGroup()
  - [ ] media()
  - [ ] nav()
  - [ ] navBar()
