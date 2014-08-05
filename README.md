@@ -1,11 +1,14 @@
 Tbs
 ===
 
-A php class for Twitter [Bootstrap](http://getbootstrap.com/) components
+A generic php helper class for [Twitter Bootstrap](http://getbootstrap.com/) components.
 
-**THIS IS IN EARLY DEVELOPMENT STAGE** *Help is welcome*
+**Here is the [demo](http://experimentslabs.com/test/tbs/index.php) for the currently available components**
 
-**A testing demo can be found [here](http://experimentslabs.com/test/tbs/index.php)**
+## Purpose
+This helper is designed to be used in a generic PHP application (there is no wrapper for any CMS, but that may come if you want to do it :)).
+The class is easily expandable for your own custom components.
+
 ## Usage:
 Include the class in your project and create a `Tbs` object. Then, call it :)
 
@@ -18,6 +21,9 @@ $Tbs = new Tbs;
 
 ## Tests
 The `demo/index.php` file contains tests, you can open it in your browser... (it uses a boilerplate template from [Initializr](http://www.initializr.com/))
+
+## Help in the development/enhancement process
+As the class is not totally finished, you are welcome to join the project !
 
 ## Methods that are ready:
 
@@ -38,10 +44,10 @@ The `demo/index.php` file contains tests, you can open it in your browser... (it
    - *Help is wanted to find a way to do input groups and form-controls elements...*
    - *input() is not totally completed as it lacks of some bootstrap functionnalities.*
   - [x] formClose($options) *Closes a form*
- - [x] image($path, $options) *Creates an image*
- - [x] breadcrumbs()
- - [x] embed()
- - [x] header($content, $subtext, $options)
+ - [x] image($path, $options) *Creates a responsive image*
+ - [x] breadcrumb($elements, $options) *Creates a breadcrumb*
+ - [x] embed($content, $options) *Creates a responsive embed element*
+ - [x] header($content, $subtext, $options) *Creates a header (big H1 with possible subtext)
  - [ ] inputGroup()
  - [ ] jAffix()
  - [ ] jAlert()
@@ -52,9 +58,10 @@ The `demo/index.php` file contains tests, you can open it in your browser... (it
  - [ ] jPopover()
  - [ ] jScrollspy()
  - [ ] jTooltip()
- - [x] jumbotron()
- - [x] listGroup()
- - [ ] media()
+ - [x] jumbotron($title, $content, $options) *Creates a hero unit*
+ - [x] listgroup($items, $options) *Creates nice panels*
+ - [x] media() *Creates a media element: an image with some text*
+  - [ ] mediaList()
  - [ ] nav()
  - [ ] navBar()
  - [ ] pager()

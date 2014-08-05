@@ -1253,7 +1253,7 @@ class Tbs {
 	/**
 	 * Creates a media element
 	 *
-	 * @param string $source Path to the media
+	 * @param string $source Path to the image
 	 * @param string $content Media text
 	 * @param array $options List of options for this element
 	 *
@@ -1264,23 +1264,90 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class:   string, *null
+	 *             Additionnal classes for the alert element
+	 *  - url:     string, *null
+	 *             Target url
+	 *  - alt:     string, *null
+	 *             Alt. text for the image
+	 *  - title:   string, *null
+	 *             Media title (will be used as header too)
+	 *  - list:    bool, *false
+	 *             Defines if the media is in a list or not.
 	 *
 	 */
-	public function media($source, $content, $options = array()) {
+	public function mediaItem($source, $content, $options = array()) {
 		// Class
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
 			$class .= " ${options['class']}";
 			unset($options['class']);
+			}
+
+		// Url
+		$url = null;
+		if ($this->_optionCheck($options, 'url')) {
+			$url = " href=\"{$options['url']}\"";
+			unset($options['url']);
+		}
+
+		// Alt
+		$alt = null;
+		if ($this->_optionCheck($options, 'alt')) {
+			$alt = " alt=\"{$options['alt']}\"";
+			unset($options['alt']);
+	}
+
+		// Title
+		$title = null;
+		$blockTitle = null;
+		if ($this->_optionCheck($options, 'title')) {
+			$title = " title=\"{$options['title']}\"";
+			$blockTitle = "\n\t\t<h4 class=\"media-heading\">{$options['title']}</h4>";
+			unset($options['title']);
+		}
+
+		// List
+		$list = false;
+		$tag = 'div';
+		if ($this->_optionCheck($options, 'list')) {
+			$list = $options['list'];
+			unset($options['list']);
+		}
+		if ($list) {
+			$tag = 'li';
 		}
 
 		// Attributes
 		$attributes = $this->_getAttributes($options);
 
-		$out= "<div class=\"media{$class}\"{$attributes}>\n";
-		$out.="</div>\n";
+		$out = "<$tag class=\"media{$class}\"{$attributes}>\n";
+		$out.="\t<a class=\"pull-left\"$url><img class=\"media-object\" src=\"$source\"{$alt}{$title}></a>\n";
+		$out.="\t<div class=\"media-body\">{$blockTitle}\n\t\t$content\n\t</div>\n";
+		$out.="</$tag>\n";
 		return $out;
+	}
+
+	/**
+	 * Creates a media element
+	 *
+	 * @param array $list List of mediaItem() html elements
+	 * @param string $content Media text
+	 * @param array $options List of options for this element
+	 *
+	 * @return string Html code to be displayed
+	 *
+	 * @link  http://getbootstrap.com/components/#media Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class:   string, *null
+	 *             Additionnal classes for the alert element
+	 *
+	 */
+	public function mediaList($list, $options = array()) {
+		
 	}
 
 	/**
@@ -1302,7 +1369,7 @@ class Tbs {
 	 *             Creates a linked items list
 	 *
 	 */
-	public function listGroup($items, $options=array()) {
+	public function listGroup($items, $options = array()) {
 		//Class
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
@@ -1364,7 +1431,7 @@ class Tbs {
 	 *  - content   srting, *null
 	 *              Custom content
 	 */
-	private function _listItem($title, $options=array()) {
+	private function _listItem($title, $options = array()) {
 		//Class
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
@@ -1452,7 +1519,7 @@ class Tbs {
 	 *
 	 *
 	 */
-	public function panel($content, $options=array()) {
+	public function panel($content, $options = array()) {
 
 	}
 
@@ -1522,7 +1589,7 @@ class Tbs {
 	 *
 	 *
 	 */
-	public function well($content, $options=array()) {
+	public function well($content, $options = array()) {
 
 	}
 
@@ -1548,7 +1615,7 @@ class Tbs {
 	 *
 	 *
 	 */
-	public function jModal($content, $options=array()) {
+	public function jModal($content, $options = array()) {
 
 	}
 
@@ -1576,7 +1643,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jTab($items, $options=array()) {
+	public function jTab($items, $options = array()) {
 
 	}
 
@@ -1595,7 +1662,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jTooltip($content, $options=array()) {
+	public function jTooltip($content, $options = array()) {
 
 	}
 
@@ -1611,7 +1678,7 @@ class Tbs {
 	 * @link 	http://getbootstrap.com/javascript/#popovers Link to the TBS documentation about this element
 	 *  ---
 	 */
-	public function jPopover($title, $content, $options=array()) {
+	public function jPopover($title, $content, $options = array()) {
 
 	}
 
@@ -1630,7 +1697,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jAlert($content, $options=array()) {
+	public function jAlert($content, $options = array()) {
 
 	}
 
@@ -1649,7 +1716,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jButton($content, $options=array()) {
+	public function jButton($content, $options = array()) {
 
 	}
 
@@ -1668,7 +1735,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jCollapse($items, $options=array()) {
+	public function jCollapse($items, $options = array()) {
 
 	}
 
@@ -1687,7 +1754,7 @@ class Tbs {
 	 * --------
 	 *
 	 */
-	public function jCarousel($slides, $options=array()) {
+	public function jCarousel($slides, $options = array()) {
 
 	}
 

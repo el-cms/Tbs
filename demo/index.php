@@ -129,27 +129,28 @@ $Tbs = new Tbs;
 
 					<div class="inToc"><h1>CSS</h1></div>
 					<?php
-					include 'sections/form.php';
-					include 'sections/input.php';
-					include 'sections/button.php';
-					include 'sections/image.php';
-					?>
-					<div class="inToc"><h1>Elements</h1></div>
-					<?php
-					include 'sections/icon.php';
-					include 'sections/dropdown.php';
-					include 'sections/btngroup.php';
-					// Toolbar is a button-group subsection
-					include 'sections/toolbar.php';
-					include 'sections/btndropdown.php';
-					include 'sections/breadcrumb.php';
-					include 'sections/label.php';
-					include 'sections/badge.php';
-					include 'sections/jumbotron.php';
-					include 'sections/header.php';
-					include 'sections/alert.php';
-					include 'sections/listgroup.php';
-					include 'sections/embed.php';
+						include 'sections/form.php';
+						include 'sections/input.php';
+						include 'sections/button.php';
+						include 'sections/image.php';
+						?>
+						<div class="inToc"><h1>Elements</h1></div>
+						<?php
+						include 'sections/icon.php';
+						include 'sections/dropdown.php';
+						include 'sections/btngroup.php';
+						// Toolbar is a button-group subsection
+						include 'sections/toolbar.php';
+						include 'sections/btndropdown.php';
+						include 'sections/breadcrumb.php';
+						include 'sections/label.php';
+						include 'sections/badge.php';
+						include 'sections/jumbotron.php';
+						include 'sections/header.php';
+						include 'sections/alert.php';
+						include 'sections/media.php';
+						include 'sections/listgroup.php';
+						include 'sections/embed.php';
 					?>
 				</div>
 			</div>
