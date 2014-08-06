@@ -17,6 +17,8 @@ $Tbs = new Tbs;
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/gh-fork-ribbon.css">
+
 		<style>
 			body {
 				padding-bottom: 20px;
@@ -95,11 +97,17 @@ $Tbs = new Tbs;
 		</style>
 	</head>
 	<body>
+		<div class="github-fork-ribbon-wrapper right">
+			<div class="github-fork-ribbon">
+				<a href="https://github.com/el-cms/Tbs/fork">Fork me on GitHub</a>
+			</div>
+		</div>
 		<!--[if lt IE 7]>
 				<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
     <div class="navbar navbar-inverse" role="navigation">
       <div class="container">
+
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -128,6 +136,7 @@ $Tbs = new Tbs;
 					</div>
 
 					<div class="inToc"><h1>CSS</h1></div>
+
 					<?php
 						include 'sections/form.php';
 						include 'sections/input.php';

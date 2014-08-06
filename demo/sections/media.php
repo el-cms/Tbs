@@ -6,23 +6,90 @@
 		Usage: <code>mediaItem($source, $content, $options)</code>, <code>mediaList($list, $options)</code>
 	</div>
 	<div class="panel-body">
+		<h3>Simple media items:</h3>
 		<pre class="syntax html">&lt;?php
-$content = "&lt;strong&gt;Well done!&lt;/strong&gt; You successfully read this important alert message.";
-echo $Tbs-&gt;alert($content, array('type' =&gt; 'success'));
-echo $Tbs-&gt;alert($content, array('type' =&gt; 'success', 'dismiss' =&gt; 'Close'));
+// Source image
+$source = "http://lorempixel.com/64/64/cats/64x64/";
+// Item content
+$content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id venenatis odio. Phasellus varius vulputate mi suscipit accumsan. Pellentesque tortor dui, placerat nec dolor ut, semper aliquet lectus.';
+// Some options
+$options = array('url' => '#', 'title' => 'Some title', 'alt' => 'Replacement text');
+
+// Simple media item
+echo $Tbs->mediaItem($source, $content);
+// With options
+echo $Tbs->mediaItem($source, $content, $options);
+?&gt;</pre>
+
+		<h3>Nested media items</h3>
+		<pre class="syntax html">&lt;?php
+//Define your $list as follow (source, content and options ARE needed, as they are passed to mediaItem)
+$list = array(
+		// Item 1
+		array('source' => $source, 'content' => $content, 'options' => $options),
+		// Item 2 with sublist
+		array('source' => $source, 'content' => $content, 'options' => $options, 'list' => array(
+						// Sub item 1
+						array('source' => $source, 'content' => $content, 'options' => $options),
+						// Sub item 2
+						array('source' => $source, 'content' => $content, 'options' => $options),
+						// ...
+						array('source' => $source, 'content' => $content, 'options' => $options, 'list' => array(
+										// Sub list
+										array('source' => $source, 'content' => $content, 'options' => $options),
+								)
+						),
+						// Sub item 3
+						array('source' => $source, 'content' => $content, 'options' => $options),
+				)
+		)
+);
+
+
+echo $Tbs->mediaList($list);
 ?&gt;</pre>
 	</div>
 	<div class="panel-footer">
 		<h3>Simple media items</h3>
 		<?php
+		// Source image
 		$source = "http://lorempixel.com/64/64/cats/64x64/";
+		// Item content
 		$content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id venenatis odio. Phasellus varius vulputate mi suscipit accumsan. Pellentesque tortor dui, placerat nec dolor ut, semper aliquet lectus.';
+		// Some options
 		$options = array('url' => '#', 'title' => 'Some title', 'alt' => 'Replacement text');
+
 		// Simple media item
 		echo $Tbs->mediaItem($source, $content);
+		// With options
 		echo $Tbs->mediaItem($source, $content, $options);
 		?>
 		<h3>Nested list</h3>
-		<em>Not done yet...</em>
+		<?php
+		//Define your $list as follow (source, content and options ARE needed, as they are passed to mediaItem)
+		$list = array(
+				// Item 1
+				array('source' => $source, 'content' => $content, 'options' => $options),
+				// Item 2 with sublist
+				array('source' => $source, 'content' => $content, 'options' => $options, 'list' => array(
+								// Sub item 1
+								array('source' => $source, 'content' => $content, 'options' => $options),
+								// Sub item 2
+								array('source' => $source, 'content' => $content, 'options' => $options),
+								// ...
+								array('source' => $source, 'content' => $content, 'options' => $options, 'list' => array(
+												// Sub list
+												array('source' => $source, 'content' => $content, 'options' => $options),
+										)
+								),
+						    // Sub item 3
+								array('source' => $source, 'content' => $content, 'options' => $options),
+						)
+				)
+		);
+
+
+		echo $Tbs->mediaList($list);
+		?>
 	</div>
 </div>

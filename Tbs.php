@@ -1282,7 +1282,7 @@ class Tbs {
 		if ($this->_optionCheck($options, 'class')) {
 			$class .= " ${options['class']}";
 			unset($options['class']);
-			}
+		}
 
 		// Url
 		$url = null;
@@ -1296,7 +1296,7 @@ class Tbs {
 		if ($this->_optionCheck($options, 'alt')) {
 			$alt = " alt=\"{$options['alt']}\"";
 			unset($options['alt']);
-	}
+		}
 
 		// Title
 		$title = null;
@@ -1331,7 +1331,7 @@ class Tbs {
 	/**
 	 * Creates a media element
 	 *
-	 * @param array $list List of mediaItem() html elements
+	 * @param array $list List of items and sub-items
 	 * @param string $content Media text
 	 * @param array $options List of options for this element
 	 *
@@ -1340,6 +1340,26 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#media Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * Define your $list as follow:
+	 * $list = array(
+	 *   // Item 1
+	 *   array('source'=>$source, 'content'=>$content, 'options'=$options),
+	 *   // Item 2, with sub-list
+	 *   array('source'=>$source, 'content'=>$content, 'options'=$options, 'list'=>array(
+	 *       array('source'=>$source, 'content'=>$content, 'options'=$options),
+	 *       array('source'=>$source, 'content'=>$content, 'options'=$options),
+	 *       array('source'=>$source, 'content'=>$content, 'options'=$options, 'list'=>array(
+	 *         ...
+	 *       ),
+	 *       ...
+	 *     )
+	 *     ...
+	 *   ),
+	 * 	 // Item 3
+	 *   array('source'=>$source, 'content'=>$content, 'options'=$options),
+	 *   ...
+	 * );
+	 *
 	 * Options:
 	 * --------
 	 *  - class:   string, *null
@@ -1347,7 +1367,32 @@ class Tbs {
 	 *
 	 */
 	public function mediaList($list, $options = array()) {
-		
+		//Class
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class.=" ${options['class']}";
+			unset($options['class']);
+		}
+
+		// Attributes
+		$attributes = $this->_getAttributes($options);
+
+		$out = "<ul class=\"media-list{$class}\"$attributes>\n";
+		foreach ($list as $item) {
+			$subList=null;
+			// Forcing item to be a list item
+			$item['options']['list'] = true;
+
+			// Search for a sub list
+			if (key_exists('list', $item)) {
+				// re-setting the class options to the list options
+				$options['class'] = trim($class);
+				$subList = $this->mediaList($item['list'], $options);
+			}
+			$out.=$this->mediaItem($item['source'], $item['content'] . $subList, $item['options']);
+		}
+		$out.="</ul>\n";
+		return $out;
 	}
 
 	/**
