@@ -1,4 +1,3 @@
-<a id="input"></a>
 <div class="inToc"><h3>Input</h3></div>
 
 <div class="panel panel-default">

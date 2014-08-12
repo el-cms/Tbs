@@ -1,4 +1,3 @@
-<a id="listgroup"></a>
 <div class="inToc"><h2>List groups</h2></div>
 
 <div class="panel panel-default">

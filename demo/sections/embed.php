@@ -1,4 +1,3 @@
-<a id="embed"></a>
 <div class="inToc"><h2>Embed</h2></div>
 
 <div class="panel panel-default">

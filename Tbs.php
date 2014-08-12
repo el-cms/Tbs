@@ -385,19 +385,22 @@ class Tbs {
 		}
 		// Split
 		$split = false;
-		if ($this->_optionCheck($options, 'split') && $options['split'] === true) {
-			$split = true;
+		if ($this->_optionCheck($options, 'split')) {
+			if ($options['split'] === true) {
+				$split = true;
+			}
 			unset($options['split']);
 		}
 
 		// Dropup
-		if ($this->_optionCheck($options, 'dropup') && $options['dropup'] === true) {
-			if (!empty($options['class'])) {
-				$options['class'].='dropup';
-			} else {
-				$options['class'] = 'dropup';
+		if ($this->_optionCheck($options, 'dropup')) {
+			if ($options['dropup'] === true) {
+				if (!empty($options['class'])) {
+					$options['class'].='dropup';
+				} else {
+					$options['class'] = 'dropup';
+				}
 			}
-			$options['class'].=' dropup';
 			unset($options['dropup']);
 		}
 
@@ -792,9 +795,85 @@ class Tbs {
 	// ---------------------------------------------------------------------------
 
 	/**
+	 * Creates a nav item.
+	 *
+	 * @param type $content
+	 * @param type $url
+	 * @param type $options
+	 * @return type
+	 *
+	 * ---
+	 *
+	 * Options
+	 * -------
+	 * - class:           string, *null
+	 *                    Additionnal classes for the ol element
+	 * - disabled:        bool, *true
+	 *                    Defines if the item is enabled or not
+	 * - active:          bool, *false
+	 *                    Defines an item as the current item
+	 * - url              string *#
+	 *                    Url for this items
+	 * - dropdown:        bool, *false
+	 *                    Defines is the item is a dropdown item. If so, define the dropdownContent option.
+	 * - dropdownContent: string *null
+	 *                    Dropdown content from dropdown(). Use only if dropdown is set to true
+	 *
+	 */
+	public function navItem($content, $options = array()) {
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class = ' ' . $options['class'];
+			unset($options['class']);
+		}
+
+		// Enabled
+		if ($this->_optionCheck($options, 'disabled') && $options['disabled'] == true) {
+			$class = ' disabled';
+			unset($options['disabled']);
+		}
+
+		// Active
+		if ($this->_optionCheck($options, 'active') && $options['active'] == true) {
+			$class = ' active';
+			unset($options['active']);
+		}
+
+		// Url
+		$url = '#';
+		if ($this->_optionCheck($options, 'url')) {
+			$url = $options['url'];
+			unset($options['url']);
+		}
+
+		// Dropdown & dropdown content
+		$isDropdown = false;
+		if ($this->_optionCheck($options, 'dropdown') && $this->_optionCheck($options, 'dropdownContent')) {
+			$class.=' dropdown';
+			$content = "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">\n\t$content <span class=\"caret\"></span></a>\n{$options['dropdownContent']}";
+			unset($options['dropdown']);
+			unset($options['dropdownContent']);
+			$isDropdown = true;
+		}
+		if (!$isDropdown) {
+			$content = "<a href=\"$url\">$content</a>";
+		}
+		// Other attributes
+		$attributes = $this->_getAttributes($options);
+
+		$class = trim($class);
+		if (!empty($class)) {
+			$class = " class=\"$class\"";
+		}
+
+		return "<li{$class}{$attributes}>$content</li>";
+	}
+
+	/**
 	 * Creates a tab list
 	 *
-	 * @param array $tabs List of elements
+	 * @param array $tabs List of elements like array('title'=>$title, 'content'=>$content)
 	 * @param array $options List of options for this element
 	 *
 	 * @return string Html code to be displayed
@@ -804,11 +883,59 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
+	 * - class:     string, *null
+	 *              Additionnal classes for the ol element
+	 * - type:      string *tabs|pills|stacked
+	 *              Item type
+	 * - justified: bool *false
+	 *              Justify the items across the page
 	 *
 	 */
 	public function nav($tabs, $options = array()) {
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class = ' ' . $options['class'];
+			unset($options['class']);
+		}
 
+		// Type
+		$type = null;
+		if ($this->_optionCheck($options, 'type')) {
+			$type = $options['type'];
+
+			unset($options['type']);
+		}
+
+		switch ($type) {
+			case 'pills':
+				$class.=' nav-pills';
+				break;
+			case 'stacked':
+				$class.= ' nav-pills nav-stacked';
+				break;
+			default:
+				$class.=' nav-tabs';
+				break;
+		}
+
+		// Align
+		if ($this->_optionCheck($options, 'justified')) {
+			if ($options['justified'] === true) {
+				$class.= ' nav-justified';
+			}
+			unset($options['justified']);
+		}
+
+		// Other attributes
+		$attributes = $this->_getAttributes($options);
+
+		$out = "<ul class=\"nav{$class}\"$attributes>\n";
+		foreach ($tabs as $t) {
+			$out.="\t$t\n";
+		}
+		$out.="</ul>\n";
+		return $out;
 	}
 
 	/**
@@ -1167,7 +1294,8 @@ class Tbs {
 		// Attributes
 		$attributes = $this->_getAttributes($options);
 
-		return "<img class=\"" . trim($class) . "\"$attributes src=\"$path\"/>";
+		$class = trim($class);
+		return "<img class=\"$class\"$attributes src=\"$path\"/>";
 	}
 
 	/**
@@ -1379,7 +1507,7 @@ class Tbs {
 
 		$out = "<ul class=\"media-list{$class}\"$attributes>\n";
 		foreach ($list as $item) {
-			$subList=null;
+			$subList = null;
 			// Forcing item to be a list item
 			$item['options']['list'] = true;
 
@@ -1424,8 +1552,10 @@ class Tbs {
 
 		// Linked
 		$linked = false;
-		if ($this->_optionCheck($options, 'linked') && $options['linked'] === true) {
-			$linked = true;
+		if ($this->_optionCheck($options, 'linked')) {
+			if ($options['linked'] === true) {
+				$linked = true;
+			}
 			unset($options['linked']);
 		}
 
@@ -1492,15 +1622,20 @@ class Tbs {
 		}
 
 		// Linked
-		if ($this->_optionCheck($options, 'linked') && $options['linked'] === true) {
-			$tag = 'a';
-		} else {
-			$tag = 'li';
+		if ($this->_optionCheck($options, 'linked')) {
+			if ($options['linked'] === true) {
+				$tag = 'a';
+			} else {
+				$tag = 'li';
+			}
+			unset($options['linked']);
 		}
 
 		// Disabled
-		if ($this->_optionCheck($options, 'disabled') && $options['disabled'] === true) {
-			$class.=' disabled';
+		if ($this->_optionCheck($options, 'disabled')) {
+			if ($options['disabled'] === true) {
+				$class.=' disabled';
+			}
 			unset($options['disabled']);
 		}
 

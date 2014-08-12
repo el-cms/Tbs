@@ -1,4 +1,3 @@
-<a id="image"></a>
 <div class="inToc"><h2>Images</h2></div>
 
 <div class="panel panel-default">

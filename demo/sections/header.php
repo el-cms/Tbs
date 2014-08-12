@@ -1,4 +1,3 @@
-<a id="header"></a>
 <div class="inToc"><h2>Header</h2></div>
 
 <div class="panel panel-default">

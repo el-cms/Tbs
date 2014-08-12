@@ -1,4 +1,3 @@
-<a id="dropdown"></a>
 <div class="inToc"><h2>Dropdown</h2></div>
 
 <div class="panel panel-default">
@@ -17,7 +16,7 @@ $content = array(
 		'SomeLink5' =&gt; '#',
 		'SomeLink6' =&gt; '#',
 );
-echo $Tbs-&gt;dropdown($content, array('class' =&gt; 'clearfix'));
+echo $Tbs-&gt;dropdown($content);
 ?&gt;</pre>
 	</div>
 	<div class="panel-footer">
@@ -32,7 +31,7 @@ echo $Tbs-&gt;dropdown($content, array('class' =&gt; 'clearfix'));
 				'SomeLink5' => '#',
 				'SomeLink6' => '#',
 		);
-		echo $Tbs->dropdown($content, array('class' => 'clearfix'));
+		echo $Tbs->dropdown($content);
 		?><em>We don't see anything as i'm unable to display a dropdown menu only...</em>
 	</div>
 </div>

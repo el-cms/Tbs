@@ -1,4 +1,3 @@
-<a id="alert"></a>
 <div class="inToc"><h2>Alert</h2></div>
 
 <div class="panel panel-default">

@@ -1,4 +1,3 @@
-<a id="toolbar"></a>
 <div class="inToc"><h3>Toolbar</h3></div>
 
 <div class="panel panel-default">

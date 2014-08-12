@@ -1,4 +1,3 @@
-<a id="jumbotron"></a>
 <div class="inToc"><h2>Jumbotron</h2></div>
 
 <div class="panel panel-default">

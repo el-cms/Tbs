@@ -1,4 +1,3 @@
-<a id="media"></a>
 <div class="inToc"><h2>Media objects</h2></div>
 
 <div class="panel panel-default">

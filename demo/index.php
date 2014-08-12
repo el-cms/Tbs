@@ -138,6 +138,9 @@ $Tbs = new Tbs;
 					<div class="inToc"><h1>CSS</h1></div>
 
 					<?php
+					if (!empty($_GET['onlyShow'])) {
+						include"sections/{$_GET['onlyShow']}.php";
+					} else {
 						include 'sections/form.php';
 						include 'sections/input.php';
 						include 'sections/button.php';
@@ -152,6 +155,7 @@ $Tbs = new Tbs;
 						include 'sections/toolbar.php';
 						include 'sections/btndropdown.php';
 						include 'sections/breadcrumb.php';
+						include 'sections/nav.php';
 						include 'sections/label.php';
 						include 'sections/badge.php';
 						include 'sections/jumbotron.php';
@@ -160,6 +164,7 @@ $Tbs = new Tbs;
 						include 'sections/media.php';
 						include 'sections/listgroup.php';
 						include 'sections/embed.php';
+					}
 					?>
 				</div>
 			</div>

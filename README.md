@@ -61,8 +61,9 @@ As the class is not totally finished, you are welcome to join the project !
  - [x] jumbotron($title, $content, $options) *Creates a hero unit*
  - [x] listgroup($items, $options) *Creates nice panels*
  - [x] media() *Creates a media element: an image with some text*
-  - [ ] mediaList()
- - [ ] nav()
+  - [x] mediaList($list, $options) *Creates a nested media list*
+ - [x] nav($tabs, $options) *Creates a navigation bar*
+  - [x] navItem($content, $options) *Creates a single navigation item to use in nav()*
  - [ ] navBar()
  - [ ] pager()
  - [ ] paginator()

@@ -1,4 +1,3 @@
-<a id="breadcrumb"></a>
 <div class="inToc"><h2>Breadcrumbs</h2></div>
 
 <div class="panel panel-default">
