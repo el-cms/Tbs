@@ -23,22 +23,23 @@ class Tbs {
 	public $iconPack = 'glyphicon';
 
 	/**
-	 * Will be true if a form is opened
-	 * @var integer
-	 */
-	public $formOpen = false;
-
-	/**
 	 * Defines the current form style.
 	 * @var string
 	 */
-	public $formStyle = null;
+	public $formStyle = 'default';
 
 	/**
 	 * Default label width in a horizontal form. Can be overriden by formOpen()
-	 * @var string
+	 * @var int
 	 */
 	public $formWidth = 3;
+
+	/**
+	 * CSS grid size
+	 * @var int
+	 */
+	public $gridSize=12;
+
 
 	// ---------------------------------------------------------------------------
 	//
@@ -64,9 +65,9 @@ class Tbs {
 	 *           Additionnal classes for the dropdown element
 	 *  - size:  string, big|*standard|small|xsmall
 	 *           Button size
-	 *  - type:  string, *standard|primary|success|info|warning|danger|link
+	 *  - type:  string, *standard|primary|success|info|warning|danger|link|submit|reset
 	 *           Button type
-	 *  - tag:   string, *a|button|submit|input
+	 *  - tag:   string, *a|button|input
 	 *           Button tag
 	 *  - url:   string, *null
 	 *           Button's URL
@@ -77,93 +78,84 @@ class Tbs {
 	 * If tag is different than "a" and $url is set, tag will be "a"
 	 */
 	public function button($content, $url = null, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		$defaults = array(
+				'class' => null,
+				'size' => 'standard',
+				'type' => 'standard',
+				'tag' => 'a',
+		);
+		// Get options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Base class
+		$attributesList['class'] = 'btn ' . $optionsList['class'];
 
 		// Size
-		if ($this->_optionCheck($options, 'size')) {
-			switch (strtolower($options['size'])) {
-				case 'big':
-					$class.=' btn-lg';
-					break;
-				case 'small':
-					$class.=' btn-sm';
-					break;
-				case 'xsmall':
-					$class.=' btn-xs';
-					break;
-				default:
-					break;
-			}
-			unset($options['size']);
+		switch (strtolower($optionsList['size'])) {
+			case 'big':
+				$attributesList['class'].=' btn-lg';
+				break;
+			case 'small':
+				$attributesList['class'].=' btn-sm';
+				break;
+			case 'xsmall':
+				$attributesList['class'].=' btn-xs';
+				break;
 		}
 
-		// Tag
-		$inputType = null;
-		$tag = null;
-		if ($this->_optionCheck($options, 'tag')) {
-			$tag = $options['tag'];
-			unset($options['tag']);
-
-			// Force type for submits and reset
-			if (in_array($tag, array('submit', 'input', 'reset'))) {
-				switch ($tag) {
-					case 'submit':
-						$options['type'] = 'primary';
-						break;
-					case 'reset':
-						$options['type'] = 'danger';
-						break;
-				}
-			}
+		// Type
+		switch ($optionsList['type']) {
+			case 'primary':
+				$attributesList['class'].=' btn-primary';
+				break;
+			case 'success':
+				$attributesList['class'].=' btn-success';
+				break;
+			case 'info':
+				$attributesList['class'].=' btn-info';
+				break;
+			case 'warning':
+				$attributesList['class'].=' btn-warning';
+				break;
+			case 'danger':
+				$attributesList['class'].=' btn-danger';
+				break;
+			case 'submit':
+				$attributesList['class'].=' btn-primary';
+				$optionsList['tag'] = 'input';
+				$attributesList['type'] = 'submit';
+				$url = null;
+				break;
+			case 'reset':
+				$attributesList['class'].=' btn-danger';
+				$optionsList['tag'] = 'input';
+				$attributesList['type'] = 'reset';
+				$url = null;
+				break;
+			default:
+				$attributesList['class'].=' btn-default';
 		}
 
-		// Type:
-		if ($this->_optionCheck($options, 'type')) {
-			switch (strtolower($options['type'])) {
-				case 'primary':
-					$class.=' btn-primary';
-					break;
-				case 'success':
-					$class.=' btn-success';
-					break;
-				case 'info':
-					$class.=' btn-info';
-					break;
-				case 'warning':
-					$class.=' btn-warning';
-					break;
-				case 'danger':
-					$class.=' btn-danger';
-					break;
-			}
-			unset($options['type']);
-		} else {
-			// Default
-			$class.=' btn-default';
+		// Passing some options as attributes
+		$attributesList['href'] = $url;
+		// HTML Attributes
+		// Special button type for standard inputs
+		if ($optionsList['tag'] == 'input' && !isset($attributesList['type'])) {
+			$attributesList['type'] = 'button';
 		}
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		// Atrtibutes
-		$attributes = $this->_getAttributes($options);
 
-		// Choose between link or button
-		if (!is_null($url) || $tag === 'a') {
-			return "<a href=\"$url\" class=\"btn$class\"$attributes>$content</a>";
-		} else {
-			switch ($tag) {
-				case 'submit':
-					return "\n<input type=\"submit\" class=\"btn$class\"$attributes/>";
-				case 'input':
-					return "\n<input type=\"button\" class=\"btn$class\"$attributes/>";
-				case 'reset':
-					return "\n<input type=\"reset\" class=\"btn$class\"$attributes/>";
-				default:
-					return "\n<button class=\"btn{$class}\"$attributes>$content</button>";
-			}
+		switch ($optionsList['tag']) {
+			case 'a':
+				return "<a{$attributes}>{$content}</a>";
+				break;
+			case 'input':
+				return "<input{$attributes}/>";
+				break;
+			case 'button':
+				return "<button{$attributes}>{$content}</button>";
 		}
 	}
 
@@ -193,24 +185,26 @@ class Tbs {
 	 *
 	 */
 	public function dropdown($content, $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'align' => 'right',
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "dropdown-menu {$optionsList['class']}";
 
 		// Align
-		if ($this->_optionCheck($options, 'align')) {
-			$class .= " dropdown-menu-${$options['align']}";
-			unset($options['align']);
-		}
+		$attributesList['class'] .= " dropdown-menu-{$optionsList['align']}";
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
 		// Opening list
-		$list = "<ul class=\"dropdown-menu$class\"$attributes>\n\t";
+		$list = "<ul{$attributes}>\n\t";
 		// Links list
 		foreach ($content as $t => $l) {
 			if ($l == "%divider%") {
@@ -242,39 +236,41 @@ class Tbs {
 	 * --------
 	 *  - class:         string    *null
 	 *                   Additionnal classes for the button group
-	 *  - size:          string    *null|big|standard|small|xsmall
+	 *  - size:          string    big|*standard|small|xsmall
 	 *                   Button sizes. Don't define custom styles for the buttons, but define one for dropdowns.
 	 */
 	public function buttonGroup($buttons, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'size' => 'standard',
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "btn-group {$optionsList['class']}";
 
 		// Size
-		if ($this->_optionCheck($options, 'size')) {
-			switch (strtolower($options['size'])) {
-				case 'big':
-					$class.=' btn-group-lg';
-					break;
-				case 'small':
-					$class.=' btn-group-sm';
-					break;
-				case 'xsmall':
-					$class.=' btn-group-xs';
-					break;
-				default:
-					break;
-			}
-			unset($options['size']);
+		switch ($optionsList['size']) {
+			case 'big':
+				$attributesList['class'].=' btn-group-lg';
+				break;
+			case 'small':
+				$attributesList['class'].=' btn-group-sm';
+				break;
+			case 'xsmall':
+				$attributesList['class'].=' btn-group-xs';
+				break;
+			default:
+				break;
 		}
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		$out = "<div class=\"btn-group{$class}\"$attributes>";
+		$out = "<div{$attributes}>";
 		foreach ($buttons as $b) {
 			$out.="\n$b";
 		}
@@ -302,17 +298,21 @@ class Tbs {
 	 *
 	 */
 	public function toolbar($buttonGroups, $options = array()) {
-		// Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		$defaults = array(
+				'class' => null,
+		);
 
-		// Atrtibutes
-		$attributes = $this->_getAttributes($options);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "btn-toolbar {$optionsList['class']}";
 
-		$out = "<div class=\"btn-toolbar{$class}\"$attributes>";
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		$out = "<div{$attributes}>";
 		foreach ($buttonGroups as $v) {
 			$out.="\n$v";
 		}
@@ -350,62 +350,53 @@ class Tbs {
 	 *           Creates a split button dropdown
 	 *  - dropup bool, *false
 	 *           Creates a dropup variation.
+	 *  - disabled bool, *false
+	 *             Disables the button
 	 * - Other attributes that can apply to a "div" element.
 	 * If you want to make a split button with an URL, pass the "url" option in the $buttonOptions array
 	 *
 	 */
 	public function buttonDropdown($title, $dropdown, $options = array()) {
-		// wrapper class
-		// button class
-		$btnClass = null;
-		$btnOptions = array('class' => null, 'url' => null, 'tag' => null, 'type' => null);
-		$url = null;
+		$defaults = array(
+				'class' => null,
+				'size' => 'standard',
+				'type' => 'standard',
+				'tag' => 'a',
+				'url' => null,
+				'split' => false,
+				'dropup' => false,
+				'disabled' => false
+		);
+
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = $optionsList['class'];
+		// Prepare button options
+		$btnOptions = array('class' => $optionsList['class']);
 
 		// Type will be passed to button();
-		if ($this->_optionCheck($options, 'type')) {
-			$btnOptions['type'] = $options['type'];
-			unset($options['type']);
-		}
+		$btnOptions['type'] = $optionsList['type'];
 
 		// Tag will be passed to button();
-		if ($this->_optionCheck($options, 'tag')) {
-			$btnOptions['tag'] = $options['tag'];
-			unset($options['tag']);
-		}
+		$btnOptions['tag'] = $optionsList['tag'];
 
 		// Url will be passed to button()
-		if ($this->_optionCheck($options, 'url')) {
-			$url = $options['url'];
-			unset($options['url']);
-		}
+		$url = $optionsList['url'];
+
+
 		// Disabled will be passed to button()
-		if ($this->_optionCheck($options, 'disabled')) {
-			$btnOptions['disabled'] = $options['disabled'];
-			unset($options['disabled']);
-		}
+		$btnOptions['disabled'] = $optionsList['disabled'];
+
 		// Split
-		$split = false;
-		if ($this->_optionCheck($options, 'split')) {
-			if ($options['split'] === true) {
-				$split = true;
-			}
-			unset($options['split']);
-		}
+		$split = $optionsList['split'];
 
 		// Dropup
-		if ($this->_optionCheck($options, 'dropup')) {
-			if ($options['dropup'] === true) {
-				if (!empty($options['class'])) {
-					$options['class'].='dropup';
-				} else {
-					$options['class'] = 'dropup';
-				}
-			}
-			unset($options['dropup']);
+		if ($optionsList['dropup'] === true) {
+			$attributesList['class'].=' dropup';
 		}
-
-		// Attributes
-		$attributes = $this->_getAttributes($options);
 
 		$buttons = array();
 
@@ -426,7 +417,7 @@ class Tbs {
 		// Creating dropdown
 		$buttons[] = $dropdown;
 
-		return $this->buttonGroup($buttons, $options);
+		return $this->buttonGroup($buttons, array('class' => $optionsList['class'], 'size' => $optionsList['size']));
 	}
 
 	// ---------------------------------------------------------------------------
@@ -454,102 +445,131 @@ class Tbs {
 	 *                Additionnal class for the element
 	 *  - default     bool, *false
 	 *                Default state for a radio or checkbox element
-	 *  - description string, *null
+	 *  - help        string, *null
 	 *                Input description (useful for radios/checkboxes)
 	 *  - disabled    bool, *false
 	 *                Defines if the element is disabled.
+	 *  - required    bool, *false
+	 *                Defines if the field is required
+	 *  - value       string, *null
+	 *                Input value
+	 *  - label       string, *$name
+	 *                Label caption
+	 *  - caption     string, *null
+	 *                Radio/checkbox caption
 	 *
 	 * To create a select, use "inputSelect()" instead
 	 *
 	 */
 	public function input($name, $type, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		// Defaults:
+		$defaults = array(
+				'label' => $name,
+				'class' => null,
+				'default' => false,
+				'help' => null,
+				'disabled' => false,
+				'required' => false,
+				'value' => null,
+				'caption' => null,
+		);
 
-		// Default state for checkboxes and radios
-		$default = false;
-		if ($this->_optionCheck($options, 'default')) {
-			$default = true;
-			unset($options['default']);
-		}
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		$attributesList['id'] = $name;
 
-		// Description
-		$description = null;
-		if ($this->_optionCheck($options, 'description')) {
-			$description = $options['description'];
-			unset($options['description']);
-		}
+		// Help/Description
+		$help = $optionsList['help'];
 
 		// Disabled state
 		$disabled = null;
-		if ($this->_optionCheck($options, 'disabled')) {
+		if ($optionsList['disabled']) {
 			$disabled = ' disabled';
-			unset($options['disabled']);
 		}
 
 		// Required state
 		$required = null;
-		if ($this->_optionCheck($options, 'required')) {
+		if ($optionsList['required']) {
 			$required = ' required';
-			unset($options['required']);
 		}
 
 		// Value
-		$value = null;
-		if ($this->_optionCheck($options, 'value')) {
-			$value = trim($options['value']);
-			unset($options['value']);
-		}
+		$value = trim($optionsList['value']);
+
+		// Value as attribute, to use only in some cases
 		$attrValue = $this->_cleanAttribute('value', $value);
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
 		// Checked state (radio/checkbox)
 		$checked = null;
+		if ($optionsList['default']) {
+			$checked = ' checked="checked"';
+		}
 
 		// Element
-		if (in_array($type, array('text', 'password', 'datetime', 'datetime-local', 'date', 'month', 'time', 'week', 'number', 'email', 'url', 'search', 'tel', 'color'))) {
-			return "\n<input type=\"$type\" class=\"form-control{$class}\"$disabled{$attrValue} name=\"$name\"$attributes/>";
+		$element = null;
+		$textInputs = array('text', 'password', 'datetime', 'datetime-local', 'date', 'month', 'time', 'week', 'number', 'email', 'url', 'search', 'tel', 'color');
+		if (in_array($type, $textInputs)) {
+			// Input field
+			$class = $this->_cleanString(array('form-control', $optionsList['class']));
+			$element = "\n<input type=\"{$type}\" name=\"{$name}\" class=\"{$class}\"{$disabled}{$attrValue}{$attributes} />";
 		} elseif ($type === 'static') {
-			return "\n<p class=\"form-control-static{$class}{$disabled}\"{$attrValue} name=\"name\"$attributes>$value</p>";
+			// Static field
+			$class = $this->_cleanString(array('form-control-static', $optionsList['class']));
+			$element = "\n<p class=\"{$class}\"$attributes>$value</p>";
+		} elseif ($type === 'checkbox') {
+			// Checkbox
+			$class = $this->_cleanString(array('checkbox', $optionsList['class']));
+			$element = "\n<div class=\"{$class}\">\n\t<label for=\"{$attributesList['id']}\">\n\t\t<input type=\"checkbox\" name=\"$name\"{$checked}{$attrValue}{$disabled}{$attributes} />{$optionsList['caption']}\n\t</label>\n</div>";
+		} elseif ($type === 'radio') {
+			// radio
+			$class = $this->_cleanString(array('radio', $optionsList['class']));
+			$element = "\n<div class=\"{$class}\">\n\t<label for=\"{$attributesList['id']}\">\n\t\t<input type=\"radio\" name=\"$name\"{$checked}{$attrValue}{$disabled}{$attributes} />{$optionsList['caption']}\n\t</label>\n</div>";
+		} elseif ($type === 'textarea') {
+			// Textareas
+			$class = $this->_cleanString(array('form-control', $optionsList['class']));
+			$element = "\n<textarea class=\"{$class}\" name=\"$name\"{$disabled}{$attributes}>$value</textarea>";
+		} elseif ($type === 'submit') {
+			// Updating options
+			$options['tag'] = 'input';
+			$options['type'] = 'submit';
+			$options['name'] = $name;
+			$options['value'] = $value;
+			$element = $this->button($value, null, $options);
+		} elseif ($type === 'reset') {
+			$options['tag'] = 'input';
+			$options['type'] = 'reset';
+			$options['name'] = $name;
+			$options['value'] = $value;
+			$optionsList['label'] = null;
+			$element = $this->button($value, null, $options);
+		} elseif ($type === 'button') {
+			$options['tag'] = 'input';
+			$options['type'] = 'standard';
+			$options['name'] = $name;
+			$options['value'] = $value;
+			$optionsList['label'] = null;
+			$element = $this->button($value, null, $options);
+		} elseif ($type === 'file') {
+			// Files
+			$element = "\n<input type=\"file\" name=\"$name\"{$disabled}{$attributes}/>";
 		} else {
-			switch (strtolower($type)) {
-				case 'submit':
-					// Updating options
-					$options['tag'] = 'submit';
-					$options['name'] = $name;
-					$options['value'] = $value;
-					return $this->button($value, null, $options);
-				case 'reset':
-					$options['tag'] = 'reset';
-					$options['name'] = $name;
-					$options['value'] = $value;
-					return $this->button($value, null, $options);
-				case 'button':
-					$options['tag'] = 'input';
-					$options['name'] = $name;
-					$options['value'] = $value;
-					return $this->button($value, null, $options);
-				case 'checkbox':
-					if ($default) {
-						$checked = ' checked="checked"';
-					}
-					return "\n<div class=\"checkbox{$disabled}\">\n\t<label>\n\t\t<input type=\"checkbox\" class=\"" . trim($class) . "\"$checked{$attrValue}{$disabled} name=\"$name\"$attributes />$description\n\t</label>\n</div>";
-				case 'radio':
-					if ($default) {
-						$checked = ' checked="checked"';
-					}
-					return "\n<div class=\"radio{$disabled}\">\n\t<label>\n\t\t<input type=\"radio\"{$disabled} class=\"" . trim($class) . "\"$checked{$attrValue} name=\"$name\"$attributes />$description\n\t</label>\n</div>";
-				case 'textarea':
-					return "\n<textarea class=\"form-control{$class}\"{$disabled} name=\"$name\"$attributes />$value</textarea>";
-				default:
-					return "\n<input type=\"text\" class=\"form-control{$class}\"{$disabled}{$attrValue} name=\"$name\"$attributes />";
-			}
+			// Default
+			$class = $this->_cleanString(array('form-control', $optionsList['class']));
+			$element = "\n<input type=\"text\" name=\"$name\" class=\"{$class}\"{$disabled}{$attrValue}{$attributes} />";
+		}
+
+		if (!empty($optionsList['label']) && !in_array($type, array('radio', 'checkbox', 'submit', 'reset', 'button'))) {
+			$out = "<div class=\"form-group\">\n";
+			$out.="\t<label for=\"{$attributesList['id']}\">{$optionsList['label']}</label>\n";
+			$out.=$element . '</div>';
+			return $out;
+		} else {
+			return $element;
 		}
 	}
 
@@ -577,30 +597,32 @@ class Tbs {
 	 *
 	 */
 	public function inputSelect($name, $list, $options = array()) {
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'default' => null,
+				'multiple' => false,
+		);
 
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "form-control{$optionsList['class']}";
 
-		// Default
-		$default = null;
-		if ($this->_optionCheck($options, 'default')) {
-			$default = $options['default'];
-			unset($options['default']);
-		}
+		$default = $optionsList['default'];
+
 		// Multiple
 		$multiple = null;
-		if ($this->_optionCheck($options, 'multiple')) {
+		if ($optionsList['multiple']) {
 			$multiple = ' multiple';
-			unset($options['multiple']);
 		}
-		// Attributes
-		$attributes = $this->_getAttributes($options);
 
-		$out = "\n<select name=\"$name\" class=\"form-control{$class}\"{$multiple}{$attributes}>";
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		$out = "\n<select name=\"$name\"{$attributes}{$multiple}>";
 		$out.= $this->_makeSelectList($list, $default);
 		$out.="\n</select>";
 		return $out;
@@ -659,59 +681,49 @@ class Tbs {
 	 *
 	 */
 	public function formOpen($name, $options = array()) {
-		$this->formOpen = true;
-
-		// Class
-		$class = null;
-
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'style' => $this->formStyle,
+				'width' => $this->formWidth,
+				'file' => false,
+				'method' => 'POST',
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "{$optionsList['class']}";
 
 		// Style
-		if ($this->_optionCheck($options, 'style')) {
-			switch ($options['style']) {
-				case 'horizontal':
-					$class.=' form-horizontal';
-					break;
-				case 'inline':
-					$class.=' form-inline';
-					break;
-				default:
-					break;
-			}
-			unset($options['style']);
-			$this->formStyle = $options['style'];
+		switch ($optionsList['style']) {
+			case 'horizontal':
+				$attributesList['class'].=' form-horizontal';
+				break;
+			case 'inline':
+				$attributesList['class'].=' form-inline';
+				break;
+			default:
+				break;
 		}
+		$this->formStyle = $optionsList['style'];
 
 		// File
-		if ($this->_optionCheck($options, 'file')) {
-			if ($options['file'] === true) {
-				$options['enctype'] = 'multipart/form-data';
-			}
-			unset($options['file']);
+		if ($optionsList['file']) {
+			$attributesList['enctype'] = 'multipart/form-data';
 		}
 
 		// Default method
-		if (!$this->_optionCheck($options, 'method')) {
-			$options['method'] = 'POST';
-		}
+		$attributesList['method'] = $optionsList['method'];
 
 		// Horizontal forms: label width
-		if ($this->_optionCheck($options, 'width')) {
-			$this->formWidth = $options['width'];
-			unset($options['width']);
-		}
+		$this->formWidth = $optionsList['width'];
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
-
-		// Cleaning class
-		$class = $this->_cleanAttribute('class', $class);
-
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 		// Output
-		return "<form{$class}{$attributes} role=\"form\">\n";
+		return "<form{$attributes} role=\"form\">\n";
 	}
 
 	/**
@@ -731,17 +743,25 @@ class Tbs {
 	 *
 	 */
 	public function formClose($options = array()) {
+		// Defaults:
+		$defaults = array(
+				'submit' => false,
+				'reset' => false,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+
 		$out = null;
 		// Submit
-		if ($this->_optionCheck($options, 'submit')) {
-			$out.=$this->input(null, 'submit', $options['submit']);
+		if ($optionsList['submit']) {
+			$out.=$this->input(null, 'submit');
 		}
 		// Reset
-		if ($this->_optionCheck($options, 'reset')) {
-			$out.=$this->input(null, 'reset', $options['reset']);
+		if ($optionsList['reset']) {
+			$out.=$this->input(null, 'reset');
 		}
 
-		return $out;
+		return $out . "\n</form>";
 	}
 
 	/**
@@ -765,7 +785,12 @@ class Tbs {
 	 *                 in standard grid system.
 	 */
 	public function formGroup($label, $input, $options = array()) {
-
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'style' => $this->formStyle,
+				'labelWidth' => $this->formWidth,
+		);
 	}
 
 	/**
@@ -785,7 +810,10 @@ class Tbs {
 	 *
 	 */
 	public function inputGroup($input, $options = array()) {
-
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+		);
 	}
 
 	// ---------------------------------------------------------------------------
@@ -808,7 +836,7 @@ class Tbs {
 	 * -------
 	 * - class:           string, *null
 	 *                    Additionnal classes for the ol element
-	 * - disabled:        bool, *true
+	 * - disabled:        bool, *false
 	 *                    Defines if the item is enabled or not
 	 * - active:          bool, *false
 	 *                    Defines an item as the current item
@@ -821,53 +849,46 @@ class Tbs {
 	 *
 	 */
 	public function navItem($content, $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class = ' ' . $options['class'];
-			unset($options['class']);
-		}
+		$defaults = array(
+				'class' => null,
+				'disabled' => false,
+				'active' => false,
+				'url' => '#',
+				'dropdown' => false,
+				'dropdownContent' => null,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = $optionsList['class'];
 
 		// Enabled
-		if ($this->_optionCheck($options, 'disabled') && $options['disabled'] == true) {
-			$class = ' disabled';
-			unset($options['disabled']);
+		if ($optionsList['disabled']) {
+			$attributesList['class'] .= ' disabled';
 		}
 
 		// Active
-		if ($this->_optionCheck($options, 'active') && $options['active'] == true) {
-			$class = ' active';
-			unset($options['active']);
-		}
-
-		// Url
-		$url = '#';
-		if ($this->_optionCheck($options, 'url')) {
-			$url = $options['url'];
-			unset($options['url']);
+		if ($optionsList['active']) {
+			$attributesList['class'] .= ' active';
 		}
 
 		// Dropdown & dropdown content
 		$isDropdown = false;
-		if ($this->_optionCheck($options, 'dropdown') && $this->_optionCheck($options, 'dropdownContent')) {
-			$class.=' dropdown';
-			$content = "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">\n\t$content <span class=\"caret\"></span></a>\n{$options['dropdownContent']}";
-			unset($options['dropdown']);
-			unset($options['dropdownContent']);
+		if ($optionsList['dropdown'] && !empty($optionsList['dropdownContent'])) {
+			$attributesList['class'].=' dropdown';
+			$content = "<a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">\n\t$content<span class=\"caret\"></span></a>\n{$optionsList['dropdownContent']}";
 			$isDropdown = true;
 		}
 		if (!$isDropdown) {
-			$content = "<a href=\"$url\">$content</a>";
-		}
-		// Other attributes
-		$attributes = $this->_getAttributes($options);
-
-		$class = trim($class);
-		if (!empty($class)) {
-			$class = " class=\"$class\"";
+			$content = "<a href=\"{$optionsList['url']}\">{$content}</a>";
 		}
 
-		return "<li{$class}{$attributes}>$content</li>";
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		return "<li{$attributes}>{$content}</li>";
 	}
 
 	/**
@@ -892,45 +913,40 @@ class Tbs {
 	 *
 	 */
 	public function nav($tabs, $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class = ' ' . $options['class'];
-			unset($options['class']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'type' => 'tabs',
+				'justified' => false,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "nav {$optionsList['class']}";
 
-		// Type
-		$type = null;
-		if ($this->_optionCheck($options, 'type')) {
-			$type = $options['type'];
-
-			unset($options['type']);
-		}
-
-		switch ($type) {
+		switch ($optionsList['type']) {
 			case 'pills':
-				$class.=' nav-pills';
+				$attributesList['class'].=' nav-pills';
 				break;
 			case 'stacked':
-				$class.= ' nav-pills nav-stacked';
+				$attributesList['class'].= ' nav-pills nav-stacked';
 				break;
 			default:
-				$class.=' nav-tabs';
+				$attributesList['class'].=' nav-tabs';
 				break;
 		}
 
 		// Align
-		if ($this->_optionCheck($options, 'justified')) {
-			if ($options['justified'] === true) {
-				$class.= ' nav-justified';
-			}
-			unset($options['justified']);
+		if ($optionsList['justified']) {
+			$attributesList['class'].= ' nav-justified';
 		}
 
-		// Other attributes
-		$attributes = $this->_getAttributes($options);
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		$out = "<ul class=\"nav{$class}\"$attributes>\n";
+		$out = "<ul{$attributes}>\n";
 		foreach ($tabs as $t) {
 			$out.="\t$t\n";
 		}
@@ -941,41 +957,100 @@ class Tbs {
 	/**
 	 * Creates a navbar element
 	 *
-	 * @param type $elements
+	 * @param type $elements List of elements
 	 * @param array $options List of options for this element
 	 *
 	 * @return string Html code to be displayed
 	 *
 	 * @link  http://getbootstrap.com/components/#navbar Link to the TBS documentation about this element
 	 * ---
+	 * Elements should be an array of navBrand(), navLink(), navForm(), navButton(), navText(), navTextLink()
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class:         string, *null
+	 *                   Additionnal classes for the ol element
+	 *  - position:      string *default|fixedtop|fixedbottom|statictop
+	 *                   Defines the navbar position. Remember to set a 60px padding to the body for fixed navbars.
+	 *  - width:         string, *null|full
+	 *                   Defines if the navbar takes the page width
+	 *  - collapse:      bool, *true
+	 *                   Defines if the navbar is responsive and collapses on small displays
+	 *  - collapseTitle: string, *null, see _navBarCollapse()
+	 *                   Alternative text for the collapse button
+	 *  - inverse        bool, *false
+	 *                   Defines the navbar color
+	 *  - title          string *null
+	 *                   Brand name
+	 *  - url            string *#
+	 *                   Link on brand name
 	 *
 	 */
-	public function navBar($elements, $options = array()) {
+	public function navbar($elements, $options = array()) {
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'position' => 'default',
+				'width' => null,
+				'collapse' => true,
+				'collapseTitle' => 'Toggle menu',
+				'inverse' => false,
+				'title' => $this->icon('home'),
+				'url' => null,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = 'navbar ' . $optionsList['class'];
 
+		// Position
+		switch ($optionsList['position']) {
+			case 'fixedtop':
+				$attributesList['class'].=' navbar-fixed-top';
+				break;
+			case 'fixedbottom':
+				$attributesList['class'].=' navbar-fixed-bottom';
+				break;
+			default:
+		}
+
+		// Width:
+		switch ($optionsList['width']) {
+			case 'full':
+				$attributesList['class'].= ' navbar-static-top';
+				break;
+			default:
+		}
+
+		// Collapse
+		$collapseButton = null;
+		if ($optionsList['collapse']) {
+			$collapseButton = $this->_navbarCollapse($optionsList['collapseTitle']);
+		}
+
+		// Inverse
+		if ($optionsList['inverse'] === true) {
+			$attributesList['class'].=' navbar-inverse';
+		} else {
+			$attributesList['class'].=' navbar-default';
+		}
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		// Opening the navbar and container
+		$out = "<nav{$attributes} role=\"navigation\">\n\t<div class=\"container-fluid\">";
+		// Header (brand)
+		$out.="\t\t<div class=\"navbar-header\">{$collapseButton}<a class=\"navbar-brand\" href=\"{$optionsList['url']}\">{$optionsList['title']}</a>\n</div>";
+
+		// End of navbar and container
+		$out.="\t</div>\n</nav>";
+		return $out;
 	}
 
-	/**
-	 * Creates breadcrumb list. The last element will be the current active element
-	 *
-	 * @param array $elements List of elements
-	 * @param array $options List of options for this element
-	 *
-	 * @return string Html code to be displayed
-	 *
-	 * @link  http://getbootstrap.com/components/#breadcrumbs Link to the TBS documentation about this element
-	 * ---
-	 *
-	 * Options:
-	 * --------
-	 *  - class:       string, *null
-	 *                 Additionnal classes for the ol element
-	 *
-	 */
-	public function breadcrumbs($elements, $options = array()) {
+	public function navbarBrand($content, $options = array()) {
 		// Additionnal classes
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
@@ -985,24 +1060,90 @@ class Tbs {
 
 		// Other attributes
 		$attributes = $this->_getAttributes($options);
-
-		$lastOne = count($elements);
-		$i = 1;
-		$out = "<ol class=\"breadcrumb{$class}\"$attributes>";
-		$itemClass = null;
-		foreach ($elements as $e => $l) {
-			$itemLink = $e;
-			if ($i === $lastOne) {
-				$itemClass = ' class="active"';
-			}
-			if (!empty($l)) {
-				$itemLink = "<a href=\"$l\">$e</a>";
-			}
-			$out.="\t<li{$itemClass}>{$itemLink}</li>";
-			$i++;
-		}
-		$out.="</ol>\n";
+		$out = "";
 		return $out;
+	}
+
+	public function navbarLink($content, $options = array()) {
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class = ' ' . $options['class'];
+			unset($options['class']);
+		}
+
+		// Other attributes
+		$attributes = $this->_getAttributes($options);
+		$out = "";
+		return $out;
+	}
+
+	public function navbarForm($content, $options = array()) {
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class = ' ' . $options['class'];
+			unset($options['class']);
+		}
+
+		// Other attributes
+		$attributes = $this->_getAttributes($options);
+		$out = "";
+		return $out;
+	}
+
+	public function navbarButton($content, $options = array()) {
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class = ' ' . $options['class'];
+			unset($options['class']);
+		}
+
+		// Other attributes
+		$attributes = $this->_getAttributes($options);
+		$out = "";
+		return $out;
+	}
+
+	public function navbarText($content, $options = array()) {
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class = ' ' . $options['class'];
+			unset($options['class']);
+		}
+
+		// Other attributes
+		$attributes = $this->_getAttributes($options);
+		$out = "";
+		return $out;
+	}
+
+	public function navbarTextLink($content, $options = array()) {
+		// Additionnal classes
+		$class = null;
+		if ($this->_optionCheck($options, 'class')) {
+			$class = ' ' . $options['class'];
+			unset($options['class']);
+		}
+
+		// Other attributes
+		$attributes = $this->_getAttributes($options);
+		$out = "";
+		return $out;
+	}
+
+	private function _navbarCollapse($title = null) {
+		if (!$title) {
+			$title = 'Toggle navigation';
+		}
+		return '<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">' . $title . '</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>';
 	}
 
 	/**
@@ -1063,29 +1204,35 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#glyphicons Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * $icon depends on the icon pack you are using. I.e:
+	 *       Glyphicon examples: http://glyphicons.com/examples-of-use/
+	 *       FontAwesome examples: http://fontawesome.io/examples/
+	 *
 	 * Options:
 	 * --------
-	 * - class string *null : additionnal list of styles. List depends on the icon pack you are using.
-	 *         Glyphicon examples: http://glyphicons.com/examples-of-use/
-	 *         FontAwesome examples: http://fontawesome.io/examples/
+	 * - class string *null : additionnal list of styles.
 	 * - other attributes, as id, title,...
 	 *
 	 */
 	public function icon($icon, $options = array()) {
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+		);
 		// Icon pack
 		$iPack = $this->iconPack;
 
+		// Options
+		$options = $this->_getOptions($defaults, $options);
+		// Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+
 		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class = ' ' . $options['class'];
-			unset($options['class']);
-		}
+		$attributesList['class'] = trim("{$iPack} {$iPack}-{$icon} {$options['class']}");
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		// Other attributes
-		$attributes = $this->_getAttributes($options);
-
-		return "<span class=\"$iPack $iPack-$icon$class\"$attributes></span>";
+		return "<span{$attributes}></span>";
 	}
 
 	/**
@@ -1103,68 +1250,47 @@ class Tbs {
 	 * --------
 	 *  - class: string, *null
 	 *           Additionnal classes for the label element
-	 *  - type:  string, *primary|success|info|warning|danger
+	 *  - type:  string, *default|primary|success|info|warning|danger
 	 *           label type
 	 *
 	 */
 	public function label($content, $options = array()) {
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'type' => 'default',
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "label {$optionsList['class']}";
+
+		switch (strtolower($optionsList['type'])) {
+			case 'primary':
+				$attributesList['class'].=' label-primary';
+				break;
+			case 'success':
+				$attributesList['class'].=' label-success';
+				break;
+			case 'info':
+				$attributesList['class'].=' label-info';
+				break;
+			case 'warning':
+				$attributesList['class'].=' label-warning';
+				break;
+			case 'danger':
+				$attributesList['class'].=' label-danger';
+				break;
+			default:
+				$attributesList['class'].=' label-default';
+				break;
 		}
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		if ($this->_optionCheck($options, 'type')) {
-			switch (strtolower($options['type'])) {
-				case 'primary':
-					$class.=' label-primary';
-					break;
-				case 'success':
-					$class.=' label-success';
-					break;
-				case 'info':
-					$class.=' label-info';
-					break;
-				case 'warning':
-					$class.=' label-warning';
-					break;
-				case 'danger':
-					$class.=' label-danger';
-					break;
-			}
-			unset($options['type']);
-		} else {
-			// Default
-			$class.=' label-default';
-		}
-
-		return "<span class=\"label{$class}\">$content</span>";
-	}
-
-	/**
-	 * Creates a badge
-	 *
-	 * @param string $content Badge content
-	 * @param array $options List of options for this element
-	 *
-	 * @return string Html code to be displayed
-	 *
-	 * @link  http://getbootstrap.com/components/#badges Link to the TBS documentation about this element
-	 * ---
-	 *
-	 * Options:
-	 * --------
-	 * - class : string *null : additionnal list of styles.
-	 *
-	 */
-	public function badge($content, $options = array()) {
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
-
-		return "<span class=\"badge{$class}\">$content</span>";
+		return "<span{$attributes}>$content</span>";
 	}
 
 	/**
@@ -1186,19 +1312,23 @@ class Tbs {
 	 *
 	 */
 	public function jumbotron($title, $content, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "jumbotron {$optionsList['class']}";
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		$out = "<div class=\"jumbotron{$class}\"$attributes>\n";
+		$out = "<div{$attributes}>\n";
 		$out.="\t<div class=\"container\">\n";
-		$out.="\t\t<h1>$title</h1>\n$content";
+		$out.="\t\t<h1>{$title}</h1>\n{$content}";
 		$out.="\t</div>\n</div>\n";
 		return $out;
 	}
@@ -1221,21 +1351,25 @@ class Tbs {
 	 *               Additionnal classes
 	 *
 	 */
-	public function header($content, $subtext, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+	public function header($content, $subtext = null, $options = array()) {
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "page-header {$optionsList['class']}";
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
 		if (!is_null($subtext)) {
 			$subtext = " <small>$subtext</small>";
 		}
-		return "\n<div class=\"page-header{$class}\">\n\t<h1>$content{$subtext}</h1></div>";
+		return "\n<div{$attributes}>\n\t<h1>{$content}{$subtext}</h1></div>";
 	}
 
 	/**
@@ -1259,43 +1393,43 @@ class Tbs {
 	 *               Defines if the image is responsive or not. Use it for big pics
 	 */
 	public function image($path, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'type' => null,
+				'responsive' => false,
+		);
+
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "{$optionsList['class']}";
+
 		// Type
-		if ($this->_optionCheck($options, 'type')) {
-			switch ($options['type']) {
-				case 'round':
-					$class.=' img-rounded';
-					break;
-				case 'circle':
-					$class.=' img-circle';
-					break;
-				case 'thumb':
-					$class.=' img-thumbnail';
-					break;
-			}
-			unset($options['type']);
+		switch ($optionsList['type']) {
+			case 'round':
+				$attributesList['class'].=' img-rounded';
+				break;
+			case 'circle':
+				$attributesList['class'].=' img-circle';
+				break;
+			case 'thumb':
+				$attributesList['class'].=' img-thumbnail';
+				break;
 		}
 
 		// Responsive
-		$responsive = false;
-		if ($this->_optionCheck($options, 'responsive')) {
-			$responsive = $options['responsive'];
-			unset($options['responsive']);
-		}
-		if ($responsive) {
-			$class.=' img-responsive';
+		if ($optionsList['responsive']) {
+			$attributesList['class'].=' img-responsive';
 		}
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+		// HTML Attributes
+		$attributesList['class'] = trim($attributesList['class']);
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		$class = trim($class);
-		return "<img class=\"$class\"$attributes src=\"$path\"/>";
+		return "<img src=\"$path\"{$attributes}/>";
 	}
 
 	/**
@@ -1313,49 +1447,147 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *  - class: string, *null
-	 *           Additionnal classes for the alert element
-	 *  - type:  string, *success|info|warning|danger
-	 *           alert type
+	 *  - class:       string, *null
+	 *                 Additionnal classes for the alert element
+	 *  - type:        string, *success|info|warning|danger
+	 *                 Alert type
+	 *  - dismiss:     string, *null
+	 *                 Makes the alert dismissible, and ads it the 'dismis' value as title
 	 *
 	 */
-	public function alert($content, $options = array(), $dismisible = '') {
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class .= " ${options['class']}";
-			unset($options['class']);
-		}
+	public function alert($content, $options = array()) {
+		$defaults = array(
+				'class' => null,
+				'type' => 'success',
+				'dismiss' => null
+		);
 
-		if ($this->_optionCheck($options, 'type')) {
-			switch (strtolower($options['type'])) {
-				case 'success':
-					$class .= ' alert-success';
-					break;
-				case 'info':
-					$class .= ' alert-info';
-					break;
-				case 'warning':
-					$class .= ' alert-warning';
-					break;
-				case 'danger':
-					$class .= ' alert-danger';
-					break;
-			}
-			unset($options['type']);
-		}
-
-		$dismiss = null;
-		if ($dismisible != '') {
-			$class .= ' alert-dismissible';
-			$dismiss = '<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">' . $dismisible . '</span></button>';
-		}
-
+		// Options
+		$optionsList = $this->_getOptions($defaults, $options);
 		// Attributes
-		$attributes = $this->_getAttributes($options);
+		$attributesList = $this->_getAttributes($defaults, $options);
 
-		return "<div class=\"alert{$class}\"{$attributes} role=\"alert\">
-			$dismiss
-			$content</div>";
+		// Base class:
+		$attributesList['class'] = 'alert';
+		// Additionnal class:
+		$attributesList['class'] .= " {$optionsList['class']}";
+
+		// Type
+		switch ($optionsList['type']) {
+			case 'success':
+				$attributesList['class'] .= ' alert-success';
+				break;
+			case 'info':
+				$attributesList['class'] .= ' alert-info';
+				break;
+			case 'warning':
+				$attributesList['class'] .= ' alert-warning';
+				break;
+			case 'danger':
+				$attributesList['class'] .= ' alert-danger';
+				break;
+		}
+
+		// Dismissable state
+		$dismiss = null;
+		if (!is_null($optionsList['dismiss'])) {
+			$attributesList['class'] .= ' alert-dismissible';
+			$dismiss = "\n\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" title=\"{$optionsList['dismiss']}\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">{$optionsList['dismiss']}</span></button>";
+		}
+
+		// HTML attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		return "<div{$attributes} role=\"alert\">$dismiss\n\t$content</div>";
+	}
+
+	/**
+	 * Creates a badge
+	 *
+	 * @param string $content Badge content
+	 * @param array $options List of options for this element
+	 *
+	 * @return string Html code to be displayed
+	 *
+	 * @link  http://getbootstrap.com/components/#badges Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 * - class : string *null : additionnal list of styles.
+	 *
+	 */
+	public function badge($content, $options = array()) {
+		$defaults = array(
+				'class' => null,
+		);
+
+		// Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+
+
+		// Additionnal classes
+		$attributesList['class'] = "badge {$optionsList['class']}";
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		return "<span{$attributes}>$content</span>";
+	}
+
+	/**
+	 * Creates breadcrumb list. The last element will be the current active element
+	 *
+	 * @param array $elements List of elements
+	 * @param array $options List of options for this element
+	 *
+	 * @return string Html code to be displayed
+	 *
+	 * @link  http://getbootstrap.com/components/#breadcrumbs Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class:       string, *null
+	 *                 Additionnal classes for the ol element
+	 *
+	 */
+	public function breadcrumbs($elements, $options = array()) {
+		// Defaults
+		$defaults = array(
+				'class' => null,
+		);
+
+		// Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+
+
+		// Additionnal classes
+		$attributesList['class'] = "breadcrumb {$optionsList['class']}";
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		// Preparting output
+		$lastOne = count($elements);
+		$i = 1;
+		$out = "<ol{$attributes}>";
+		$itemClass = null;
+		foreach ($elements as $e => $l) {
+			$itemLink = $e;
+			if ($i === $lastOne) {
+				$itemClass = ' class="active"';
+			}
+			if (!empty($l)) {
+				$itemLink = "<a href=\"$l\">$e</a>";
+			}
+			$out.="\t<li{$itemClass}>{$itemLink}</li>";
+			$i++;
+		}
+		$out.="</ol>\n";
+		return $out;
 	}
 
 	/**
@@ -1405,52 +1637,53 @@ class Tbs {
 	 *
 	 */
 	public function mediaItem($source, $content, $options = array()) {
-		// Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class .= " ${options['class']}";
-			unset($options['class']);
-		}
-
-		// Url
-		$url = null;
-		if ($this->_optionCheck($options, 'url')) {
-			$url = " href=\"{$options['url']}\"";
-			unset($options['url']);
-		}
-
-		// Alt
-		$alt = null;
-		if ($this->_optionCheck($options, 'alt')) {
-			$alt = " alt=\"{$options['alt']}\"";
-			unset($options['alt']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'url' => null,
+				'alt' => null,
+				'title' => null,
+				'list' => false,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add class to attributes
+		$attributesList['class'] = "media {$optionsList['class']}";
 
 		// Title
 		$title = null;
 		$blockTitle = null;
-		if ($this->_optionCheck($options, 'title')) {
-			$title = " title=\"{$options['title']}\"";
-			$blockTitle = "\n\t\t<h4 class=\"media-heading\">{$options['title']}</h4>";
-			unset($options['title']);
+		if (!empty($optionsList['title'])) {
+			$title = " title=\"{$optionsList['title']}\"";
+			$blockTitle = "\n\t\t<h4 class=\"media-heading\">{$optionsList['title']}</h4>";
 		}
 
 		// List
-		$list = false;
-		$tag = 'div';
-		if ($this->_optionCheck($options, 'list')) {
-			$list = $options['list'];
-			unset($options['list']);
-		}
-		if ($list) {
+		if ($optionsList['list']) {
 			$tag = 'li';
+		} else {
+			$tag = 'div';
 		}
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+		// Url
+		$url = null;
+		if (!empty($optionsList['url'])) {
+			$url = " href=\"{$optionsList['url']}\"";
+		}
 
-		$out = "<$tag class=\"media{$class}\"{$attributes}>\n";
-		$out.="\t<a class=\"pull-left\"$url><img class=\"media-object\" src=\"$source\"{$alt}{$title}></a>\n";
+		// Url
+		$alt = null;
+		if (!empty($optionsList['alt'])) {
+			$alt = " href=\"{$optionsList['alt']}\"";
+		}
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		$out = "<$tag{$attributes}>\n";
+		$out.="\t<a class=\"pull-left\"><img class=\"media-object\" src=\"$source\"{$alt}{$title}></a>\n";
 		$out.="\t<div class=\"media-body\">{$blockTitle}\n\t\t$content\n\t</div>\n";
 		$out.="</$tag>\n";
 		return $out;
@@ -1495,17 +1728,21 @@ class Tbs {
 	 *
 	 */
 	public function mediaList($list, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "media-list{$optionsList['class']}";
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		$out = "<ul class=\"media-list{$class}\"$attributes>\n";
+		$out = "<ul{$attributes}>\n";
 		foreach ($list as $item) {
 			$subList = null;
 			// Forcing item to be a list item
@@ -1513,8 +1750,6 @@ class Tbs {
 
 			// Search for a sub list
 			if (key_exists('list', $item)) {
-				// re-setting the class options to the list options
-				$options['class'] = trim($class);
 				$subList = $this->mediaList($item['list'], $options);
 			}
 			$out.=$this->mediaItem($item['source'], $item['content'] . $subList, $item['options']);
@@ -1543,39 +1778,35 @@ class Tbs {
 	 *
 	 */
 	public function listGroup($items, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
-
-		// Linked
-		$linked = false;
-		if ($this->_optionCheck($options, 'linked')) {
-			if ($options['linked'] === true) {
-				$linked = true;
-			}
-			unset($options['linked']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'linked' => false,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "list-group {$optionsList['class']}";
 
 		// Tag choice
-		if ($linked) {
+		if ($optionsList['linked']) {
 			$tag = 'div';
 		} else {
 			$tag = 'ol';
 		}
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
 		// Output
-		$out = "<$tag class=\"list-group$class\"$attributes>\n";
+		$out = "<{$tag}{$attributes}>\n";
 		foreach ($items as $i) {
-			$i[1]['linked'] = $linked;
+			$i[1]['linked'] = $optionsList['linked'];
 			$out.="\t" . $this->_listItem($i[0], $i[1]);
 		}
-		$out.="</$tag>";
+		$out.="</{$tag}>";
 		return $out;
 	}
 
@@ -1597,90 +1828,84 @@ class Tbs {
 	 *              HTML string for a badge (you should use badge() output)
 	 *  - linked:   bool, *false
 	 *              creates 'a' elements instead of 'li'
-	 *  - url:      string, *null
+	 *  - url:      string, *#
 	 *              Url for the link, if any
 	 *  - disabled  bool, *false
 	 *              Toggle the disabled state
-	 *  - type      string, *null|success|info|warning|danger
+	 *  - type      string, *default|success|info|warning|danger
 	 *              Contextual class
 	 *  - content   srting, *null
 	 *              Custom content
 	 */
 	private function _listItem($title, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		$defaults = array(
+				'class' => null,
+				'badge' => null,
+				'linked' => false,
+				'url' => '#',
+				'disabled' => false,
+				'type' => 'default',
+				'content' => null,
+		);
 
-		// Badge
-		$badge = null;
-		if ($this->_optionCheck($options, 'badge')) {
-			$badge = $options['badge'];
-			unset($options['badge']);
-		}
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "list-group-item {$optionsList['class']}";
+
 
 		// Linked
-		if ($this->_optionCheck($options, 'linked')) {
-			if ($options['linked'] === true) {
-				$tag = 'a';
-			} else {
-				$tag = 'li';
-			}
-			unset($options['linked']);
+		if ($optionsList['linked']) {
+			$tag = 'a';
+		} else {
+			$tag = 'li';
 		}
 
 		// Disabled
-		if ($this->_optionCheck($options, 'disabled')) {
-			if ($options['disabled'] === true) {
-				$class.=' disabled';
-			}
-			unset($options['disabled']);
+		if ($optionsList['disabled']) {
+			$attributesList['class'].=' disabled';
 		}
 
 		// Type
-		if ($this->_optionCheck($options, 'type')) {
-			switch (strtolower($options['type'])) {
-				case 'success':
-					$class .= ' list-group-item-success';
-					break;
-				case 'info':
-					$class .= ' list-group-item-info';
-					break;
-				case 'warning':
-					$class .= ' list-group-item-warning';
-					break;
-				case 'danger':
-					$class .= ' list-group-item-danger';
-					break;
-			}
-			unset($options['type']);
+		switch ($optionsList['type']) {
+			case 'success':
+				$attributesList['class'] .= ' list-group-item-success';
+				break;
+			case 'info':
+				$attributesList['class'] .= ' list-group-item-info';
+				break;
+			case 'warning':
+				$attributesList['class'] .= ' list-group-item-warning';
+				break;
+			case 'danger':
+				$attributesList['class'] .= ' list-group-item-danger';
+				break;
 		}
 
 		// Content
-		if ($this->_optionCheck($options, 'content')) {
-			$content = "\t\t{$badge}<h4 class=\"list-group-item-heading\">$title</h4>\n";
-			$content .= "\t\t<p class=\"list-group-item-text\">{$options['content']}</p>\n";
-			unset($options['content']);
+		if (!empty($optionsList['content'])) {
+			$content = "\t\t{$optionsList['badge']}<h4 class=\"list-group-item-heading\">{$title}</h4>\n";
+			$content .= "\t\t<p class=\"list-group-item-text\">{$optionsList['content']}</p>\n";
 		} else {
-			$content = $badge . $title;
+			$content = $optionsList['badge'] . $title;
 		}
 
 		// Url
-		if ($this->_optionCheck($options, 'url')) {
+		if (!empty($optionsList['url'])) {
 			if ($tag === 'a') {
-				$options['href'] = $options['url'];
+				$attributesList['href'] = $optionsList['url'];
 			} else {
-				$title = "<a href=\"{$options['url']}\">$content</a>";
+				$title = "<a href=\"{$optionsList['url']}\">{$content}</a>";
 			}
-			unset($options['url']);
 		}
-		// Attributes
-		$attributes = $this->_getAttributes($options);
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
 		// Output
-		return "<$tag class=\"list-group-item{$class}\"$attributes>$content</$tag>";
+		return "<{$tag}{$attributes}>$content</$tag>";
 	}
 
 	/**
@@ -1713,6 +1938,8 @@ class Tbs {
 	 *
 	 * @link  http://getbootstrap.com/components/#responsive-embed Link to the TBS documentation about this element
 	 * ---
+	 * It's nice to add a title in your options, in order to facilitate identification and navigation:
+	 *   WCAG2 4.1.2 (A) http://www.w3.org/TR/WCAG20-TECHS/H64.html
 	 *
 	 * Options:
 	 * --------
@@ -1723,31 +1950,31 @@ class Tbs {
 	 *
 	 */
 	public function embed($content, $options = array()) {
-		//Class
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class.=" ${options['class']}";
-			unset($options['class']);
-		}
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'size' => '4:3',
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "embed-responsive {$optionsList['class']}";
 
-		// Size
-		if (!$this->_optionCheck($options, 'size')) {
-			$options['size'] = '4:3';
-		}
-		switch ($options['size']) {
+		switch ($optionsList['size']) {
 			case '16:9':
-				$class.=' embed-responsive-16by9';
+				$attributesList['class'].=' embed-responsive-16by9';
 				break;
 			case '4:3':
-				$class.=' embed-responsive-4by3';
+				$attributesList['class'].=' embed-responsive-4by3';
 				break;
 		}
-		unset($options['size']);
 
-		// Attributes
-		$attributes = $this->_getAttributes($options);
-		$out = "<div class=\"embed-responsive{$class}\">\n";
-		$out.="\t<iframe class=\"embed-responsive-item\" src=\"$content\"></iframe>\n";
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+		$out = "<div{$attributes}>\n";
+		$out.="\t<iframe class=\"embed-responsive-item\" src=\"{$content}\"></iframe>\n";
 		$out.='</div>';
 
 		return $out;
@@ -1766,7 +1993,10 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
+	 *  - class: string, *null
+	 *           Additionnal classes for the alert element
+	 *  - size:  string *default|small|big
+	 *           Well size
 	 *
 	 */
 	public function well($content, $options = array()) {
@@ -1952,29 +2182,34 @@ class Tbs {
 	// Class methods
 	//
 	// ---------------------------------------------------------------------------
+
 	/**
-	 * Return true if a given option is defined in the $options list. Else, returns false.
+	 * Returns an array of html attributes
 	 *
-	 * @param array $options List of options given to the method
-	 * @param string $option Option to check
+	 * @param array $defaults Defaults for the method
+	 * @param array $defined Options passed to the method
 	 *
-	 * @return bool
+	 * @return array List of attributes
 	 */
-	private function _optionCheck($options, $option) {
-		return (isset($options[$option]) && !empty($options[$option]));
+	private function _getAttributes($defaults, $defined) {
+		$options = array();
+		$merge = array_merge($defaults, $defined);
+		foreach ($defaults as $k => $u) {
+			$options[$k] = $merge[$k];
+		}
+		return array_diff_key($defined, $options);
 	}
 
 	/**
-	 * Returns a list of HTML attributes to add in components
+	 * Returns a string to be added in an HTML tag, containing attributes.
 	 *
-	 * @param array $options Remaining options from the method
-	 *
-	 * @return string Attributes
+	 * @param array $attributesList List of attributes
+	 * @return string HTML attributes, as ' attr1="val1" attr2="val2" ...'
 	 */
-	private function _getAttributes($options) {
+	private function _prepareHTMLAttributes($attributesList) {
 		$attributes = null;
-		foreach ($options as $k => $v) {
-			$attributes.=" $k=\"$v\"";
+		foreach ($attributesList as $k => $v) {
+			$attributes.=$this->_cleanAttribute($k, $v);
 		}
 		return $attributes;
 	}
@@ -1989,13 +2224,39 @@ class Tbs {
 	 * @return null|string
 	 */
 	private function _cleanAttribute($name, $value) {
-		$value = trim($value);
+		$value = preg_replace('/\s+/', ' ', trim($value));
 		if (empty($value)) {
 			return null;
 		} else {
 			$value = $value;
 			return " $name=\"$value\"";
 		}
+	}
+
+	/**
+	 * Returns the list of options with gtheir updated values
+	 * @param array $defaults Default options for the method
+	 * @param array $defined Defined options
+	 * @return array An array of updated options
+	 */
+	private function _getOptions($defaults, $defined) {
+		$options = array();
+		$merge = array_merge($defaults, $defined);
+		foreach ($defaults as $k => $u) {
+			$options[$k] = $merge[$k];
+		}
+		return $options;
+	}
+
+	/**
+	 * Trim spaces on each entries, implode it in a string with spaces and trim double spaces
+	 *
+	 * @param type $string
+	 *
+	 * @return string Clean chain.
+	 */
+	private function _cleanString($string = array()) {
+		return preg_replace('/\s+/', ' ', trim(implode(' ', $string)));
 	}
 
 }

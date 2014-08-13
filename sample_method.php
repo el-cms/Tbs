@@ -20,16 +20,25 @@
  *
  */
 public function <method>($var, $options) {
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+		);
 
-	//Class
-	$class = null;
-	if ($this->_optionCheck($options, 'class')) {
-		$class.=" ${options['class']}";
-		unset($options['class']);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "<base class> {$optionsList['class']}";
+
+		/*
+		 * Your logic goes here
+		 */
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		return "<span{$attributes}></span>";
 	}
-
-	// Attributes
-	$attributes = $this->_getAttributes($options);
-
-	return '';
 }

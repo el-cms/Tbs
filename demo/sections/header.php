@@ -6,7 +6,7 @@
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php
-echo $Tbs->header('Header', 'sub-text');
+echo $Tbs-&gt;header('Header', 'sub-text');
 ?&gt;</pre>
 	</div>
 	<div class="panel-footer">

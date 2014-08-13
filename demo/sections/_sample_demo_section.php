@@ -1,4 +1,3 @@
-<a id="<!--Element-->"></a>
 <!-- if the section corresponds to an element variation, use h3 !-->
 <div class="inToc"><h2>Alert</h2></div>
 

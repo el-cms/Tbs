@@ -11,9 +11,9 @@ $Tbs = new Tbs;
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
 		<title>Test page</title>
-		<meta name="description" content="">
+		<!--<meta name="description" content="">-->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -138,9 +138,9 @@ $Tbs = new Tbs;
 					<div class="inToc"><h1>CSS</h1></div>
 
 					<?php
-					if (!empty($_GET['onlyShow'])) {
-						include"sections/{$_GET['onlyShow']}.php";
-					} else {
+//					if (!empty($_GET['onlyShow'])) {
+//						include"sections/{$_GET['onlyShow']}.php";
+//					} else {
 						include 'sections/form.php';
 						include 'sections/input.php';
 						include 'sections/button.php';
@@ -164,7 +164,7 @@ $Tbs = new Tbs;
 						include 'sections/media.php';
 						include 'sections/listgroup.php';
 						include 'sections/embed.php';
-					}
+//					}
 					?>
 				</div>
 			</div>
@@ -179,7 +179,7 @@ $Tbs = new Tbs;
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/jquery-syntax/jquery.syntax.min.js"></script>
 		<script src="js/jquery.tableofcontents.min.js"></script>
-		<script language="javascript">
+		<script>
 			// Syntax highlighting
 			jQuery(function($) {
 				$.syntax({

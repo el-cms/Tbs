@@ -14,7 +14,7 @@ $list=array(
 		'Here'=&gt;null,
 );
 echo $Tbs-&gt;breadcrumbs($list);
-?&gt;&lt;/pre&gt;
+?&gt;</pre>
 	</div>
 	<div class="panel-footer">
 		<?php

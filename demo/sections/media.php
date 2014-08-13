@@ -8,16 +8,16 @@
 		<h3>Simple media items:</h3>
 		<pre class="syntax html">&lt;?php
 // Source image
-$source = "http://lorempixel.com/64/64/cats/64x64/";
+$source = &quot;http://lorempixel.com/64/64/cats/64x64/&quot;;
 // Item content
 $content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id venenatis odio. Phasellus varius vulputate mi suscipit accumsan. Pellentesque tortor dui, placerat nec dolor ut, semper aliquet lectus.';
 // Some options
-$options = array('url' => '#', 'title' => 'Some title', 'alt' => 'Replacement text');
+$options = array('url' =&gt; '#', 'title' =&gt; 'Some title', 'alt' =&gt; 'Replacement text');
 
 // Simple media item
-echo $Tbs->mediaItem($source, $content);
+echo $Tbs-&gt;mediaItem($source, $content);
 // With options
-echo $Tbs->mediaItem($source, $content, $options);
+echo $Tbs-&gt;mediaItem($source, $content, $options);
 ?&gt;</pre>
 
 		<h3>Nested media items</h3>

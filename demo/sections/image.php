@@ -7,15 +7,15 @@
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php
 // simple image
-echo $Tbs->image('http://lorempixel.com/150/150/cats/150x150/');
+echo $Tbs-&gt;image('http://lorempixel.com/150/150/cats/150x150/');
 // Circle
-echo $Tbs->image('http://lorempixel.com/150/150/cats/150x150/', array('type'=>'circle'));
+echo $Tbs-&gt;image('http://lorempixel.com/150/150/cats/150x150/', array('type'=&gt;'circle'));
 // Thumbnail
-echo $Tbs->image('http://lorempixel.com/150/150/cats/150x150/', array('type'=>'thumb'));
+echo $Tbs-&gt;image('http://lorempixel.com/150/150/cats/150x150/', array('type'=&gt;'thumb'));
 // Rounded
-echo $Tbs->image('http://lorempixel.com/150/150/cats/150x150/', array('type'=>'round'));
+echo $Tbs-&gt;image('http://lorempixel.com/150/150/cats/150x150/', array('type'=&gt;'round'));
 // Responsive
-echo $Tbs->image('http://lorempixel.com/1600/400/cats/1600x400/', array('type'=>'round', 'responsive'=>true));
+echo $Tbs-&gt;image('http://lorempixel.com/1600/400/cats/1600x400/', array('type'=&gt;'round', 'responsive'=&gt;true));
 ?&gt;</pre>
 	</div>
 	<div class="panel-footer">
