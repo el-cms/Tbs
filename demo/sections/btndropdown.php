@@ -6,7 +6,7 @@
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php
-$content = $Tbs-&gt;dropdown(array(
+$content = $Tbs->dropdown(array(
 		'Title' =&gt; '%header%',
 		'SomeLink' =&gt; '#',
 		'SomeLink2' =&gt; '#',

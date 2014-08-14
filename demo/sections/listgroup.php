@@ -16,9 +16,6 @@ $items = array(
 );
 echo $Tbs-&gt;listGroup($items);
 
-//
-// Linked list
-//
 $items = array(
 		array('Item1'),
 		array($Tbs-&gt;icon('home') . ' Icon'),

@@ -44,7 +44,6 @@ $list = array(
 		)
 );
 
-
 echo $Tbs->mediaList($list);
 ?&gt;</pre>
 	</div>
@@ -86,7 +85,6 @@ echo $Tbs->mediaList($list);
 						)
 				)
 		);
-
 
 		echo $Tbs->mediaList($list);
 		?>

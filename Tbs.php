@@ -38,8 +38,7 @@ class Tbs {
 	 * CSS grid size
 	 * @var int
 	 */
-	public $gridSize=12;
-
+	public $gridSize = 12;
 
 	// ---------------------------------------------------------------------------
 	//
@@ -1064,7 +1063,7 @@ class Tbs {
 		return $out;
 	}
 
-	public function navbarLink($content, $options = array()) {
+	public function navbarLinks($content, $options = array()) {
 		// Additionnal classes
 		$class = null;
 		if ($this->_optionCheck($options, 'class')) {
@@ -1564,7 +1563,6 @@ class Tbs {
 		// Attributes
 		$attributesList = $this->_getAttributes($defaults, $options);
 
-
 		// Additionnal classes
 		$attributesList['class'] = "breadcrumb {$optionsList['class']}";
 		// HTML Attributes
@@ -1593,7 +1591,7 @@ class Tbs {
 	/**
 	 * Creates a progress bar
 	 *
-	 * @param float $percent Percentage
+	 * @param int $percentage Value
 	 * @param array $options List of options for this element
 	 *
 	 * @return string Html code to be displayed
@@ -1603,11 +1601,106 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
+	 *  - class:   string, *null
+	 *             Additionnal classes for the alert element
+	 *  - label:   string, *null
+	 *             Label
+	 *  - min:     int, *0
+	 *             Min value
+	 *  - max:     int *100
+	 *             Max value
+	 *  - type:    string, *default|success|info|warning|danger
+	 * 	           Color
+	 *  - striped: bool, *false
+	 *             Defines if the bar is stripped or not.
+	 *  - animated: bool, *false
+	 *              Defines if the bar is animated (and stripped, by the way)
+	 *  - stacked:  bool, *false
+	 *              Define it to true if this bar is in a stack
 	 *
-	 *
+	 * If you want to create stacked bars, use progressBarStacked() and feed it with some bars.
 	 */
-	public function progressBar($percent, $options = array()) {
+	public function progressBar($percentage, $options = array()) {
+		// Defaults
+		$defaults = array(
+				'class' => null,
+				'label' => null,
+				'min' => 0,
+				'max' => 100,
+				'type' => 'default',
+				'striped' => false,
+				'animated' => false,
+				'stacked' => false,
+		);
+		// Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Additionnal classes
+		$attributesList['class'] = "progress-bar {$optionsList['class']}";
 
+		// Some base attributes:
+		$attributesList['role'] = 'progressbar';
+		$attributesList['aria-valuenow'] = $percentage;
+		$attributesList['aria-valuemin'] = $optionsList['min'];
+		$attributesList['aria-valuemax'] = $optionsList['max'];
+		$attributesList['style'] = "width: {$percentage}%";
+
+		// Screen reader additionnal string
+		$srType = null;
+		// Type
+		switch ($optionsList['type']) {
+			case 'success':
+				$attributesList['class'].=' progress-bar-success';
+				$srType = ' (success)';
+				break;
+			case 'info':
+				$attributesList['class'].=' progress-bar-info';
+				$srType = ' (info)';
+				break;
+			case 'warning':
+				$attributesList['class'].=' progress-bar-warning';
+				$srType = ' (warning)';
+				break;
+			case 'danger':
+				$attributesList['class'].=' progress-bar-danger';
+				$srType = ' (danger)';
+				break;
+		}
+
+		// Label
+		if (empty($optionsList['label'])) {
+			$label = "<div class=\"sr-only\">{$percentage}%{$srType}</div>\n";
+		} elseif ($optionsList['label'] === true) {
+			$label = $percentage . '%';
+		} else {
+			$label = $optionsList['label'];
+		}
+
+		// Stripped
+		if ($optionsList['striped'] || $optionsList['animated']) {
+			$attributesList['class'].=' progress-bar-striped';
+		}
+
+		// Animated
+		if ($optionsList['animated']) {
+			$attributesList['class'] .= ' active';
+		}
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		$bar = "<div{$attributes}>\n\t{$label}\n</div>";
+		if (!$optionsList['stacked']) {
+			return $this->progressBarStack(array($bar));
+		} else {
+			return $bar;
+		}
+	}
+
+	public function progressBarStack($bars) {
+		$bars=implode("\n", $bars);
+		return "<div class=\"progress\">{$bars}</div>";
 	}
 
 	/**
@@ -2000,7 +2093,32 @@ class Tbs {
 	 *
 	 */
 	public function well($content, $options = array()) {
+		// Defaults:
+		$defaults = array(
+				'class' => null,
+				'size' => 'standard',
+		);
 
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "well {$optionsList['class']}";
+
+		switch ($optionsList['size']) {
+			case 'big':
+				$attributesList['class'].=' well-lg';
+				break;
+			case 'small':
+				$attributesList['class'].=' well-sm';
+				break;
+		}
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		return "<div{$attributes}>{$content}</div>\n";
 	}
 
 	// ---------------------------------------------------------------------------

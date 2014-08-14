@@ -22,7 +22,7 @@ echo $Tbs-&gt;button('Active danger button', '#button', array('type' =&gt; 'dang
 echo $Tbs-&gt;button('Small info button', '#button', array('size' =&gt; 'small', 'type' =&gt; 'info')).' ';
 // Small Button with an icon
 echo $Tbs-&gt;button($Tbs-&gt;icon('star') . ' I have an icon !!', '#button', array('size' =&gt; 'xsmall', 'type' =&gt; 'warning')).' ';
-		?&gt;</pre>
+?&gt;</pre>
 	</div>
 	<div class="panel-footer">
 		<?php

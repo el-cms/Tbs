@@ -64,10 +64,16 @@ As the class is not totally finished, you are welcome to join the project !
   - [x] mediaList($list, $options) *Creates a nested media list*
  - [x] nav($tabs, $options) *Creates a navigation bar*
   - [x] navItem($content, $options) *Creates a single navigation item to use in nav()*
- - [ ] navBar()
+ - [x] navbar($content, $options) *Creates a navbar*
+  - [x] navbarBrand($content, $options) *Creates a brand item for a navbar*
+  - [ ] navbarLinks($links, $options) *Creates a menu with given links*
+  - [ ] navbarForm($content, $options) *Creates a form*
+  - [ ] navbarButton($content, $options) *Creates a navbar button*
+  - [ ] navbarText($content, $options) *Creates simple text to add in a navbar*
+  - [ ] navbarTextLink($content, $options) *Creates a text link (not a button nor a menu link)
  - [ ] pager()
  - [ ] paginator()
  - [ ] panel()
- - [ ] progressBar()
- - [ ] toolbar()
- - [ ] well()
+ - [x] progressBar($percentage, $options) *Creates a progress bar*
+  - [x] progressBarStack($bars) *Creates a stack of progress bars*
+ - [x] well($content, $options) *Creates a well element*

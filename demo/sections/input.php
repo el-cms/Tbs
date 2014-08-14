@@ -6,6 +6,40 @@
 	</div>
 	<div class="panel-body">
 		<pre class="syntax html">&lt;?php
+// Text
+echo $Tbs-&gt;input('test', 'text', array('placeholder' =&gt; 'Some text', 'value' =&gt; 'Some text'));
+// Color
+echo $Tbs-&gt;input('test2', 'color', array('value' =&gt; '#FF0000'));
+// Datetime
+echo $Tbs-&gt;input('test3', 'datetime');
+// Url
+echo $Tbs-&gt;input('test4', 'url', array('placeholder' =&gt; 'http://example.com'));
+// Email
+echo $Tbs-&gt;input('test5', 'email', array('placeholder' =&gt; 'email@example.com'));
+// Reset button
+echo $Tbs-&gt;input('test6', 'reset', array('value' =&gt; 'Reset form'));
+// Submit button
+echo $Tbs-&gt;input('test7', 'submit', array('value' =&gt; 'Submit form'));
+// Input button
+echo $Tbs-&gt;input('test8', 'button', array('value' =&gt; 'Input button'));
+// Radios
+echo $Tbs-&gt;input('test9', 'radio', array('caption' =&gt; 'Radio', 'value' =&gt; 'radioValue'));
+echo $Tbs-&gt;input('test9', 'radio', array('caption' =&gt; 'Radio 2', 'default' =&gt; true, 'value' =&gt; 'radioValue2'));
+echo $Tbs-&gt;input('test9', 'radio', array('caption' =&gt; 'Radio 3', 'value' =&gt; 'radioValue3'));
+// Checkboxes
+echo $Tbs-&gt;input('test10', 'checkbox', array('checked' =&gt; true, 'caption' =&gt; 'I\'m a checkbox !'));
+echo $Tbs-&gt;input('test10', 'checkbox', array('disabled' =&gt; true, 'caption' =&gt; 'I\'m a disabled checkbox'));
+// Static input
+echo $Tbs-&gt;input('test11', 'static', array('value'=&gt;'Static input'));
+// Textarea
+$text = &quot;Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&quot;;
+echo $Tbs-&gt;input('test11', 'textarea', array($text));
+// Select
+$list = array('element1' =&gt; 'val1', 'element2' =&gt; 'val2', 'element3' =&gt; 'val3', 'element4' =&gt; 'val4');
+echo $Tbs-&gt;inputSelect('test12', $list, array('default' =&gt; 'val2'));
+// Multiple select with option groups
+$list2 = array('group1' =&gt; $list, 'group2' =&gt; array('element5' =&gt; 'val5', 'element6' =&gt; 'val6', 'element7' =&gt; 'val7', 'element8' =&gt; 'val8'));
+echo $Tbs-&gt;inputSelect('test13', $list2, array('multiple' =&gt; true));
 ?&gt;</pre>
 	</div>
 	<div class="panel-footer">

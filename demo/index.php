@@ -131,16 +131,13 @@ $Tbs = new Tbs;
 				<div class="col-md-10">
 
 					<div class='alert alert-warning'>
-						This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.<br><br>
-						<strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong><br>
+						<p>This page is a temporary demo page for Tbs, a PHP class that generates Twitter Bootstrap elements.</p>
+						<p><strong>Note that this class is in an early stage of development. Feel free to join the project, submit issues, fork,... on <a href='https://github.com/el-cms/Tbs'>GitHub</a></strong></p>
+						<p><strong>There may be differences between the version on github and this preview.</strong></p>
 					</div>
 
 					<div class="inToc"><h1>CSS</h1></div>
-
 					<?php
-//					if (!empty($_GET['onlyShow'])) {
-//						include"sections/{$_GET['onlyShow']}.php";
-//					} else {
 						include 'sections/form.php';
 						include 'sections/input.php';
 						include 'sections/button.php';
@@ -156,17 +153,20 @@ $Tbs = new Tbs;
 						include 'sections/btndropdown.php';
 						include 'sections/breadcrumb.php';
 						include 'sections/nav.php';
+						include 'sections/navbar.php';
 						include 'sections/label.php';
 						include 'sections/badge.php';
 						include 'sections/jumbotron.php';
 						include 'sections/header.php';
 						include 'sections/alert.php';
+						include 'sections/progress.php';
 						include 'sections/media.php';
 						include 'sections/listgroup.php';
 						include 'sections/embed.php';
-//					}
+						include 'sections/well.php';
 					?>
 				</div>
+
 			</div>
 			<div class="alert alert-info">
 				This demo uses <a href="http://www.codeotaku.com/projects/jquery-syntax/index.en">JQuery.syntax</a>, <a href="http://fuelyourcoding.com/scripts/toc/">jQuery Table of Content plugin</a>, sample HTML5 file from <a href="http://initializr.com/">initializr</a>, and of course, <a href="http://getbootstrap.net">Twitter Bootstrap</a> and <a href="http://jquery.com">Jquery</a>.
