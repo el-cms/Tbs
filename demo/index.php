@@ -138,6 +138,11 @@ $Tbs = new Tbs;
 
 					<div class="inToc"><h1>CSS</h1></div>
 					<?php
+					
+					/* Remove this comment for development to access on one section only.
+						if (!empty($_GET['onlyShow'])) {
+						include"sections/{$_GET['onlyShow']}.php";
+					} else {*/
 						include 'sections/form.php';
 						include 'sections/input.php';
 						include 'sections/button.php';
@@ -148,16 +153,17 @@ $Tbs = new Tbs;
 						include 'sections/icon.php';
 						include 'sections/dropdown.php';
 						include 'sections/btngroup.php';
-						// Toolbar is a button-group subsection
 						include 'sections/toolbar.php';
 						include 'sections/btndropdown.php';
-						include 'sections/breadcrumb.php';
 						include 'sections/nav.php';
 						include 'sections/navbar.php';
+						include 'sections/breadcrumb.php';
+						include 'sections/pagination.php';
 						include 'sections/label.php';
 						include 'sections/badge.php';
 						include 'sections/jumbotron.php';
 						include 'sections/header.php';
+						include 'sections/thumbnail.php';
 						include 'sections/alert.php';
 						include 'sections/progress.php';
 						include 'sections/media.php';
@@ -165,6 +171,7 @@ $Tbs = new Tbs;
 						include 'sections/panel.php';
 						include 'sections/embed.php';
 						include 'sections/well.php';
+					//}
 					?>
 				</div>
 
@@ -178,6 +185,7 @@ $Tbs = new Tbs;
 		<script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script>
 
 		<script src="js/bootstrap.min.js"></script>
+		<script src="js/holder/holder.js"></script>
 		<script src="js/jquery-syntax/jquery.syntax.min.js"></script>
 		<script src="js/jquery.tableofcontents.min.js"></script>
 		<script>

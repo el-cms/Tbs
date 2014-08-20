@@ -279,6 +279,119 @@ class Tbs {
 	}
 
 	/**
+	 * Creates a thumbnail
+	 *
+	 * @param string $src Image url
+	 * @param array $options List of options for this element
+	 *
+	 * @return string Html code to be displayed
+	 *
+	 * @link  http://getbootstrap.com/components/#thumbnails Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class:        string    *null
+	 *                  Additionnal classes for the button group
+	 *  - url           string, *null
+	 *                  Destination url
+	 *  - caption       string, *null
+	 *                  Image description
+	 *  - title         string, *file name
+	 *                  Title attribute
+	 *  - alt           string, *title option
+	 *                  Alt attribute
+	 *
+	 */
+	public function thumbnail($src, $options = array()) {
+		$defaults = array(
+				'class' => null,
+				'url' => null,
+				'caption' => null,
+				'title' => null,
+				'alt' => null,
+		);
+
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "thumbnail {$optionsList['class']}";
+
+		// Title
+		if (!empty($optionsList['title'])) {
+			$title = $optionsList['title'];
+		} else {
+			$title = pathinfo($src, PATHINFO_FILENAME);
+		}
+
+		// Alt
+		if (!empty($optionsList['alt'])) {
+			$alt = $optionsList['alt'];
+		} else {
+			$alt = $title;
+		}
+
+		// Image:
+		$content = "<img data-src=\"{$src}\" title=\"{$title}\" alt=\"$alt\" />";
+
+		// Url
+		if (!empty($optionsList['url'])) {
+			$content = "<a href=\"{$optionsList['url']}\">$content</a>";
+		}
+
+		if (!empty($optionsList['caption'])) {
+			$content.='<div class="caption">' . $optionsList['caption'] . '</div>';
+		}
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+		return "<div{$attributes}>{$content}</div>";
+	}
+
+	/**
+	 * Creates a thumbnails list
+	 *
+	 * @param string $thumbnails List of thumbnails from thumbnail()
+	 * @param array $options List of options for this element
+	 *
+	 * @return string Html code to be displayed
+	 *
+	 * @link  http://getbootstrap.com/components/#thumbnails Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - mobileWidth:  int, *6
+	 *                  Grid size for mobile display
+	 *  - desktopWidth: int, *3
+	 *                  Grid size for desktop displays
+	 *  - tabletWidth:  int, *3
+	 */
+	public function thumbList($thumbnails, $options = array()) {
+		$defaults = array(
+				'mobileWidth' => 6,
+				'desktopWidth' => 3,
+				'tabletWidth' => 3,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+
+		$content = null;
+		foreach ($thumbnails as $t) {
+			$content.="\n\t<div class=\"col-sm-{$optionsList['mobileWidth']} col-md-{$optionsList['tabletWidth']} col-lg-{$optionsList['desktopWidth']}\">\n\t\t$t\n\t</div>";
+		}
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		return "<div class=\"row\"{$attributes}>\n\t{$content}\n</div>";
+	}
+
+	/**
 	 * Creates a toolbar
 	 *
 	 * @param array $buttonGroups List of buttonGroup() items
@@ -1050,87 +1163,27 @@ class Tbs {
 	}
 
 	public function navbarBrand($content, $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class = ' ' . $options['class'];
-			unset($options['class']);
-		}
 
-		// Other attributes
-		$attributes = $this->_getAttributes($options);
-		$out = "";
-		return $out;
 	}
 
 	public function navbarLinks($content, $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class = ' ' . $options['class'];
-			unset($options['class']);
-		}
 
-		// Other attributes
-		$attributes = $this->_getAttributes($options);
-		$out = "";
-		return $out;
 	}
 
 	public function navbarForm($content, $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class = ' ' . $options['class'];
-			unset($options['class']);
-		}
 
-		// Other attributes
-		$attributes = $this->_getAttributes($options);
-		$out = "";
-		return $out;
 	}
 
 	public function navbarButton($content, $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class = ' ' . $options['class'];
-			unset($options['class']);
-		}
 
-		// Other attributes
-		$attributes = $this->_getAttributes($options);
-		$out = "";
-		return $out;
 	}
 
 	public function navbarText($content, $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class = ' ' . $options['class'];
-			unset($options['class']);
-		}
 
-		// Other attributes
-		$attributes = $this->_getAttributes($options);
-		$out = "";
-		return $out;
 	}
 
 	public function navbarTextLink($content, $options = array()) {
-		// Additionnal classes
-		$class = null;
-		if ($this->_optionCheck($options, 'class')) {
-			$class = ' ' . $options['class'];
-			unset($options['class']);
-		}
 
-		// Other attributes
-		$attributes = $this->_getAttributes($options);
-		$out = "";
-		return $out;
 	}
 
 	private function _navbarCollapse($title = null) {
@@ -1159,11 +1212,104 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 *
-	 *
+	 *  - class: string, *null
+	 *           Additionnal classes for this element
+	 *  - size:  string, *default|big|small
+	 *           Size variation
 	 */
-	public function paginator($links, $current, $options = array()) {
+	public function paginator($links, $options = array()) {
+		$defaults = array(
+				'class' => null,
+				'size' => 'default',
+		);
 
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "pagination {$optionsList['class']}";
+		// Size
+		switch ($optionsList['size']) {
+			case 'small':
+				$attributesList['class'].=' pagination-sm';
+				break;
+			case 'big':
+				$attributesList['class'].=' pagination-lg';
+				break;
+		}
+		// HTML attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		$out = "<ul{$attributes}>\n";
+		$out.=implode("\n\t", $links);
+		$out.="</ul>\n";
+
+		return $out;
+	}
+
+	/**
+	 * Creates a link to use in paginator()
+	 *
+	 * @param string $title
+	 * @param string $url
+	 * @param array $options
+	 *
+	 * @return string HTML link
+	 *
+	 *
+	 * @link  http://getbootstrap.com/components/#pagination Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class:    string, *null
+	 *              Additionnal classes for this element
+	 *  - current:  int, *false
+	 *              Defines if the element is the current element in list
+	 *  - disabled: int, *false
+	 *              Defines if the element is disabled or not.
+	 */
+	public function paginatorLink($title, $url, $options = array()) {
+		$defaults = array(
+				'class' => null,
+				'current' => false,
+				'disabled' => false,
+		);
+
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = $optionsList['class'];
+
+		// Current
+		if ($optionsList['current']) {
+			$attributesList['class'].=' active';
+		}
+
+		// Disabled
+		if ($optionsList['disabled']) {
+			$attributesList['class'].=' disabled';
+		}
+
+		// HTML attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+		return "<li{$attributes}>" . $this->link($title, $url) . "</li>";
+	}
+
+	/**
+	 * Helper method to create links
+	 *
+	 * @param type $caption Link caption
+	 * @param type $url Destination url
+	 * @param type $options Other options
+	 */
+	public function link($caption, $url, $options = array()) {
+		$attributes = $this->_prepareHTMLAttributes($options);
+
+		return "<a href=\"{$url}\"{$attributes}>{$caption}</a>";
 	}
 
 	/**
@@ -1209,7 +1355,8 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 * - class string *null : additionnal list of styles.
+	 * - class string *null
+	 *         additionnal list of styles.
 	 * - other attributes, as id, title,...
 	 *
 	 */
@@ -2016,15 +2163,16 @@ class Tbs {
 	 *
 	 * Options:
 	 * --------
-	 * - class
-	 *  - header  string, *null
-	 *            Adds a header string. Overides title.
-	 *  - title   string, *null
-	 *            Adds a big header
-	 *  - footer  string, *null
-	 *            Adds a footer note
-	 *  - type    string, *default|primary|success|info|warning|danger
-	 *            Contextual variations
+	 *  - class:   string    *null
+	 *             Additionnal classes for the button group
+	 *  - header:  string, *null
+	 *             Adds a header string. Overides title.
+	 *  - title:   string, *null
+	 *             Adds a big header
+	 *  - footer:  string, *null
+	 *             Adds a footer note
+	 *  - type:    string, *default|primary|success|info|warning|danger
+	 *             Contextual variations
 	 *
 	 */
 	public function panel($content, $options = array()) {

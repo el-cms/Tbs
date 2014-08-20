@@ -41,6 +41,7 @@ As the class is not totally finished, you are welcome to join the project !
   - [x] formOpen($name, $options) *Opens a form*
   - [x] input($name, $type, $value, $options) *Creates an input element*
    - [x] inputSelect($name, $list, $options) *Creates a select element*
+   - [ ] inputGroup()
    - *Help is wanted to find a way to do input groups and form-controls elements...*
    - *input() is not totally completed as it lacks of some bootstrap functionnalities.*
   - [x] formClose($options) *Closes a form*
@@ -48,16 +49,6 @@ As the class is not totally finished, you are welcome to join the project !
  - [x] breadcrumb($elements, $options) *Creates a breadcrumb*
  - [x] embed($content, $options) *Creates a responsive embed element*
  - [x] header($content, $subtext, $options) *Creates a header (big H1 with possible subtext)
- - [ ] inputGroup()
- - [ ] jAffix()
- - [ ] jAlert()
- - [ ] jButton()
- - [ ] jCarousel()
- - [ ] jCollapse()
- - [ ] jModal()
- - [ ] jPopover()
- - [ ] jScrollspy()
- - [ ] jTooltip()
  - [x] jumbotron($title, $content, $options) *Creates a hero unit*
  - [x] listgroup($items, $options) *Creates nice panels*
  - [x] media() *Creates a media element: an image with some text*
@@ -72,8 +63,21 @@ As the class is not totally finished, you are welcome to join the project !
   - [ ] navbarText($content, $options) *Creates simple text to add in a navbar*
   - [ ] navbarTextLink($content, $options) *Creates a text link (not a button nor a menu link)
  - [ ] pager()
- - [ ] paginator()
- - [ ] panel()
+ - [x] paginator($links, $options) *Creates pagination links*
+  - [x] paginatorLink($title, $url, $options) *Creates a link to use in pagination*
+ - [x] panel($content, $options) *Creates a panel*
  - [x] progressBar($percentage, $options) *Creates a progress bar*
   - [x] progressBarStack($bars) *Creates a stack of progress bars*
+ - [x] thumbList($thumbnails, $options) *Creates a list of given thumbnails*
+  - [x] thumbnail($src, $options) *Creates a thumbnail*
  - [x] well($content, $options) *Creates a well element*
+ - **Javascript elements**
+  - [ ] jAffix()
+  - [ ] jAlert()
+  - [ ] jButton()
+  - [ ] jCarousel()
+  - [ ] jCollapse()
+  - [ ] jModal()
+  - [ ] jPopover()
+  - [ ] jScrollspy()
+  - [ ] jTooltip()

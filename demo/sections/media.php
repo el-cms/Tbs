@@ -8,7 +8,7 @@
 		<h3>Simple media items:</h3>
 		<pre class="syntax html">&lt;?php
 // Source image
-$source = &quot;http://lorempixel.com/64/64/cats/64x64/&quot;;
+$source = &quot;holder.js/64x64&quot;;
 // Item content
 $content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id venenatis odio. Phasellus varius vulputate mi suscipit accumsan. Pellentesque tortor dui, placerat nec dolor ut, semper aliquet lectus.';
 // Some options
@@ -51,7 +51,7 @@ echo $Tbs->mediaList($list);
 		<h3>Simple media items</h3>
 		<?php
 		// Source image
-		$source = "http://lorempixel.com/64/64/cats/64x64/";
+		$source = "holder.js/64x64";
 		// Item content
 		$content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id venenatis odio. Phasellus varius vulputate mi suscipit accumsan. Pellentesque tortor dui, placerat nec dolor ut, semper aliquet lectus.';
 		// Some options
