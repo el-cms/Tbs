@@ -1699,7 +1699,7 @@ class Tbs {
 	}
 
 	public function progressBarStack($bars) {
-		$bars=implode("\n", $bars);
+		$bars = implode("\n", $bars);
 		return "<div class=\"progress\">{$bars}</div>";
 	}
 
@@ -2012,13 +2012,78 @@ class Tbs {
 	 * @link  http://getbootstrap.com/components/#panels Link to the TBS documentation about this element
 	 * ---
 	 *
+	 * In your content, you can add lists (listGroup()) or tables in addition to your content.
+	 *
 	 * Options:
 	 * --------
-	 *
+	 * - class
+	 *  - header  string, *null
+	 *            Adds a header string. Overides title.
+	 *  - title   string, *null
+	 *            Adds a big header
+	 *  - footer  string, *null
+	 *            Adds a footer note
+	 *  - type    string, *default|primary|success|info|warning|danger
+	 *            Contextual variations
 	 *
 	 */
 	public function panel($content, $options = array()) {
+		$defaults = array(
+				'class' => null,
+				'header' => null,
+				'title' => null,
+				'footer' => null,
+				'type' => 'default',
+		);
 
+		// Get options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Base class
+		$attributesList['class'] = 'panel ' . $optionsList['class'];
+
+		// Header/Title
+		$title = null;
+		if (!empty($optionsList['header']) && empty($optionsList['title'])) {
+			$title = '<div class="panel-heading">' . $optionsList['header'] . '</div>';
+		} elseif (!empty($optionsList['title'])) {
+			$title = '<div class="panel-heading"><h3 class="panel-title">' . $optionsList['title'] . '</h3></div>';
+		}
+
+		// Footer
+		$footer = null;
+		if (!empty($optionsList['footer'])) {
+			$footer = '<div class="panel-footer">' . $optionsList['footer'] . '</div>';
+		}
+
+		// Type
+		switch ($optionsList['type']) {
+			case 'primary':
+				$attributesList['class'].=' panel-primary';
+				break;
+			case 'success':
+				$attributesList['class'].=' panel-success';
+				break;
+			case 'info':
+				$attributesList['class'].=' panel-info';
+				break;
+			case 'warning':
+				$attributesList['class'].=' panel-warning';
+				break;
+			case 'danger':
+				$attributesList['class'].=' panel-danger';
+				break;
+			default:
+				$attributesList['class'].=' panel-default';
+				break;
+		}
+
+		// Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		// Output
+		return "<div{$attributes}>\n{$title}\n\t<div class=\"panel-body\">{$content}</div>\n{$footer}\n</div>";
 	}
 
 	/**

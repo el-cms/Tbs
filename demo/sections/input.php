@@ -1,10 +1,10 @@
 <div class="inToc"><h3>Input</h3></div>
 
 <div class="panel panel-default">
-	<div class="panel-heading">
+	<div class="panel-heading panel-example-heading">
 		Usage: <code>input($name, $options)</code>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body panel-example-body">
 		<pre class="syntax html">&lt;?php
 // Text
 echo $Tbs-&gt;input('test', 'text', array('placeholder' =&gt; 'Some text', 'value' =&gt; 'Some text'));
@@ -42,7 +42,7 @@ $list2 = array('group1' =&gt; $list, 'group2' =&gt; array('element5' =&gt; 'val5
 echo $Tbs-&gt;inputSelect('test13', $list2, array('multiple' =&gt; true));
 ?&gt;</pre>
 	</div>
-	<div class="panel-footer">
+	<div class="panel-footer panel-example-footer">
 		<div class="form-group">
 			<?php
 			// Text

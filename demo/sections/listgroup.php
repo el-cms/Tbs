@@ -1,10 +1,10 @@
 <div class="inToc"><h2>List groups</h2></div>
 
 <div class="panel panel-default">
-	<div class="panel-heading">
+	<div class="panel-heading panel-example-heading">
 		Usage: <code>listgroup($items, $options)</code>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body panel-example-body">
 		<pre class="syntax html">&lt;?php
 //
 // Simple list
@@ -28,7 +28,7 @@ $items = array(
 echo $Tbs-&gt;listGroup($items, array('linked' =&gt; true));
 ?&gt;</pre>
 	</div>
-	<div class="panel-footer">
+	<div class="panel-footer panel-example-footer">
 		<div class="row">
 			<div class="col-sm-4">
 				<h3>Simple list</h3>

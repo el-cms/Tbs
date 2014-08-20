@@ -1,10 +1,10 @@
 <div class="inToc"><h3>Toolbar</h3></div>
 
 <div class="panel panel-default">
-	<div class="panel-heading">
+	<div class="panel-heading panel-example-heading">
 		Usage: <code>toolbar($buttonsGroups, $options)</code>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body panel-example-body">
 		<pre class="syntax html">&lt;?php
 // button list 1
 $tb1 = array(
@@ -29,7 +29,7 @@ $buttonGroups = array(
 echo $Tbs-&gt;toolbar($buttonGroups);
 ?&gt;</pre>
 	</div>
-	<div class="panel-footer">
+	<div class="panel-footer panel-example-footer">
 		<?php
 		// button list 1
 		$tb1 = array(

@@ -1,10 +1,10 @@
 <div class="inToc"><h2>Images</h2></div>
 
 <div class="panel panel-default">
-	<div class="panel-heading">
+	<div class="panel-heading panel-example-heading">
 		Usage: <code>image($path, $options = array())</code>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body panel-example-body">
 		<pre class="syntax html">&lt;?php
 // simple image
 echo $Tbs-&gt;image('http://lorempixel.com/150/150/cats/150x150/');
@@ -18,7 +18,7 @@ echo $Tbs-&gt;image('http://lorempixel.com/150/150/cats/150x150/', array('type'=
 echo $Tbs-&gt;image('http://lorempixel.com/1600/400/cats/1600x400/', array('type'=&gt;'round', 'responsive'=&gt;true));
 ?&gt;</pre>
 	</div>
-	<div class="panel-footer">
+	<div class="panel-footer panel-example-footer">
 		<?php
 		// simple image
 		echo $Tbs->image('http://lorempixel.com/150/150/cats/150x150/');

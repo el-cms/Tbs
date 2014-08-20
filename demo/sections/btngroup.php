@@ -2,10 +2,10 @@
 		<div class="inToc"><h2>Button group</h2></div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading">
+			<div class="panel-heading panel-example-heading">
 				Usage: <code>buttonGroup($buttons, $options)</code>
 			</div>
-			<div class="panel-body">
+			<div class="panel-body panel-example-body">
 				<pre class="syntax html">&lt;?php
 // Default usage
 $buttons = array(
@@ -40,7 +40,7 @@ echo '&lt;h3&gt;Mixed usage&lt;/h3&gt;';
 echo $Tbs-&gt;buttonGroup($buttonsMixed, array('size' =&gt; 'xsmall'));
 ?&gt;</pre>
 			</div>
-			<div class="panel-footer">
+			<div class="panel-footer panel-example-footer">
 				<?php
 				// Default usage
 				$buttons = array(

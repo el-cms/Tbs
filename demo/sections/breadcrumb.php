@@ -1,10 +1,10 @@
 <div class="inToc"><h2>Breadcrumbs</h2></div>
 
 <div class="panel panel-default">
-	<div class="panel-heading">
+	<div class="panel-heading panel-example-heading">
 		Usage: <code>breadcrumb($elements, $options)</code>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body panel-example-body">
 		<pre class="syntax html">&lt;?php
 $list=array(
 		$Tbs-&gt;icon('home').' Home'=&gt;'#',
@@ -16,7 +16,7 @@ $list=array(
 echo $Tbs-&gt;breadcrumbs($list);
 ?&gt;</pre>
 	</div>
-	<div class="panel-footer">
+	<div class="panel-footer panel-example-footer">
 		<?php
 		$list=array(
 				$Tbs->icon('home').' Home'=>'#',

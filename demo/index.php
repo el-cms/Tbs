@@ -63,10 +63,10 @@ $Tbs = new Tbs;
 				border-left:3px solid #0CC;
 			}
 
-			.panel-body{
+			.panel-example-body{
 				background-color:#FBFBFB;
 			}
-			.panel-body:before{
+			.panel-example-body:before{
 				content: 'Code:';
 				display:block;
 				color: #CCC;
@@ -75,10 +75,10 @@ $Tbs = new Tbs;
 				font-variant: small-caps;
 
 			}
-			.panel-footer{
+			.panel-example-footer{
 				background-color:#FFF;
 			}
-			.panel-footer:before{
+			.panel-example-footer:before{
 				content: 'Results:';
 				display:block;
 				color: #CCC;
@@ -86,7 +86,7 @@ $Tbs = new Tbs;
 				margin-bottom:5px;
 				font-variant: small-caps;
 			}
-			.panel-heading:before{
+			.panel-example-heading:before{
 				content: 'Infos :';
 				display:block;
 				color: #CCC;
@@ -162,6 +162,7 @@ $Tbs = new Tbs;
 						include 'sections/progress.php';
 						include 'sections/media.php';
 						include 'sections/listgroup.php';
+						include 'sections/panel.php';
 						include 'sections/embed.php';
 						include 'sections/well.php';
 					?>

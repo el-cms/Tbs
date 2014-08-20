@@ -1,10 +1,10 @@
 <div class="inToc"><h2>Media objects</h2></div>
 
 <div class="panel panel-default">
-	<div class="panel-heading">
+	<div class="panel-heading panel-example-heading">
 		Usage: <code>mediaItem($source, $content, $options)</code>, <code>mediaList($list, $options)</code>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body panel-example-body">
 		<h3>Simple media items:</h3>
 		<pre class="syntax html">&lt;?php
 // Source image
@@ -47,7 +47,7 @@ $list = array(
 echo $Tbs->mediaList($list);
 ?&gt;</pre>
 	</div>
-	<div class="panel-footer">
+	<div class="panel-footer panel-example-footer">
 		<h3>Simple media items</h3>
 		<?php
 		// Source image

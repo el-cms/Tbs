@@ -1,10 +1,10 @@
 <div class="inToc"><h2>Button</h2></div>
 
 <div class="panel panel-default">
-	<div class="panel-heading">
+	<div class="panel-heading panel-example-heading">
 		Usage: <code>button($content, $options)</code>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body panel-example-body">
 		<pre class="syntax html">&lt;?php
 // Simple button
 echo $Tbs-&gt;button('I\'m a button').' ';
@@ -24,7 +24,7 @@ echo $Tbs-&gt;button('Small info button', '#button', array('size' =&gt; 'small',
 echo $Tbs-&gt;button($Tbs-&gt;icon('star') . ' I have an icon !!', '#button', array('size' =&gt; 'xsmall', 'type' =&gt; 'warning')).' ';
 ?&gt;</pre>
 	</div>
-	<div class="panel-footer">
+	<div class="panel-footer panel-example-footer">
 		<?php
 		// Simple button
 		echo $Tbs->button('I\'m a button').' ';
