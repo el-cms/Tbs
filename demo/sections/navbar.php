@@ -14,19 +14,37 @@ echo $Tbs-&gt;navbar(array(), array('title'=&gt;'Site Name', 'link'=&gt;'#navbar
 	</div>
 	<div class="panel-footer panel-example-footer">
 		<?php
-		echo '<h3>Simple responsive navbar<h3>';
-		echo $Tbs->navbar(array(), array('title'=>'Site Name', 'link'=>'#navbar'));
+		echo '<h3>Simple responsive navbar</h3>';
+		echo $Tbs->navbar(array(), array('title' => 'Site Name', 'url' => '#navbar'));
 
-		echo '<h3>Simple non-responsive navbar<h3>';
-		echo $Tbs->navbar(array(), array('title'=>'Site Name', 'link'=>'#navbar', 'collapse'=>false));
+		echo '<h3>Simple non-responsive navbar</h3>';
+		echo $Tbs->navbar(array(), array('title' => 'Site Name', 'url' => '#navbar', 'collapse' => false));
 
-//		echo '<h3>Adding links<h3>';
-//		echo $Tbs->navbar(array(), array('title'=>'Site Name', 'link'=>'#navbar', 'collapse'=>false));
+		echo '<h3>Adding links</h3>';
+		$dropdown = array(
+				'Title' => '%header%',
+				'SomeLink' => '#',
+				'SomeLink2' => '#',
+				'SomeLink3' => '#',
+				'item' => '%divider%',
+				'SomeLink4' => '#',
+				'SomeLink5' => '#',
+				'SomeLink6' => '#',
+		);
+
+		$links = array(
+				$Tbs->navbarLink('Link 1', '#navbar', array('active'=>true)),
+				$Tbs->navbarLink('Link 2', '#navbar'),
+				$Tbs->navbarLink('Link 3', '#navbar'),
+				$Tbs->navbarLink('Link 4', '#', array('dropdown'=>$Tbs->dropdown($dropdown))),
+		);
+		$navbarContent=array(
+				$Tbs->navbarLinks($links),
+		);
+		echo $Tbs->navbar($navbarContent, array('title' => 'Site Name', 'url' => '#navbar', 'collapse' => true));
 //
 //		echo '<h3>Simple non-responsive navbar<h3>';
 //		echo $Tbs->navbar(array(), array('title'=>'Site Name', 'link'=>'#navbar', 'collapse'=>false));
-
-
 		?>
 	</div>
 </div>

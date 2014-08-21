@@ -627,23 +627,23 @@ class Tbs {
 		$textInputs = array('text', 'password', 'datetime', 'datetime-local', 'date', 'month', 'time', 'week', 'number', 'email', 'url', 'search', 'tel', 'color');
 		if (in_array($type, $textInputs)) {
 			// Input field
-			$class = $this->_cleanString(array('form-control', $optionsList['class']));
+			$class = $this->_cleanStrings(array('form-control', $optionsList['class']));
 			$element = "\n<input type=\"{$type}\" name=\"{$name}\" class=\"{$class}\"{$disabled}{$attrValue}{$attributes} />";
 		} elseif ($type === 'static') {
 			// Static field
-			$class = $this->_cleanString(array('form-control-static', $optionsList['class']));
+			$class = $this->_cleanStrings(array('form-control-static', $optionsList['class']));
 			$element = "\n<p class=\"{$class}\"$attributes>$value</p>";
 		} elseif ($type === 'checkbox') {
 			// Checkbox
-			$class = $this->_cleanString(array('checkbox', $optionsList['class']));
+			$class = $this->_cleanStrings(array('checkbox', $optionsList['class']));
 			$element = "\n<div class=\"{$class}\">\n\t<label for=\"{$attributesList['id']}\">\n\t\t<input type=\"checkbox\" name=\"$name\"{$checked}{$attrValue}{$disabled}{$attributes} />{$optionsList['caption']}\n\t</label>\n</div>";
 		} elseif ($type === 'radio') {
 			// radio
-			$class = $this->_cleanString(array('radio', $optionsList['class']));
+			$class = $this->_cleanStrings(array('radio', $optionsList['class']));
 			$element = "\n<div class=\"{$class}\">\n\t<label for=\"{$attributesList['id']}\">\n\t\t<input type=\"radio\" name=\"$name\"{$checked}{$attrValue}{$disabled}{$attributes} />{$optionsList['caption']}\n\t</label>\n</div>";
 		} elseif ($type === 'textarea') {
 			// Textareas
-			$class = $this->_cleanString(array('form-control', $optionsList['class']));
+			$class = $this->_cleanStrings(array('form-control', $optionsList['class']));
 			$element = "\n<textarea class=\"{$class}\" name=\"$name\"{$disabled}{$attributes}>$value</textarea>";
 		} elseif ($type === 'submit') {
 			// Updating options
@@ -671,7 +671,7 @@ class Tbs {
 			$element = "\n<input type=\"file\" name=\"$name\"{$disabled}{$attributes}/>";
 		} else {
 			// Default
-			$class = $this->_cleanString(array('form-control', $optionsList['class']));
+			$class = $this->_cleanStrings(array('form-control', $optionsList['class']));
 			$element = "\n<input type=\"text\" name=\"$name\" class=\"{$class}\"{$disabled}{$attrValue}{$attributes} />";
 		}
 
@@ -1069,7 +1069,7 @@ class Tbs {
 	/**
 	 * Creates a navbar element
 	 *
-	 * @param type $elements List of elements
+	 * @param array $elements List of elements
 	 * @param array $options List of options for this element
 	 *
 	 * @return string Html code to be displayed
@@ -1153,21 +1153,121 @@ class Tbs {
 		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
 		// Opening the navbar and container
-		$out = "<nav{$attributes} role=\"navigation\">\n\t<div class=\"container-fluid\">";
+//		$out = "<nav{$attributes} role=\"navigation\">\n\t<div class=\"container-fluid\">";
+		$out = "<div{$attributes} role=\"navigation\">\n\t<div class=\"container-fluid\">";
 		// Header (brand)
 		$out.="\t\t<div class=\"navbar-header\">{$collapseButton}<a class=\"navbar-brand\" href=\"{$optionsList['url']}\">{$optionsList['title']}</a>\n</div>";
+		// Elements
+		if (!empty($elements)) {
+			$collapse = ($optionsList['collapse']) ? ' class="collapse navbar-collapse"' : null;
+			$out.="<div{$collapse}>\n";
+			foreach ($elements as $e) {
+				$out.="\t{$e}\n";
+			}
+			$out.="</div>\n";
+		}
 
 		// End of navbar and container
-		$out.="\t</div>\n</nav>";
+		$out.="\t</div>\n</div>";
 		return $out;
 	}
 
-	public function navbarBrand($content, $options = array()) {
+//  Removed for now
+//	public function navbarBrand($content, $options = array()) {
+//
+//	}
 
+	/**
+	 * Creates links to be used in navbars
+	 *
+	 * @param array $links List of links from link()
+	 * @param array $options List of options for this element
+	 *
+	 * @return string Html code to pass to navbar()
+	 * ---
+	 * Elements should be an array of navBrand(), navLink(), navForm(), navButton(), navText(), navTextLink()
+	 *
+	 * Options:
+	 * --------
+	 *  - class:  string, *null
+	 *            Additionnal classes for the alert element
+	 * No other options. Everything you pass in the option array will be used as HTML
+	 * attribute for the wrapping "div" element.
+	 */
+	public function navbarLinks($links, $options = array()) {
+		$defaults = array(
+				'class' => null,
+		);
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = "nav navbar-nav{$optionsList['class']}";
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		// Output
+		$out = "<ul{$attributes}>";
+		foreach ($links as $l) {
+			$out.="\n\t{$l}";
+		}
+		return $out . "\n</ul>\n";
 	}
 
-	public function navbarLinks($content, $options = array()) {
+	/**
+	 * Creates a link wrapped in a "li" tag, to be used in a list of links
+	 *
+	 * @param string $caption Link caption
+	 * @param string $url Destination url
+	 * @param array $options Other options for the "li" tag
+	 *
+	 * @return string HTML code
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class:    string, *null
+	 *              Additionnal classes for the alert element
+	 *  - active:   bool, *null
+	 *              Change the state of the link
+	 *  - dropdown: string, *null
+	 *              Dropdown element from dropdown()
+	 *
+	 */
+	public function navbarLink($caption, $url, $options = array()) {
+		$defaults = array(
+				'class' => null,
+				'active' => false,
+				'dropdown' => null,
+		);
 
+		// Get Options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = $optionsList['class'];
+
+		// Active state
+		if ($optionsList['active']) {
+			$attributesList['class'].=' active';
+		}
+
+		// Dropdown option
+		$linkOptions = array();
+		if (!empty($optionsList['dropdown'])) {
+			$linkOptions['class'] = 'dropdown-toggle';
+			$linkOptions['data-toggle'] = 'dropdown';
+			$caption.=' <span class="caret"></span>';
+			$optionsList['dropdown']="\n{$optionsList['dropdown']}\n";
+			$url='#';
+		}
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		return "<li{$attributes}>" . $this->link($caption, $url, $linkOptions) . $optionsList['dropdown'] . '</li>';
 	}
 
 	public function navbarForm($content, $options = array()) {
@@ -1190,7 +1290,7 @@ class Tbs {
 		if (!$title) {
 			$title = 'Toggle navigation';
 		}
-		return '<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		return '<button type="button" class="navbar-toggle" data-toggle="collapse">
         <span class="sr-only">' . $title . '</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -1297,19 +1397,6 @@ class Tbs {
 		// HTML attributes
 		$attributes = $this->_prepareHTMLAttributes($attributesList);
 		return "<li{$attributes}>" . $this->link($title, $url) . "</li>";
-	}
-
-	/**
-	 * Helper method to create links
-	 *
-	 * @param type $caption Link caption
-	 * @param type $url Destination url
-	 * @param type $options Other options
-	 */
-	public function link($caption, $url, $options = array()) {
-		$attributes = $this->_prepareHTMLAttributes($options);
-
-		return "<a href=\"{$url}\"{$attributes}>{$caption}</a>";
 	}
 
 	/**
@@ -2515,6 +2602,22 @@ class Tbs {
 	// ---------------------------------------------------------------------------
 
 	/**
+	 * Helper method to create links
+	 *
+	 * @param string $caption Link caption
+	 * @param string $url Destination url
+	 * @param array $options Other attributes for the "a" tag
+	 *
+	 * @return string Html code.
+	 */
+	public function link($caption, $url, $options = array()) {
+		// Convert all the options as attributes
+		$attributes = $this->_prepareHTMLAttributes($options);
+
+		return "<a href=\"{$url}\"{$attributes}>{$caption}</a>";
+	}
+
+	/**
 	 * Returns an array of html attributes
 	 *
 	 * @param array $defaults Defaults for the method
@@ -2580,14 +2683,26 @@ class Tbs {
 	}
 
 	/**
-	 * Trim spaces on each entries, implode it in a string with spaces and trim double spaces
+	 * Implodes an array of strings and cleans extra spaces
 	 *
-	 * @param type $string
+	 * @param string $strings
 	 *
 	 * @return string Clean chain.
 	 */
-	private function _cleanString($string = array()) {
-		return preg_replace('/\s+/', ' ', trim(implode(' ', $string)));
+	private function _cleanStrings($strings = array()) {
+		return $this->cleanString(implode(' ', $strings));
+	}
+
+	/**
+	 * Removes extra spaces in a string
+	 *
+	 * @param string $string String to clean
+	 *
+	 * @return string Clean string
+	 */
+	private function _cleanString($string) {
+		$string = preg_replace('/\s+/', ' ', trim($string));
+		return (empty($string)) ? null : $string;
 	}
 
 }

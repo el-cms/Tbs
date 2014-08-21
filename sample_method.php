@@ -19,10 +19,11 @@
  * If you want to make a split button with an URL, pass the "url" option in the $buttonOptions array
  *
  */
-public function <method>($var, $options) {
+public function <method>($var, $options=array()) {
 		// Defaults:
 		$defaults = array(
 				'class' => null,
+				<other defaults for the options>
 		);
 
 		// Get Options
@@ -39,6 +40,6 @@ public function <method>($var, $options) {
 		// HTML Attributes
 		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		return "<span{$attributes}></span>";
+		return "<span{$attributes}>{$content}</span>";
 	}
 }
