@@ -80,8 +80,6 @@ class Tbs {
 	 *           Button type
 	 *  - tag:   string, *a|button|input
 	 *           Button tag
-	 *  - url:   string, *null
-	 *           Button's URL
 	 *  - Other attributes that can apply to the "a" or "button" elements
 	 *
 	 * If no $url is provided, a button element is created instead of a link.
@@ -1298,18 +1296,140 @@ class Tbs {
 
 	}
 
-	public function navbarButton($content, $options = array()) {
+	/**
+	 * Returns a button tu use in navbar(). This is basically a wrapper for button()
+	 *
+	 * @param string $content Button content
+	 * @param string $url target url
+	 * @param array $options List of options
+	 *
+	 * @return string Html code to be displayed
+	 *
+	 * @link http://getbootstrap.com/css/#buttons Link to the TBS documentation about this element
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class: string, *null
+	 *           Additionnal classes for the dropdown element
+	 *  - size:  string, big|*standard|small|xsmall
+	 *           Button size
+	 *  - type:  string, *standard|primary|success|info|warning|danger|link|submit|reset
+	 *           Button type
+	 *  - Other attributes that can apply to the "a" or "button" elements
+	 *
+	 * If no $url is provided, a button element is created instead of a link.
+	 * Additionnal classes can be seen on the TBS CSS page: btn-block, active, disabled,...
+	 * If tag is different than "a" and $url is set, tag will be "a"
+	 */
+	public function navbarButton($content, $url=null, $options = array()) {
+		$defaults = array(
+				'class' => null, // this is the only parameter we change
+		);
+		// Get options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Base class
+		$attributesList['class'] = 'navbar-btn' . $optionsList['class'];
+		// Button tag
+		$attributesList['tag']='button';
 
+		return $this->button($content, $url, $attributesList);
 	}
 
+	/**
+	 * Returns some... text to put in navbars.
+	 *
+	 * @param string $content The text
+	 * @param array $options List of options
+	 *
+	 * @return string The HTML code to use in navbar()'s $content
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class: string, *null
+	 *           Additionnal classes for the dropdown element
+	 *  - type:  string, *standard|primary|success|info|warning|danger|link|submit|reset
+	 *           Button type
+	 *  - Other attributes that can apply to the "a" or "button" elements
+	 *
+	 *
+	 */
 	public function navbarText($content, $options = array()) {
+		$defaults=array(
+				'class'=>null,
+				'type'=>'standard',
+		);
+		// Get options
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Base class
+		$attributesList['class'] = 'navbar-text ' . $optionsList['class'];
+
+		// Type
+		switch($optionsList['type']){
+			case 'primary':
+				$attributesList['class'].=' text-primary';
+				break;
+			case 'info':
+				$attributesList['class'].=' text-info';
+				break;
+			case 'success':
+				$attributesList['class'].=' text-success';
+				break;
+			case 'warning':
+				$attributesList['class'].=' text-warning';
+				break;
+			case 'danger':
+				$attributesList['class'].=' text-danger';
+				break;
+		}
+
+		// HTML attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		return "<p{$attributes}>$content</p>";
 
 	}
 
-	public function navbarTextLink($content, $options = array()) {
+//	/**
+//	 *
+//	 * @param string $caption Link caption
+//	 * @param string $url Target url
+//	 * @param array $options A list of options
+//	 *
+//	 * @return text The link
+//	 * ---
+//	 *
+//	 * Options:
+//	 * --------
+//	 *  - class: string, *null
+//	 *           Additionnal classes for the dropdown element
+//	 *
+//	 */
+//	public function navbarTextLink($caption, $url, $options = array()) {
+//		$defaults=array(
+//				'class'=>null,
+//		);
+//		// Get options
+//		$optionsList = $this->_getOptions($defaults, $options);
+//		// Get attributes
+//		$attributesList = $this->_getAttributes($defaults, $options);
+//		// Base class
+//		$attributesList['class'] = 'navbar-link ' . $optionsList['class'];
+//
+//		return $this->link($caption, $url, $attributesList);
+//	}
 
-	}
-
+	/**
+	 * Creates a navbar button that appears when the navbar is collapsed
+	 *
+	 * @param string $title Button title (appears on mouse over)
+	 * @return string Button
+	 */
 	private function _navbarCollapse($title = null) {
 		if (!$title) {
 			$title = 'Toggle navigation';

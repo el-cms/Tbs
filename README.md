@@ -57,9 +57,10 @@ As the class is not totally finished, you are welcome to join the project !
   - [x] navItem($content, $options) *Creates a single navigation item to use in nav()*
  - [x] navbar($content, $options) *Creates a navbar*
   - [x] navbarBrand($content, $options) *Creates a brand item for a navbar*
-  - [ ] navbarLinks($links, $options) *Creates a menu with given links*
+  - [x] navbarLinks($links, $options) *Creates a menu with given links*
+   - [x] navbarLink($caption, $url, $options) *Create a link to feed navbarLinks()*
   - [ ] navbarForm($content, $options) *Creates a form*
-  - [ ] navbarButton($content, $options) *Creates a navbar button*
+  - [x] navbarButton($content, $options) *Creates a navbar button*
   - [ ] navbarText($content, $options) *Creates simple text to add in a navbar*
   - [ ] navbarTextLink($content, $options) *Creates a text link (not a button nor a menu link)
  - [ ] pager()

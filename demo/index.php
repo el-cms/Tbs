@@ -177,7 +177,7 @@ $Tbs = new Tbs;
 
 			</div>
 			<div class="alert alert-info">
-				This demo uses <a href="http://www.codeotaku.com/projects/jquery-syntax/index.en">JQuery.syntax</a>, <a href="http://fuelyourcoding.com/scripts/toc/">jQuery Table of Content plugin</a>, sample HTML5 file from <a href="http://initializr.com/">initializr</a>, and of course, <a href="http://getbootstrap.net">Twitter Bootstrap</a> and <a href="http://jquery.com">Jquery</a>.
+				This demo uses <a href="http://www.codeotaku.com/projects/jquery-syntax/index.en">JQuery.syntax</a>, <a href="http://fuelyourcoding.com/scripts/toc/">jQuery Table of Content plugin</a>, sample HTML5 file from <a href="http://initializr.com/">initializr</a>, <a href="http://imsky.github.io/holder">holder.js</a> to create sample images, and of course, <a href="http://getbootstrap.net">Twitter Bootstrap</a> and <a href="http://jquery.com">Jquery</a>.
 			</div>
     </div> <!-- /container -->
 
