@@ -2714,7 +2714,7 @@ class Tbs {
 	 * @return string Clean chain.
 	 */
 	private function _cleanStrings($strings = array()) {
-		return $this->cleanString(implode(' ', $strings));
+		return $this->_cleanString(implode(' ', $strings));
 	}
 
 	/**
