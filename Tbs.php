@@ -2565,7 +2565,7 @@ class Tbs {
 	}
 
 	/**
-	 * Returns the list of options with gtheir updated values
+	 * Returns the list of options with their updated values
 	 * @param array $defaults Default options for the method
 	 * @param array $defined Defined options
 	 * @return array An array of updated options
