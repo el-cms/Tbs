@@ -1,4 +1,5 @@
 <?php
+include '../Tbs.php';
 
 /**
  * All tests for Tbs
@@ -6,16 +7,17 @@
 class TbsTest extends PHPUnit_Framework_TestCase {
 
     /**
+     * Twitter Bootstrap
      * @var Tbs
      */
-    protected $object;
+    protected $Tbs;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->object = new Tbs;
+        $this->Tbs = new Tbs;
     }
 
     /**
@@ -27,14 +29,27 @@ class TbsTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Simple Button
      * @covers Tbs::button
-     * @todo   Implement testButton().
      */
-    public function testButton() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+    public function testSimpleButton() {
+        $textButton = "I\'m a button";
+        $computed = $this->Tbs->button($textButton);
+        $attempted = "<a class=\"btn btn-default\">" . $textButton . "</a>";
+        
+        return $this->assertEquals($computed, $attempted);
+    }
+    /**
+     * Button with link
+     * @covers Tbs::button
+     */
+    public function testLinkedButton() {
+        $textButton = 'Me too';
+        $computed = $this->Tbs->button($textButton, '#button');
+        $attempted = "<a class=\"btn btn-default\" href=\"#button\">" . $textButton . "</a>";
+        
+        return $this->assertEquals($computed, $attempted);
+    
     }
 
     /**
@@ -42,7 +57,6 @@ class TbsTest extends PHPUnit_Framework_TestCase {
      * @todo   Implement testDropdown().
      */
     public function testDropdown() {
-        // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
         );
@@ -53,7 +67,6 @@ class TbsTest extends PHPUnit_Framework_TestCase {
      * @todo   Implement testButtonGroup().
      */
     public function testButtonGroup() {
-        // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
         );
