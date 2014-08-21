@@ -29,13 +29,32 @@ class TbsTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Default button
+     * @covers Tbs::button
+     */
+    public function testButtonDefault() {
+        $expected = '<a class="btn btn-default"></a>';
+        $computed = $this->Tbs->button(null);
+        
+        return $this->assertEquals($expected,$computed);
+    }
+    /**
+     * Default button
+     * @covers Tbs::button
+     */
+    public function testButtonWithNoUrl() {
+        $expected = '<a class="btn btn-default"></a>';
+        $computed = $this->Tbs->button(null,null);
+        
+        return $this->assertEquals($expected,$computed);
+    }
+    /**
      * Simple Button
      * @covers Tbs::button
      */
     public function testButtonSimpleText() {
-        $textButton = "I'm a button";
-        $expected = '<a class="btn btn-default">' . $textButton . '</a>';
-        $computed = $this->Tbs->button($textButton);
+        $expected = '<a class="btn btn-default">I\'m a button</a>';
+        $computed = $this->Tbs->button('I\'m a button');
         
         return $this->assertEquals($expected,$computed);
     }
@@ -44,9 +63,8 @@ class TbsTest extends PHPUnit_Framework_TestCase {
      * @covers Tbs::button
      */
     public function testButtonWithLink() {
-        $textButton = 'Me too';
-        $expected = '<a class="btn btn-default" href="#button">' . $textButton . '</a>';
-        $computed = $this->Tbs->button($textButton, '#button');
+        $expected = '<a class="btn btn-default" href="#button">Me too</a>';
+        $computed = $this->Tbs->button('Me too', '#button');
         
         return $this->assertEquals($expected,$computed);
     
@@ -112,9 +130,9 @@ class TbsTest extends PHPUnit_Framework_TestCase {
      * @covers Tbs::button
      */
     public function testButtonSubmit() {
-        $expected = '';
-        $computed = $this->Tbs->button(null, null, array('tag' => 'submit', 'value'=>'Submit button'));
-        
+        $expected = '<input value="Submit button" class="btn btn-primary" type="submit"/>';
+        $computed = $this->Tbs->button(null, null, array('type' => 'submit', 'value'=>'Submit button'));
+        //print $this->Tbs->button(null, null, array('type' => 'submit', 'value'=>'Submit button'));
         return $this->assertEquals($expected,$computed);
     
     }
