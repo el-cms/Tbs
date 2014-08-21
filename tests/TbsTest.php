@@ -32,26 +32,93 @@ class TbsTest extends PHPUnit_Framework_TestCase {
      * Simple Button
      * @covers Tbs::button
      */
-    public function testSimpleButton() {
-        $textButton = "I\'m a button";
+    public function testButtonSimpleText() {
+        $textButton = "I'm a button";
+        $expected = '<a class="btn btn-default">' . $textButton . '</a>';
         $computed = $this->Tbs->button($textButton);
-        $attempted = "<a class=\"btn btn-default\">" . $textButton . "</a>";
         
-        return $this->assertEquals($computed, $attempted);
+        return $this->assertEquals($expected,$computed);
     }
     /**
      * Button with link
      * @covers Tbs::button
      */
-    public function testLinkedButton() {
+    public function testButtonWithLink() {
         $textButton = 'Me too';
+        $expected = '<a class="btn btn-default" href="#button">' . $textButton . '</a>';
         $computed = $this->Tbs->button($textButton, '#button');
-        $attempted = "<a class=\"btn btn-default\" href=\"#button\">" . $textButton . "</a>";
         
-        return $this->assertEquals($computed, $attempted);
+        return $this->assertEquals($expected,$computed);
     
     }
-
+    /**
+     * Button with Javascript onClick event
+     * @covers Tbs::button
+     */
+    public function testButtonWithJavascript() {
+        $expected = '<a onClick="javascript:alert(\'i\\\\\'m the alert\')" class="btn btn-default">I\'m a button with a JS alert</a>';
+        $computed = $this->Tbs->button("I'm a button with a JS alert", null, array('onClick' => "javascript:alert('i\\\'m the alert')"));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Disabled big button
+     * @covers Tbs::button
+     */
+    public function testButtonBigDisabledPrimaryType() {
+        $expected = '<a class="btn disabled btn-lg btn-primary" href="#">Big disabled button</a>';
+        $computed = $this->Tbs->button('Big disabled button', '#', array('size' => 'big', 'type' => 'primary', 'class' => 'disabled'));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Active danger button
+     * @covers Tbs::button
+     */
+    public function testButtonActiveStateDangerType() {
+        $expected = '<a class="btn active btn-danger" href="#button">Active danger button</a>';
+        $computed = $this->Tbs->button('Active danger button', '#button', array('type' => 'danger', 'class' => 'active'));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Small info button
+     * @covers Tbs::button
+     */
+    public function testButtonSmallSizeInfoType() {
+        $expected = '<a class="btn btn-sm btn-info" href="#button">Small info button</a>';
+        $computed = $this->Tbs->button('Small info button', '#button', array('size' => 'small', 'type' => 'info'));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Small button with icon
+     * @covers Tbs::button
+     */
+    public function testButtonSmallSizeWithIcon() {
+        $expected = '<a class="btn btn-xs btn-warning" href="#button"><span class="glyphicon glyphicon-star"></span> I have an icon !!</a>';
+        $icon = $this->Tbs->icon('star');
+        $computed = $this->Tbs->button($icon . ' I have an icon !!', '#button', array('size' => 'xsmall', 'type' => 'warning'));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Button submit
+     * @covers Tbs::button
+     */
+    public function testButtonSubmit() {
+        $expected = '';
+        $computed = $this->Tbs->button(null, null, array('tag' => 'submit', 'value'=>'Submit button'));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    
     /**
      * @covers Tbs::dropdown
      * @todo   Implement testDropdown().
