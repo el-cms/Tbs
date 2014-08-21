@@ -40,6 +40,18 @@ class Tbs {
 	 */
 	public $gridSize = 12;
 
+	/**
+	 * Current navbar id
+	 * @var string
+	 */
+	private $_navbarId = null;
+
+	/**
+	 * Counter for some element's Ids.
+	 * @var integer
+	 */
+	private $_idCounter = 0;
+
 	// ---------------------------------------------------------------------------
 	//
 	// Buttons-related components
@@ -1096,6 +1108,8 @@ class Tbs {
 	 *                   Brand name
 	 *  - url            string *#
 	 *                   Link on brand name
+	 *  - id             string , *null
+	 *                   Id for the menu on responsive design. Leave it blank and it will create a "navbar-<number>" id
 	 *
 	 */
 	public function navbar($elements, $options = array()) {
@@ -1109,6 +1123,7 @@ class Tbs {
 				'inverse' => false,
 				'title' => $this->icon('home'),
 				'url' => null,
+				'id'=>null,
 		);
 		// Get Options
 		$optionsList = $this->_getOptions($defaults, $options);
@@ -1116,6 +1131,13 @@ class Tbs {
 		$attributesList = $this->_getAttributes($defaults, $options);
 		// Add classes to attributes
 		$attributesList['class'] = 'navbar ' . $optionsList['class'];
+
+		// Generate id if none is provided
+		if (is_null($optionsList['id'])) {
+			$this->_navbarId = 'navbar-' . $this->_idCounter;
+		} else {
+			$this->_navbarId = $optionsList['id'];
+		}
 
 		// Position
 		switch ($optionsList['position']) {
@@ -1153,14 +1175,13 @@ class Tbs {
 		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
 		// Opening the navbar and container
-//		$out = "<nav{$attributes} role=\"navigation\">\n\t<div class=\"container-fluid\">";
-		$out = "<div{$attributes} role=\"navigation\">\n\t<div class=\"container-fluid\">";
+		$out = "<nav{$attributes} role=\"navigation\">\n\t<div class=\"container-fluid\">";
 		// Header (brand)
 		$out.="\t\t<div class=\"navbar-header\">{$collapseButton}<a class=\"navbar-brand\" href=\"{$optionsList['url']}\">{$optionsList['title']}</a>\n</div>";
 		// Elements
 		if (!empty($elements)) {
 			$collapse = ($optionsList['collapse']) ? ' class="collapse navbar-collapse"' : null;
-			$out.="<div{$collapse}>\n";
+			$out.="<div{$collapse} id=\"{$this->_navbarId}\">\n";
 			foreach ($elements as $e) {
 				$out.="\t{$e}\n";
 			}
@@ -1168,7 +1189,10 @@ class Tbs {
 		}
 
 		// End of navbar and container
-		$out.="\t</div>\n</div>";
+		$out.="\t</div>\n</nav>";
+
+		// Increment counter
+		$this->_idCounter++;
 		return $out;
 	}
 
@@ -1260,8 +1284,8 @@ class Tbs {
 			$linkOptions['class'] = 'dropdown-toggle';
 			$linkOptions['data-toggle'] = 'dropdown';
 			$caption.=' <span class="caret"></span>';
-			$optionsList['dropdown']="\n{$optionsList['dropdown']}\n";
-			$url='#';
+			$optionsList['dropdown'] = "\n{$optionsList['dropdown']}\n";
+			$url = '#';
 		}
 
 		// HTML Attributes
@@ -1290,7 +1314,7 @@ class Tbs {
 		if (!$title) {
 			$title = 'Toggle navigation';
 		}
-		return '<button type="button" class="navbar-toggle" data-toggle="collapse">
+		return '<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#'.$this->_navbarId.'">
         <span class="sr-only">' . $title . '</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
