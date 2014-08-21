@@ -1,4 +1,5 @@
 <?php
+include '../Tbs.php';
 
 /**
  * All tests for Tbs
@@ -6,16 +7,17 @@
 class TbsTest extends PHPUnit_Framework_TestCase {
 
     /**
+     * Twitter Bootstrap
      * @var Tbs
      */
-    protected $object;
+    protected $Tbs;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->object = new Tbs;
+        $this->Tbs = new Tbs;
     }
 
     /**
@@ -27,22 +29,119 @@ class TbsTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Default button
      * @covers Tbs::button
-     * @todo   Implement testButton().
      */
-    public function testButton() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+    public function testButtonDefault() {
+        $expected = '<a class="btn btn-default"></a>';
+        $computed = $this->Tbs->button(null);
+        
+        return $this->assertEquals($expected,$computed);
     }
-
+    /**
+     * Default button
+     * @covers Tbs::button
+     */
+    public function testButtonWithNoUrl() {
+        $expected = '<a class="btn btn-default"></a>';
+        $computed = $this->Tbs->button(null,null);
+        
+        return $this->assertEquals($expected,$computed);
+    }
+    /**
+     * Simple Button
+     * @covers Tbs::button
+     */
+    public function testButtonSimpleText() {
+        $expected = '<a class="btn btn-default">I\'m a button</a>';
+        $computed = $this->Tbs->button('I\'m a button');
+        
+        return $this->assertEquals($expected,$computed);
+    }
+    /**
+     * Button with link
+     * @covers Tbs::button
+     */
+    public function testButtonWithLink() {
+        $expected = '<a class="btn btn-default" href="#button">Me too</a>';
+        $computed = $this->Tbs->button('Me too', '#button');
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Button with Javascript onClick event
+     * @covers Tbs::button
+     */
+    public function testButtonWithJavascript() {
+        $expected = '<a onClick="javascript:alert(\'i\\\\\'m the alert\')" class="btn btn-default">I\'m a button with a JS alert</a>';
+        $computed = $this->Tbs->button("I'm a button with a JS alert", null, array('onClick' => "javascript:alert('i\\\'m the alert')"));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Disabled big button
+     * @covers Tbs::button
+     */
+    public function testButtonBigDisabledPrimaryType() {
+        $expected = '<a class="btn disabled btn-lg btn-primary" href="#">Big disabled button</a>';
+        $computed = $this->Tbs->button('Big disabled button', '#', array('size' => 'big', 'type' => 'primary', 'class' => 'disabled'));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Active danger button
+     * @covers Tbs::button
+     */
+    public function testButtonActiveStateDangerType() {
+        $expected = '<a class="btn active btn-danger" href="#button">Active danger button</a>';
+        $computed = $this->Tbs->button('Active danger button', '#button', array('type' => 'danger', 'class' => 'active'));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Small info button
+     * @covers Tbs::button
+     */
+    public function testButtonSmallSizeInfoType() {
+        $expected = '<a class="btn btn-sm btn-info" href="#button">Small info button</a>';
+        $computed = $this->Tbs->button('Small info button', '#button', array('size' => 'small', 'type' => 'info'));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Small button with icon
+     * @covers Tbs::button
+     */
+    public function testButtonSmallSizeWithIcon() {
+        $expected = '<a class="btn btn-xs btn-warning" href="#button"><span class="glyphicon glyphicon-star"></span> I have an icon !!</a>';
+        $icon = $this->Tbs->icon('star');
+        $computed = $this->Tbs->button($icon . ' I have an icon !!', '#button', array('size' => 'xsmall', 'type' => 'warning'));
+        
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    /**
+     * Button submit
+     * @covers Tbs::button
+     */
+    public function testButtonSubmit() {
+        $expected = '<input value="Submit button" class="btn btn-primary" type="submit"/>';
+        $computed = $this->Tbs->button(null, null, array('type' => 'submit', 'value'=>'Submit button'));
+        //print $this->Tbs->button(null, null, array('type' => 'submit', 'value'=>'Submit button'));
+        return $this->assertEquals($expected,$computed);
+    
+    }
+    
     /**
      * @covers Tbs::dropdown
      * @todo   Implement testDropdown().
      */
     public function testDropdown() {
-        // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
         );
@@ -53,7 +152,6 @@ class TbsTest extends PHPUnit_Framework_TestCase {
      * @todo   Implement testButtonGroup().
      */
     public function testButtonGroup() {
-        // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
         );

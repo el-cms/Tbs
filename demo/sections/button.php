@@ -15,7 +15,7 @@ echo $Tbs-&gt;button('I\'m a button with a JS alert', null, array('onClick' =&gt
 // Big, disabled button
 echo $Tbs-&gt;button('Big disabled button', '#', array('size' =&gt; 'big', 'type' =&gt; 'primary', 'class' =&gt; 'disabled')).' ';
 // Submit button
-echo $Tbs-&gt;button(null, null, array('tag' =&gt; 'submit', 'value'=&gt;'Submit button')).' ';
+echo $Tbs-&gt;button(null, null, array('type' =&gt; 'submit', 'value'=&gt;'Submit button')).' ';
 // Active state, danger button
 echo $Tbs-&gt;button('Active danger button', '#button', array('type' =&gt; 'danger', 'class' =&gt; 'active')).' ';
 // Small button
@@ -35,7 +35,7 @@ echo $Tbs-&gt;button($Tbs-&gt;icon('star') . ' I have an icon !!', '#button', ar
 		// Big, disabled button
 		echo $Tbs->button('Big disabled button', '#', array('size' => 'big', 'type' => 'primary', 'class' => 'disabled')).' ';
 		// Submit button
-		echo $Tbs->button(null, null, array('tag' => 'submit', 'value'=>'Submit button')).' ';
+		echo $Tbs->button(null, null, array('type' => 'submit', 'value'=>'Submit button')).' ';
 		// Active state, danger button
 		echo $Tbs->button('Active danger button', '#button', array('type' => 'danger', 'class' => 'active')).' ';
 		// Small button
