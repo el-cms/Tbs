@@ -7,14 +7,14 @@
 	<div class="panel-body panel-example-body">
 		<pre class="syntax html">&lt;?php
 $content = array(
-		'Title' =&gt; '%header%',
-		'SomeLink' =&gt; '#',
-		'SomeLink2' =&gt; '#',
-		'SomeLink3' =&gt; '#',
-		'item' =&gt; '%divider%',
-		'SomeLink4' =&gt; '#',
-		'SomeLink5' =&gt; '#',
-		'SomeLink6' =&gt; '#',
+		$Tbs-&gt;dropdownItem(null, null, array('type' =&gt; 'header')),
+		$Tbs-&gt;dropdownItem('SomeLink', '#'),
+		$Tbs-&gt;dropdownItem('SomeLink2', '#'),
+		$Tbs-&gt;dropdownItem('SomeLink3', '#'),
+		$Tbs-&gt;dropdownItem(null, null, array('type' =&gt; 'divider')),
+		$Tbs-&gt;dropdownItem('SomeLink4', '#'),
+		$Tbs-&gt;dropdownItem('SomeLink5', '#'),
+		$Tbs-&gt;dropdownItem('SomeLink6', '#'),
 );
 echo $Tbs-&gt;dropdown($content);
 ?&gt;</pre>
@@ -22,14 +22,14 @@ echo $Tbs-&gt;dropdown($content);
 	<div class="panel-footer panel-example-footer">
 		<?php
 		$content = array(
-				'Title' => '%header%',
-				'SomeLink' => '#',
-				'SomeLink2' => '#',
-				'SomeLink3' => '#',
-				'item' => '%divider%',
-				'SomeLink4' => '#',
-				'SomeLink5' => '#',
-				'SomeLink6' => '#',
+				$Tbs->dropdownItem('Section header', null, array('type' => 'header')),
+				$Tbs->dropdownItem('SomeLink', '#'),
+				$Tbs->dropdownItem('SomeLink2', '#'),
+				$Tbs->dropdownItem('SomeLink3', '#'),
+				$Tbs->dropdownItem(null, null, array('type' => 'divider')),
+				$Tbs->dropdownItem('SomeLink4', '#'),
+				$Tbs->dropdownItem('SomeLink5', '#'),
+				$Tbs->dropdownItem('SomeLink6', '#'),
 		);
 		echo $Tbs->dropdown($content);
 		?><em>We don't see anything as i'm unable to display a dropdown menu only...</em>

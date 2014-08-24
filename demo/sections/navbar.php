@@ -14,14 +14,14 @@ echo $Tbs-&gt;navbar(array(), array('title' =&gt; 'Site Name', 'url' =&gt; '#nav
 
 echo '&lt;h3&gt;Adding links&lt;/h3&gt;';
 $dropdown = array(
-		'Title' =&gt; '%header%',
-		'SomeLink' =&gt; '#',
-		'SomeLink2' =&gt; '#',
-		'SomeLink3' =&gt; '#',
-		'item' =&gt; '%divider%',
-		'SomeLink4' =&gt; '#',
-		'SomeLink5' =&gt; '#',
-		'SomeLink6' =&gt; '#',
+		$Tbs-&gt;dropdownItem(null, null, array('type' =&gt; 'header')),
+		$Tbs-&gt;dropdownItem('SomeLink', '#'),
+		$Tbs-&gt;dropdownItem('SomeLink2', '#'),
+		$Tbs-&gt;dropdownItem('SomeLink3', '#'),
+		$Tbs-&gt;dropdownItem(null, null, array('type' =&gt; 'divider')),
+		$Tbs-&gt;dropdownItem('SomeLink4', '#'),
+		$Tbs-&gt;dropdownItem('SomeLink5', '#'),
+		$Tbs-&gt;dropdownItem('SomeLink6', '#'),
 );
 
 $links = array(
@@ -46,31 +46,32 @@ echo $Tbs-&gt;navbar($navbarContent, array('title' =&gt; 'Site Name', 'url' =&gt
 
 		echo '<h3>Adding links</h3>';
 		$dropdown = array(
-				'Title' => '%header%',
-				'SomeLink' => '#',
-				'SomeLink2' => '#',
-				'SomeLink3' => '#',
-				'item' => '%divider%',
-				'SomeLink4' => '#',
-				'SomeLink5' => '#',
-				'SomeLink6' => '#',
+				$Tbs->dropdownItem('Section header', null, array('type' => 'header')),
+				$Tbs->dropdownItem('SomeLink', '#'),
+				$Tbs->dropdownItem('SomeLink2', '#'),
+				$Tbs->dropdownItem('SomeLink3', '#'),
+				$Tbs->dropdownItem(null, null, array('type' => 'divider')),
+				$Tbs->dropdownItem('SomeLink4', '#'),
+				$Tbs->dropdownItem('SomeLink5', '#'),
+				$Tbs->dropdownItem('SomeLink6', '#'),
 		);
+		;
 
 		$links = array(
-				$Tbs->navbarLink('Link 1', '#navbar', array('active'=>true)),
+				$Tbs->navbarLink('Link 1', '#navbar', array('active' => true)),
 				$Tbs->navbarLink('Link 2', '#navbar'),
 				$Tbs->navbarLink('Link 3', '#navbar'),
-				$Tbs->navbarLink('Link 4', '#', array('dropdown'=>$Tbs->dropdown($dropdown))),
+				$Tbs->navbarLink('Link 4', '#', array('dropdown' => $Tbs->dropdown($dropdown))),
 		);
-		$navbarContent=array(
+		$navbarContent = array(
 				$Tbs->navbarLinks($links),
 				$Tbs->navbarButton('Button', '#navbar'),
-				$Tbs->navbarText('I\'m just a text with '.$Tbs->link('a link', '#navbar'), array('type'=>'danger')),
+				$Tbs->navbarText('I\'m just a text with ' . $Tbs->link('a link', '#navbar'), array('type' => 'danger')),
 		);
 		echo $Tbs->navbar($navbarContent, array('title' => 'Site Name', 'url' => '#navbar', 'collapse' => true));
 
 		echo '<h3>Inverted version</h3>';
-		echo $Tbs->navbar($navbarContent, array('title' => 'Site Name', 'url' => '#navbar', 'collapse' => true, 'inverse'=>true));
+		echo $Tbs->navbar($navbarContent, array('title' => 'Site Name', 'url' => '#navbar', 'collapse' => true, 'inverse' => true));
 //
 //		echo '<h3>Simple non-responsive navbar<h3>';
 //		echo $Tbs->navbar(array(), array('title'=>'Site Name', 'link'=>'#navbar', 'collapse'=>false));

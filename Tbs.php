@@ -9,11 +9,6 @@
  */
 class Tbs {
 
-	// ---------------------------------------------------------------------------
-	//
-	// Configuration
-	//
-	// ---------------------------------------------------------------------------
 	/**
 	 * @var string Icon pack name (glyphicon, fa, icon,...)
 	 *
@@ -51,12 +46,6 @@ class Tbs {
 	 * @var integer
 	 */
 	private $_idCounter = 0;
-
-	// ---------------------------------------------------------------------------
-	//
-	// Buttons-related components
-	//
-	// ---------------------------------------------------------------------------
 
 	/**
 	 * Creates a button
@@ -155,7 +144,6 @@ class Tbs {
 		}
 		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-
 		switch ($optionsList['tag']) {
 			case 'a':
 				return "<a{$attributes}>{$content}</a>";
@@ -172,7 +160,7 @@ class Tbs {
 	 * Creates a dropdown menu to be used with dropdown buttons, or alone...
 	 * This method does not generate a button, just the dropdwon menu.
 	 *
-	 * @param array $content List of elements. Should be links or %separator% or a
+	 * @param array $list List of elements from dropdownItem()
 	 * @param array $options List of options for this element
 	 *
 	 * @return string Html code to be displayed
@@ -187,13 +175,8 @@ class Tbs {
 	 *  - class: string, *null
 	 *           Additionnal classes for the dropdown element
 	 *  - Other attributes that can apply to the "ul" element
-	 *
-	 * Elements should be like "'title' => 'url'"
-	 * To add a divider, add a "'someItem' => '%divider%'" item
-	 * To add a menu header, add a "'headerTitle' => '%header%'" item
-	 *
 	 */
-	public function dropdown($content, $options = array()) {
+	public function dropdown($list, $options = array()) {
 		// Defaults:
 		$defaults = array(
 				'class' => null,
@@ -212,22 +195,53 @@ class Tbs {
 		// HTML Attributes
 		$attributes = $this->_prepareHTMLAttributes($attributesList);
 
-		// Opening list
-		$list = "<ul{$attributes}>\n\t";
-		// Links list
-		foreach ($content as $t => $l) {
-			if ($l == "%divider%") {
-				$list.="\t<li class=\"divider\"></li>\n";
-			} elseif ($l == "%header%") {
-				$list.="\t<li class=\"dropdown-header\">$t</li>\n";
-			} else {
-				$list.="\t<li><a tabindex=\"-1\" href=\"$l\">$t</a></li>\n";
-			}
-		}
-		// Closing list
-		$list.="</ul>\n";
+		return "<ul{$attributes}>\n\t".implode("\n\t", $list)."</ul>\n";
+	}
 
-		return $list;
+	/**
+	 * Creates a dropdown menu item
+	 *
+	 * @param string $title
+	 * @param string $url
+	 * @param array $options
+	 *
+	 * @return string Item to pass in dropdown()'s $list
+	 * ---
+	 *
+	 * Options:
+	 * --------
+	 *  - class: string, *null
+	 *           Additionnal classes for the dropdown element
+	 *  - type:  string, *default|divider|header
+	 */
+	public function dropdownItem($title = null, $url = '#', $options = array()) {
+		$defaults = array(
+				'class' => null,
+				'type' => 'default',
+		);
+		$optionsList = $this->_getOptions($defaults, $options);
+		// Get Attributes
+		$attributesList = $this->_getAttributes($defaults, $options);
+		// Add classes to attributes
+		$attributesList['class'] = $optionsList['class'];
+
+		// Type
+		switch ($optionsList['type']) {
+			case 'divider':
+				$attributesList['class'].=' divider';
+				$title = null;
+				break;
+			case 'header':
+				$attributesList['class'].=' dropdown-header';
+				break;
+			default:
+				$title = $this->link($title, $url, array('tabindex' => '-1'));
+		}
+
+		// HTML Attributes
+		$attributes = $this->_prepareHTMLAttributes($attributesList);
+
+		return "<li{$attributes}>{$title}</li>";
 	}
 
 	/**
@@ -541,12 +555,6 @@ class Tbs {
 
 		return $this->buttonGroup($buttons, array('class' => $optionsList['class'], 'size' => $optionsList['size']));
 	}
-
-	// ---------------------------------------------------------------------------
-	//
-	// Forms-related components
-	//
-	// ---------------------------------------------------------------------------
 
 	/**
 	 * Creates an input element to be used in forms
@@ -938,12 +946,6 @@ class Tbs {
 		);
 	}
 
-	// ---------------------------------------------------------------------------
-	//
-	// Navigation-related components
-	//
-	// ---------------------------------------------------------------------------
-
 	/**
 	 * Creates a nav item.
 	 *
@@ -1194,11 +1196,6 @@ class Tbs {
 		return $out;
 	}
 
-//  Removed for now
-//	public function navbarBrand($content, $options = array()) {
-//
-//	}
-
 	/**
 	 * Creates links to be used in navbars
 	 *
@@ -1395,35 +1392,6 @@ class Tbs {
 
 	}
 
-//	/**
-//	 *
-//	 * @param string $caption Link caption
-//	 * @param string $url Target url
-//	 * @param array $options A list of options
-//	 *
-//	 * @return text The link
-//	 * ---
-//	 *
-//	 * Options:
-//	 * --------
-//	 *  - class: string, *null
-//	 *           Additionnal classes for the dropdown element
-//	 *
-//	 */
-//	public function navbarTextLink($caption, $url, $options = array()) {
-//		$defaults=array(
-//				'class'=>null,
-//		);
-//		// Get options
-//		$optionsList = $this->_getOptions($defaults, $options);
-//		// Get attributes
-//		$attributesList = $this->_getAttributes($defaults, $options);
-//		// Base class
-//		$attributesList['class'] = 'navbar-link ' . $optionsList['class'];
-//
-//		return $this->link($caption, $url, $attributesList);
-//	}
-
 	/**
 	 * Creates a navbar button that appears when the navbar is collapsed
 	 *
@@ -1562,12 +1530,6 @@ class Tbs {
 	public function pager($links, $options = array()) {
 
 	}
-
-	// ---------------------------------------------------------------------------
-	//
-	// Misc components
-	//
-	// ---------------------------------------------------------------------------
 
 	/**
 	 * Creates an icon
