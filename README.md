@@ -3,7 +3,7 @@ Tbs
 
 A generic php helper class for [Twitter Bootstrap](http://getbootstrap.com/) components.
 
-**Here is the [demo](http://experimentslabs.com/test/tbs/index.php) for the currently available components**
+**Here is the [demo](http://experimentslabs.com/demos/tbs/index.php) for the currently available components**
 
 ## Purpose
 This helper is designed to be used in a generic PHP application (there is no wrapper for any CMS, but that may come if you want to do it :)).
